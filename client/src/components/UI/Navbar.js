@@ -13,6 +13,7 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import routes from '../../utils/routes.js';
+import { NavLink } from "react-router-dom";
 
 // const pages = ['Products', 'Pricing', 'Blog'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
@@ -89,7 +90,7 @@ const ResponsiveAppBar = () => {
               }}
             >
               {routes.map((page) => (
-                <MenuItem key={page.key} to={page.path}>
+                <MenuItem key={page.key} to={page.path} component={NavLink}>
                   <Typography textAlign="center">{page.title}</Typography>
                 </MenuItem>
               ))}
@@ -119,6 +120,7 @@ const ResponsiveAppBar = () => {
               <Button
                 key={page.key}
                 to={page.path}
+                component={NavLink}
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >
                 {page.title}
