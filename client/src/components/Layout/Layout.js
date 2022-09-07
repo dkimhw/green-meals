@@ -1,13 +1,12 @@
 
 import React from "react";
 import { Outlet } from "react-router-dom";
-// import Navbar from "../NavBar";
-
+import Navbar from "../UI/Navbar";
 
 const Layout = (props) => {
   return (
     <div style={{ maxHeight: "100vh" }}>
-      <nav><h1>Hello</h1></nav>
+      <Navbar />
       <Outlet />
     </div>
   );

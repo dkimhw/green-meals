@@ -3,7 +3,8 @@ import React from "react";
 import { CssBaseline } from "@mui/material";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Layout from './components/Layout/Layout';
-import Home from './pages/Home/Home';
+import Home from './pages/HomePage/HomePage';
+import CreateRecipesPage from './pages/CreateRecipesPage/CreateRecipesPage';
 
 const theme = createTheme({
   palette: {
@@ -20,6 +21,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route index element={<Home />} />
+            <Route path="/create-recipes" element={<CreateRecipesPage />} />
           </Route>
         </Routes>
       </BrowserRouter>
