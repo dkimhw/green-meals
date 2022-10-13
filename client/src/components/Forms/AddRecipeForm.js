@@ -1,6 +1,7 @@
 import React from 'react';
-import { TextField, Card } from '@mui/material';
+import { TextField, Card, Typography } from '@mui/material';
 import classes from './AddRecipeForm.module.css';
+import Divider from '../UI/Divider';
 
 const AddRecipeForm = () => {
 
@@ -10,6 +11,8 @@ const AddRecipeForm = () => {
   return (
     <Card>
       <form className={classes.form}>
+        <Divider color={'#ffffff'} borderSize={'1rem'}>Recipe Overview</Divider>
+        <Typography variant="body">Uploading personal recipes is easy! Add yours to your favorites!</Typography>
         <TextField
           id="recipe-name"
           name="name"
@@ -18,7 +21,7 @@ const AddRecipeForm = () => {
           variant="standard"
           label="Recipe Name"
           className={classes['form-input']}
-          InputLabelProps={{ shrink: true, sx: {'fontSize': '1rem'} }}
+          InputLabelProps={{ shrink: true, sx: {'fontSize': '1.25rem'} }}
         />
         <TextField
           id="recipe-description"
@@ -29,8 +32,10 @@ const AddRecipeForm = () => {
           rows={4}
           placeholder="Write your recipe description here..."
           className={classes['form-input']}
-          InputLabelProps={{ shrink: true }}
+          InputLabelProps={{ shrink: true, sx: {'fontSize': '1.25rem'} }}
           />
+
+          <Divider>Recipes</Divider>
       </form>
     </Card>
   )
