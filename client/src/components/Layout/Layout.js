@@ -7,7 +7,7 @@ const Layout = (props) => {
   return (
     <div style={{ maxHeight: "100vh" }}>
       <Navbar />
-      <Outlet />
+      <Outlet sx={{backgroundColor: '#255a92'}}/>
     </div>
   );
 };

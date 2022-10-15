@@ -2,6 +2,7 @@ import React from 'react';
 import { TextField, Card, Typography } from '@mui/material';
 import classes from './AddRecipeForm.module.css';
 import Divider from '../UI/Divider';
+import FormCard from '../UI/FormCard'
 
 const AddRecipeForm = () => {
 
@@ -9,7 +10,7 @@ const AddRecipeForm = () => {
   // Ingredients section
   // Directions section (ability to reorder as well)
   return (
-    <Card>
+    <FormCard>
       <form className={classes.form}>
         <Divider color={'#ffffff'} borderSize={'1rem'}>Recipe Overview</Divider>
         <Typography variant="body">Uploading personal recipes is easy! Add yours to your favorites!</Typography>
@@ -37,7 +38,7 @@ const AddRecipeForm = () => {
 
           <Divider>Recipes</Divider>
       </form>
-    </Card>
+    </FormCard>
   )
 
 };
