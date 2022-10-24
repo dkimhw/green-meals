@@ -11,5 +11,6 @@
     "server": "nodemon server/server.ts",
     "client": "npm start --prefix client",
     "site": "concurrently \"npm run server\" \"npm run client\""
-  }
+  },
+  "type": "module"
 }

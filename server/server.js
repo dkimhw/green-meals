@@ -11,10 +11,14 @@ if (process.env.NODE_ENV !== 'production') {
 // Create express app
 const app = express();
 
-// Connect to postgres
-const sequelize = new Sequelize('database', 'username', 'password', {
-  host: process.env.HOST,
-  username: process.env.USERNAME,
-  password: process.env.PASSWORD,
-  dialect: 'postgrres'
+
+
+// Routes
+app.get('/', (req, res) => {
+  res.send('Hello World!');
+});
+
+const PORT = 5050;
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}.`);
 });
