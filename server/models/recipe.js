@@ -1,7 +1,7 @@
 
 
 const getRecipeModel = (sequelize, { DataTypes }) => {
-  const User = sequelize.define('user', {
+  const Recipe = sequelize.define('recipe', {
     recipe_name: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -16,9 +16,12 @@ const getRecipeModel = (sequelize, { DataTypes }) => {
         notEmpty: true,
       },
     }
+  }, {
+    updatedAt: 'updated_at',
+    createdAt: 'created_at',
   });
 
-  return User;
+  return Recipe;
 };
 
 export default getRecipeModel;
