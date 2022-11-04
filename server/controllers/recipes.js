@@ -8,8 +8,8 @@ export const index = async (req, res, next) => {
 };
 
 export const createRecipe = async (req, res) => {
-  console.log("request body", req.query);
-  const { recipeName, recipeDescription } = req.query;
+  console.log("request body", req.body);
+  const { recipeName, recipeDescription } = req.body;
   const recipe = {
     recipe_name: recipeName,
     recipe_description: recipeDescription,

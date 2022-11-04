@@ -3,7 +3,7 @@ import recipesController from '../controllers/recipes.js';
 
 const router = express.Router();
 
-router.route('/recipes').get(recipesController.index)
-router.route('/create-recipes').post(recipesController.createRecipe)
+router.route('/getAll').get(recipesController.index)
+router.route('/create').post(recipesController.createRecipe)
 
 export default router;
