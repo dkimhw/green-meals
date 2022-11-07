@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { TextField, Button } from '@mui/material';
 import classes from './AddRecipeForm.module.css';
 // import Divider from '../UI/Divider';
+import AddIngredientsFormSection from './AddIngredientsFormSection';
 import FormCard from '../UI/FormCard';
 import axios from 'axios';
 
@@ -70,6 +71,7 @@ const AddRecipeForm = () => {
           value={recipeInfo.recipeDescription}
           onChange={handleRecipeInfoChange}
         />
+        <AddIngredientsFormSection />
 
         <Button variant="outlined" type="submit">Submit</Button>
       </form>
