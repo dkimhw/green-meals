@@ -21,6 +21,10 @@ const getRecipeModel = (sequelize, { DataTypes }) => {
     createdAt: 'created_at',
   });
 
+  Recipe.associate = (models) => {
+    Recipe.hasMany(models.Ingredient, { foreignKey: 'recipe_id' });
+  }
+
   return Recipe;
 };
 

@@ -1,13 +1,13 @@
 import { Sequelize } from "sequelize";
 import getRecipeModel from "./recipe.js";
+import getIngredientModel from "./ingredient.js";
 import dotenv from 'dotenv'
 
 
 dotenv.config();
-
 // Connect to postgres
 // https://www.robinwieruch.de/postgres-express-setup-tutorial/
-console.log(process.env.HOST);
+// https://stackoverflow.com/questions/58470439/sequelize-how-to-design-one-to-one-association
 const sequelize = new Sequelize(process.env.DB, process.env.USERNAME, process.env.PASSWORD, {
   host: process.env.HOST,
   dialect: 'postgres',
@@ -24,6 +24,7 @@ const sequelize = new Sequelize(process.env.DB, process.env.USERNAME, process.en
 
 const models = {
   Recipe: getRecipeModel(sequelize, Sequelize),
+  Ingredient: getIngredientModel(sequelize, Sequelize),
 }
 
 export { sequelize };

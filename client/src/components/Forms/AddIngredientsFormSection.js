@@ -1,7 +1,27 @@
 
 import React from 'react';
-import { TextField, Button } from '@mui/material';
+import { TextField, Button, MenuItem } from '@mui/material';
 import classes from './AddIngredientsFormSection.module.css';
+
+
+const qty_types = [
+  {
+    value: 'Cup',
+    label: 'Cup'
+  },
+  {
+    value: 'Tablespoon',
+    label: 'Tbsp'
+  },
+  {
+    value: 'Teaspoon',
+    label: 'Tsp'
+  },
+  {
+    value: 'Ounces',
+    label: 'Oz'
+  },
+];
 
 // https://stackoverflow.com/questions/66469913/how-to-add-input-field-dynamically-when-user-click-on-button-in-react-js
 const AddIngredientsFormSection = () => {
@@ -11,6 +31,11 @@ const AddIngredientsFormSection = () => {
     { id: 'ingredient-name2', name: 'ingredientName2', placeholder: 'e.g. 1 cup of olive oil' },
   ]
   const [ingredients, setIngredients] = React.useState(ingredientsInputs);
+  const [currency, setCurrency] = React.useState('Cup');
+
+  const handleSelectInputChange = (event) => {
+    setCurrency(event.target.value);
+  };
 
   const addNewInput = () => {
     setIngredients([...ingredients, { id: `ingredient-name${ingredients.length}`, name: `ingredientName${ingredients.length}`, placeholder: 'Add a new ingredient' }]);
@@ -31,44 +56,39 @@ const AddIngredientsFormSection = () => {
     setIngredients(values);
   };
 
+
   return (
     <React.Fragment>
       {ingredients.map((input, index) => {
         return (
-          <TextField
-            key={index}
-            id={input.id}
-            name={input.name}
-            placeholder={input.placeholder}
-            defaultValue=""
-            onChange={handleInputChange}
-            variant="outlined"
-            label={null}
-            className={classes['add-ingredient-input']}
-          />
+          <div className={classes['ingredients-form-group']} key={index}>
+            <TextField
+              id={input.id}
+              name={input.name}
+              placeholder={input.placeholder}
+              defaultValue=""
+              onChange={handleInputChange}
+              variant="outlined"
+              label="Ingredient Name"
+              className={classes['add-ingredient-input']}
+            />
+            <TextField
+              id="outlined-select-currency"
+              select
+              label="Choose Qty Type"
+              value={currency}
+              onChange={handleSelectInputChange}
+              // helperText="Please select your quantity type"
+            >
+              {qty_types.map((option) => (
+                <MenuItem key={option.value} value={option.value}>
+                  {option.label}
+                </MenuItem>
+              ))}
+            </TextField>
+          </div>
         )
       })}
-
-      {/* <TextField
-        id={`ingredient-name${ingredientsOrder[0]}`}
-        name={`recipeName${ingredientsOrder[0]}`}
-        placeholder="e.g. 2 cups of flour"
-        defaultValue=""
-        className={classes['add-ingredient-input']}
-        variant="outlined"
-        label={null}
-        InputLabelProps={{ shrink: true, sx: {'fontSize': '1.25rem'} }}
-      />
-      <TextField
-        id={`ingredient-name${ingredientsOrder[1]}`}
-        name={`recipeName${ingredientsOrder[1]}`}
-        placeholder="e.g. 1 cup of sugar"
-        defaultValue=""
-        variant="outlined"
-        className={classes['add-ingredient-input']}
-        label={null}
-        InputLabelProps={{ shrink: true, sx: {'fontSize': '1.25rem'} }}
-      /> */}
 
       <Button variant="contained" color="primary" className={classes['add-ingredient-btn']} onClick={addNewInput}>Add Ingredient</Button>
     </React.Fragment>
