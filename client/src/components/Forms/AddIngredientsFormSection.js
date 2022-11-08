@@ -26,16 +26,12 @@ const qty_types = [
 // https://stackoverflow.com/questions/66469913/how-to-add-input-field-dynamically-when-user-click-on-button-in-react-js
 const AddIngredientsFormSection = () => {
   const ingredientsInputs = [
-    { id: 'ingredient-name0', name: 'ingredientName0', placeholder: 'e.g. 2 cups of flour' },
-    { id: 'ingredient-name1', name: 'ingredientName1', placeholder: 'e.g. 1 cup of sugar' },
-    { id: 'ingredient-name2', name: 'ingredientName2', placeholder: 'e.g. 1 cup of olive oil' },
+    { id: 0, recipe_name: '', qty: 0, qty_type: '', placeholder: 'e.g. Flour' },
+    { id: 1, recipe_name: '', qty: 0, qty_type: '', placeholder: 'e.g. Sugar' },
+    { id: 2, recipe_name: '', qty: 0, qty_type: '', placeholder: 'e.g. Olive oil' },
   ]
   const [ingredients, setIngredients] = React.useState(ingredientsInputs);
-  const [currency, setCurrency] = React.useState('Cup');
-
-  const handleSelectInputChange = (event) => {
-    setCurrency(event.target.value);
-  };
+  const [quantityType, setQuantityType] = React.useState('Cup');
 
   const addNewInput = () => {
     setIngredients([...ingredients, { id: `ingredient-name${ingredients.length}`, name: `ingredientName${ingredients.length}`, placeholder: 'Add a new ingredient' }]);
@@ -48,12 +44,35 @@ const AddIngredientsFormSection = () => {
   //   setIngredients(values);
   // };
 
-  const handleInputChange = (event) => {
+  const handleRecipeNameChange = (event) => {
     event.preventDefault();
-    const index = event.target.id.split('ingredient-name')[1];
+    let splitIdLen = event.target.id.split('-').length
+    const index = event.target.id.split('-')[splitIdLen - 1];
     const values = [...ingredients];
-    values[index].name = event.target.value;
+    values[index].recipe_name = event.target.value;
     setIngredients(values);
+    console.log(ingredients);
+  };
+
+  const handleQtyChange = (event) => {
+    event.preventDefault();
+    let splitIdLen = event.target.id.split('-').length
+    const index = event.target.id.split('-')[splitIdLen - 1];
+    const values = [...ingredients];
+    values[index].qty = event.target.value;
+    setIngredients(values);
+    console.log(ingredients);
+  };
+
+  const handleQtyTypeChange = (event) => {
+    event.preventDefault();
+    console.log(event);
+    let splitIdLen = event.target.name.split('-').length
+    const index = event.target.name.split('-')[splitIdLen - 1];
+    const values = [...ingredients];
+    values[index].qty_type = event.target.value;
+    setIngredients(values);
+    console.log(ingredients);
   };
 
 
@@ -63,22 +82,30 @@ const AddIngredientsFormSection = () => {
         return (
           <div className={classes['ingredients-form-group']} key={index}>
             <TextField
-              id={input.id}
-              name={input.name}
+              id={`recipe-name-${input.id}`}
+              name={`recipe-name-${input.id}`}
               placeholder={input.placeholder}
               defaultValue=""
-              onChange={handleInputChange}
+              onChange={handleRecipeNameChange}
               variant="outlined"
               label="Ingredient Name"
-              className={classes['add-ingredient-input']}
             />
             <TextField
-              id="outlined-select-currency"
+              id={`recipe-qty-${input.id}`}
+              name={`recipe-qty-${input.id}`}
+              placeholder={`e.g. ${Math.ceil(Math.random() * 10)}`}
+              defaultValue=""
+              onChange={handleQtyChange}
+              variant="outlined"
+              label="Quantity"
+            />
+            <TextField
               select
+              id = {`recipe-qty-type-${input.id}`}
+              name = {`recipe-qty-type-${input.id}`}
               label="Choose Qty Type"
-              value={currency}
-              onChange={handleSelectInputChange}
-              // helperText="Please select your quantity type"
+              value='Cup'
+              onChange={handleQtyTypeChange}
             >
               {qty_types.map((option) => (
                 <MenuItem key={option.value} value={option.value}>
@@ -86,6 +113,7 @@ const AddIngredientsFormSection = () => {
                 </MenuItem>
               ))}
             </TextField>
+
           </div>
         )
       })}
