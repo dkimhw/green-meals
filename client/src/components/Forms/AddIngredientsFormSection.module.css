@@ -6,11 +6,6 @@
   width: 300px;
 }
 
-.add-ingredient-btn {
-  margin-top: .3rem;
-  margin-bottom: 1.5rem;
-}
-
 .ingredients-form-group {
   display: grid;
   grid-template-columns: minmax(300px, 4fr) 1fr;
