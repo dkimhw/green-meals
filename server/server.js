@@ -29,18 +29,21 @@ app.get('/', (req, res) => {
 app.use('/api/recipes', recipesRoutes);
 
 // Sync DB
-sequelize.sync()
-  .then(() => {
-    console.log("Synced db.");
-  })
-  .catch((err) => {
-    console.log("Failed to sync db: " + err.message);
-  });
+// sequelize.sync()
+//   .then(() => {
+//     console.log("Synced db.");
+//   })
+//   .catch((err) => {
+//     console.log("Failed to sync db: " + err.message);
+//   });
 
 const PORT = process.env.PORT;
-app.listen(5051, () => {
-  console.log(`Listening on port ${5051}!`);
+sequelize.sync().then(() => {
+  app.listen(5051, () => {
+    console.log(`Listening on port ${5051}!`);
+  });
 });
+
 // Connect to database
 // sequelize.sync().then(() => {
 //   app.listen(PORT, () => {

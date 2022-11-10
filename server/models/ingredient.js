@@ -1,21 +1,7 @@
 const getIngredientModel = (sequelize, { DataTypes }) => {
-  const Ingredient = sequelize.define('recipe', {
+  const Ingredient = sequelize.define('ingredient', {
     ingredient_name: {
       type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notEmpty: true,
-      },
-    },
-    ingredient_quantity_type: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notEmpty: true,
-      },
-    },
-    ingredient_quantity: {
-      type: DataTypes.FLOAT,
       allowNull: false,
       validate: {
         notEmpty: true,
@@ -27,8 +13,8 @@ const getIngredientModel = (sequelize, { DataTypes }) => {
   });
 
   Ingredient.associate = (models) => {
-    Ingredient.belongsTo(models.Recipe, { foreignKey: 'recipe_id' });
-  }
+    Ingredient.belongsTo(models.Recipe);
+  };
 
   return Ingredient;
 };

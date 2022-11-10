@@ -27,5 +27,11 @@ const models = {
   Ingredient: getIngredientModel(sequelize, Sequelize),
 }
 
+Object.keys(models).forEach((key) => {
+  if ('associate' in models[key]) {
+    models[key].associate(models);
+  }
+});
+
 export { sequelize };
 export default models;
