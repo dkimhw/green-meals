@@ -25,6 +25,10 @@ const getRecipeModel = (sequelize, { DataTypes }) => {
     Recipe.hasMany(models.Ingredient, { onDelete: 'CASCADE' });
   };
 
+  Recipe.associate = (models) => {
+    Recipe.hasMany(models.Instruction, { onDelete: 'CASCADE' });
+  };
+
   return Recipe;
 };
 

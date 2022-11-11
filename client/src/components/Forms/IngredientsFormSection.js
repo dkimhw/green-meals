@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { TextField, Button, IconButton } from '@mui/material';
-import classes from './AddIngredientsFormSection.module.css';
+import classes from './IngredientsFormSection.module.css';
 import CloseIcon from '@mui/icons-material/Close';
 
 const AddIngredientsFormSection = (props) => {

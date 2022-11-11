@@ -1,6 +1,7 @@
 import { Sequelize } from "sequelize";
 import getRecipeModel from "./recipe.js";
 import getIngredientModel from "./ingredient.js";
+import getInstructionModel from "./instruction.js";
 import dotenv from 'dotenv'
 
 
@@ -25,6 +26,7 @@ const sequelize = new Sequelize(process.env.DB, process.env.USERNAME, process.en
 const models = {
   Recipe: getRecipeModel(sequelize, Sequelize),
   Ingredient: getIngredientModel(sequelize, Sequelize),
+  Instruction: getInstructionModel(sequelize, Sequelize),
 }
 
 Object.keys(models).forEach((key) => {
