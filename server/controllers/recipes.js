@@ -9,31 +9,40 @@ export const index = async (req, res, next) => {
 
 export const createRecipe = async (req, res) => {
   console.log("request body", req.body);
-  const { recipeName, recipeDescription, recipeIngredients } = req.body;
-  const recipe = {
-    recipe_name: recipeName,
-    recipe_description: recipeDescription,
-  }
+  const { recipeName, recipeDescription, recipeIngredients, recipeInstructions } = req.body;
 
-  // Save recipe data
   const ingredients = recipeIngredients.map(ingredient => {
     return {
       ingredient_name: ingredient.ingredient_name,
     }
   });
 
-  console.log("Ingredients: ", ingredients);
+  const instructions = recipeInstructions.map(instruction => {
+    return {
+      instruction_order_number: instruction.order,
+      instruction_text: instruction.instruction
+    }
+  });
 
-  await models.Recipe.create(
+  const newRecipe = await models.Recipe.create(
     {
       recipe_name: recipeName
       , recipe_description: recipeDescription
       , ingredients: ingredients
-    },
-    {
+    }, {
       include: [models.Ingredient]
     }
-  )
+  );
+
+  await models.Instruction.bulkCreate(
+    instructions.map(instruction => {
+      return {
+        instruction_order_number: instruction.instruction_order_number,
+        instruction_text: instruction.instruction_text,
+        recipe_id: newRecipe.id
+      }
+    })
+  );
 
   res.json({ message: "Recipe saved!" });
 }

@@ -98,6 +98,7 @@ const AddRecipeForm = () => {
       recipeName: recipeInfo.recipeName,
       recipeDescription: recipeInfo.recipeDescription,
       recipeIngredients: recipeIngredients,
+      recipeInstructions: recipeInstructions,
     };
     let result = await axios.post('http://localhost:5051/api/recipes/create', recipeFormInfo)
     console.log(result);
