@@ -1,5 +1,5 @@
 
-
+// https://www.robinwieruch.de/postgres-express-setup-tutorial/
 const getRecipeModel = (sequelize, { DataTypes }) => {
   const Recipe = sequelize.define('recipe', {
     recipe_name: {
@@ -20,6 +20,10 @@ const getRecipeModel = (sequelize, { DataTypes }) => {
     updatedAt: 'updated_at',
     createdAt: 'created_at',
   });
+
+  Recipe.associate = (models) => {
+    Recipe.hasMany(models.Ingredient, { onDelete: 'CASCADE' });
+  };
 
   return Recipe;
 };

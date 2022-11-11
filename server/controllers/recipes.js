@@ -9,15 +9,36 @@ export const index = async (req, res, next) => {
 
 export const createRecipe = async (req, res) => {
   console.log("request body", req.body);
-  const { recipeName, recipeDescription } = req.body;
+  const { recipeName, recipeDescription, recipeIngredients } = req.body;
   const recipe = {
     recipe_name: recipeName,
     recipe_description: recipeDescription,
   }
-  const recipesModel = models.Recipe;
-  const newRecipe = await recipesModel.create(recipe);
-  res.send(newRecipe);
+
+  // Save recipe data
+  const ingredients = recipeIngredients.map(ingredient => {
+    return {
+      ingredient_name: ingredient.ingredient_name,
+    }
+  });
+
+  console.log("Ingredients: ", ingredients);
+
+  await models.Recipe.create(
+    {
+      recipe_name: recipeName
+      , recipe_description: recipeDescription
+      , ingredients: ingredients
+    },
+    {
+      include: [models.Ingredient]
+    }
+  )
+
+  res.json({ message: "Recipe saved!" });
 }
+
+
 
 export default {
   index,
