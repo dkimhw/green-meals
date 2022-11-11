@@ -40,7 +40,7 @@ app.use('/api/recipes', recipesRoutes);
 const PORT = process.env.PORT;
 sequelize.sync().then(() => {
   app.listen(5051, () => {
-    console.log(`Listening on port ${5051}!`);
+    console.log(`Listening on port ${PORT}!`);
   });
 });
 
