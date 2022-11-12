@@ -10,6 +10,7 @@ const getIngredientModel = (sequelize, { DataTypes }) => {
   }, {
     updatedAt: 'updated_at',
     createdAt: 'created_at',
+    recipeId: 'recipe_id'
   });
 
   Ingredient.associate = (models) => {

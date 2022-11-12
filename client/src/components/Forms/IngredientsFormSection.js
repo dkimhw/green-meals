@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { TextField, Button, IconButton } from '@mui/material';
-import classes from './AddIngredientsFormSection.module.css';
+import classes from './IngredientsFormSection.module.css';
 import CloseIcon from '@mui/icons-material/Close';
 
 const AddIngredientsFormSection = (props) => {
@@ -27,7 +27,7 @@ const AddIngredientsFormSection = (props) => {
         )
       })}
 
-      <Button variant="contained" color="primary" sx={{mb: '1rem'}} onClick={props.addIngredient}>Add Ingredient</Button>
+      <Button variant="contained" color="primary" sx={{mb: '1rem', display: 'flex', justifyContent: 'center'}} onClick={props.addIngredient}>Add Ingredient</Button>
     </React.Fragment>
   )
 }

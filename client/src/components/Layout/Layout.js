@@ -5,9 +5,9 @@ import Navbar from "../UI/Navbar";
 
 const Layout = (props) => {
   return (
-    <div style={{ maxHeight: "100vh" }}>
+    <div>
       <Navbar />
-      <Outlet sx={{backgroundColor: '#255a92'}}/>
+      <Outlet />
     </div>
   );
 };

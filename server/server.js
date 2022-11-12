@@ -37,16 +37,10 @@ app.use('/api/recipes', recipesRoutes);
 //     console.log("Failed to sync db: " + err.message);
 //   });
 
+// force: true
 const PORT = process.env.PORT;
-sequelize.sync().then(() => {
+sequelize.sync({ force: true }).then(() => {
   app.listen(5051, () => {
     console.log(`Listening on port ${PORT}!`);
   });
 });
-
-// Connect to database
-// sequelize.sync().then(() => {
-//   app.listen(PORT, () => {
-//     console.log(`Listening on port ${PORT}!`);
-//   });
-// });

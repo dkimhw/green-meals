@@ -1,10 +1,11 @@
 import React from 'react';
 import { useState } from 'react';
-import { TextField, Button } from '@mui/material';
+import { TextField, Button, Typography } from '@mui/material';
 import classes from './AddRecipeForm.module.css';
-// import Divider from '../UI/Divider';
-import AddIngredientsFormSection from './AddIngredientsFormSection';
+import IngredientsFormSection from './IngredientsFormSection';
+import RecipeInstructionsFormSection from './RecipeInstructionsFormSection';
 import FormCard from '../UI/FormCard';
+import Divider from '../UI/Divider';
 import axios from 'axios';
 
 const initialValues = {
@@ -18,12 +19,18 @@ const ingredientsInputs = [
   { id: 2, ingredient_name: '', placeholder: 'e.g. Olive oil' },
 ]
 
+const recipeInstructionsIntitalValue = [
+  { id: 0, order: 1, instruction: '', placeholder: 'e.g. Preheat oven to 350 degrees F.' },
+  { id: 1, order: 2, instruction: '', placeholder: 'Add another instruction' },
+  { id: 2, order: 3, instruction: '', placeholder: 'Add another instruction' },
+]
 
 // https://github.com/bradtraversy/react_step_form/tree/master/src/components
 // Breaking apart long forms into components
 const AddRecipeForm = () => {
   const [recipeInfo, setRecipeInfo] = useState({initialValues});
   const [recipeIngredients, setRecipeIngredients] = useState(ingredientsInputs);
+  const [recipeInstructions, setRecipeInstructions] = useState(recipeInstructionsIntitalValue);
 
   // Recipe Info changes
   const handleRecipeInfoChange = async (event) => {
@@ -53,6 +60,33 @@ const AddRecipeForm = () => {
     setRecipeIngredients(values);
   };
 
+  // Recipe instructions handlers //
+  const addRecipeInstruction = () => {
+    let maxId = Math.max(...recipeInstructions.map(instruction => instruction.id));
+    maxId < 0 ? maxId = 0 : maxId = maxId + 1;
+    setRecipeInstructions([...recipeInstructions, { id: maxId, order: maxId + 1, instruction: '', placeholder: 'Add another instruction' }]);
+  };
+
+  const removeRecipeInstruction = (id) => {
+    const values = [...recipeInstructions];
+    values.splice(values.findIndex(value => value.id === id), 1);
+    values.forEach((value, index) => {
+      value.id = index;
+      value.order = index + 1;
+    });
+    setRecipeInstructions(values);
+  };
+
+  const handleRecipeInstructionChange = (event) => {
+    event.preventDefault();
+    let splitIdLen = event.target.id.split('-').length
+    const id = event.target.id.split('-')[splitIdLen - 1];
+    let findIdx = recipeInstructions.findIndex(instruction => instruction.id === parseInt(id));
+    const values = [...recipeInstructions];
+    values[findIdx].instruction = event.target.value;
+    setRecipeInstructions(values);
+  };
+
   // Submit Recipe Info //
   const submitHandler = async (event) => {
     event.preventDefault();
@@ -64,6 +98,7 @@ const AddRecipeForm = () => {
       recipeName: recipeInfo.recipeName,
       recipeDescription: recipeInfo.recipeDescription,
       recipeIngredients: recipeIngredients,
+      recipeInstructions: recipeInstructions,
     };
     let result = await axios.post('http://localhost:5051/api/recipes/create', recipeFormInfo)
     console.log(result);
@@ -75,8 +110,6 @@ const AddRecipeForm = () => {
   return (
     <FormCard>
       <form className={classes.form} onSubmit={submitHandler}>
-        {/* <Divider color={'#ffffff'} borderSize={'1rem'}>Recipe Overview</Divider>
-        <Typography variant="body">Uploading personal recipes is easy! Add yours to your favorites!</Typography> */}
         <TextField
           id="recipe-name"
           name="recipeName"
@@ -101,11 +134,21 @@ const AddRecipeForm = () => {
           value={recipeInfo.recipeDescription || ''}
           onChange={handleRecipeInfoChange}
         />
-        <AddIngredientsFormSection
+        <Divider />
+        <Typography variant="h5" sx={{mb: '1rem'}}>Ingredients</Typography>
+        <IngredientsFormSection
           ingredients={recipeIngredients}
-          removeIngredient={removeIngredient}
           addIngredient={addIngredient}
+          removeIngredient={removeIngredient}
           handleIngredientNameChange={handleIngredientNameChange}
+        />
+        <Divider />
+        <Typography variant="h5" sx={{mb: '1rem'}}>Directions</Typography>
+        <RecipeInstructionsFormSection
+          instructions={recipeInstructions}
+          addRecipeInstruction={addRecipeInstruction}
+          removeRecipeInstruction={removeRecipeInstruction}
+          handleRecipeInstructionChange={handleRecipeInstructionChange}
         />
 
         <Button variant="outlined" type="submit">Submit</Button>
