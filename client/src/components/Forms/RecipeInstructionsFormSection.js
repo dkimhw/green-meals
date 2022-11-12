@@ -6,7 +6,7 @@ import CloseIcon from '@mui/icons-material/Close';
 
 const RecipeInstructionsFormSection = (props) => {
   return (
-    <React.Fragment>
+    <div className={classes['ingredients-form-section']}>
       {props.instructions.map((input) => {
         return (
           <div className={classes['ingredients-form-group']} key={input.id}>
@@ -28,7 +28,7 @@ const RecipeInstructionsFormSection = (props) => {
       })}
 
       <Button variant="contained" color="primary" sx={{mb: '1rem'}} onClick={props.addRecipeInstruction}>Add Instruction Step</Button>
-    </React.Fragment>
+    </div>
   )
 }
 

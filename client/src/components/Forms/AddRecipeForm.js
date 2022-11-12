@@ -1,11 +1,11 @@
 import React from 'react';
 import { useState } from 'react';
-import { TextField, Button } from '@mui/material';
+import { TextField, Button, Typography } from '@mui/material';
 import classes from './AddRecipeForm.module.css';
-// import Divider from '../UI/Divider';
 import IngredientsFormSection from './IngredientsFormSection';
 import RecipeInstructionsFormSection from './RecipeInstructionsFormSection';
 import FormCard from '../UI/FormCard';
+import Divider from '../UI/Divider';
 import axios from 'axios';
 
 const initialValues = {
@@ -110,8 +110,6 @@ const AddRecipeForm = () => {
   return (
     <FormCard>
       <form className={classes.form} onSubmit={submitHandler}>
-        {/* <Divider color={'#ffffff'} borderSize={'1rem'}>Recipe Overview</Divider>
-        <Typography variant="body">Uploading personal recipes is easy! Add yours to your favorites!</Typography> */}
         <TextField
           id="recipe-name"
           name="recipeName"
@@ -136,12 +134,16 @@ const AddRecipeForm = () => {
           value={recipeInfo.recipeDescription || ''}
           onChange={handleRecipeInfoChange}
         />
+        <Divider />
+        <Typography variant="h5" sx={{mb: '1rem'}}>Ingredients</Typography>
         <IngredientsFormSection
           ingredients={recipeIngredients}
           addIngredient={addIngredient}
           removeIngredient={removeIngredient}
           handleIngredientNameChange={handleIngredientNameChange}
         />
+        <Divider />
+        <Typography variant="h5" sx={{mb: '1rem'}}>Directions</Typography>
         <RecipeInstructionsFormSection
           instructions={recipeInstructions}
           addRecipeInstruction={addRecipeInstruction}

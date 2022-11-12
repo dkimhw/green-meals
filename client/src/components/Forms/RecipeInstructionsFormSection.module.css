@@ -1,10 +1,12 @@
 
-/*
-.add-ingredient-input {
-  margin-top: .3rem;
-  margin-bottom: .3rem;
-  width: 300px;
-} */
+.ingredients-form-section {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
 
 .ingredients-form-group {
   display: grid;
