@@ -1,0 +1,14 @@
+
+
+.form-input {
+  margin-top: 1.25rem !important;
+  margin-bottom: 1.25rem !important;
+  width: 300px;
+}
+
+.form-group {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  grid-gap: 1rem;
+  margin: 1.25rem 0;
+}

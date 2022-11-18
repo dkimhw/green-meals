@@ -1,9 +1,10 @@
 import React from 'react';
 import { useState } from 'react';
-import { TextField, Button, Typography } from '@mui/material';
+import { Button, Typography } from '@mui/material';
 import classes from './AddRecipeForm.module.css';
 import IngredientsFormSection from './IngredientsFormSection';
 import RecipeInstructionsFormSection from './RecipeInstructionsFormSection';
+import RecipeInfoFormSection from './RecipeInfoFormSection';
 import FormCard from '../UI/FormCard';
 import Divider from '../UI/Divider';
 import axios from 'axios';
@@ -11,6 +12,8 @@ import axios from 'axios';
 const initialValues = {
   recipeName: "",
   recipeDescription: "",
+  prepTime: "",
+  prepTimeType: "mins",
 }
 
 const ingredientsInputs = [
@@ -110,29 +113,9 @@ const AddRecipeForm = () => {
   return (
     <FormCard>
       <form className={classes.form} onSubmit={submitHandler}>
-        <TextField
-          id="recipe-name"
-          name="recipeName"
-          placeholder="Write your recipe name here..."
-          variant="standard"
-          label="Recipe Name"
-          className={classes['form-input']}
-          InputLabelProps={{ shrink: true, sx: {'fontSize': '1.25rem'} }}
-          value={recipeInfo.recipeName || ''}
-          onChange={handleRecipeInfoChange}
-        />
-        <TextField
-          id="recipe-description"
-          label="Recipe Description"
-          name="recipeDescription"
-          multiline
-          variant="standard"
-          rows={4}
-          placeholder="Write your recipe description here..."
-          className={classes['form-input']}
-          InputLabelProps={{ shrink: true, sx: {'fontSize': '1.25rem'} }}
-          value={recipeInfo.recipeDescription || ''}
-          onChange={handleRecipeInfoChange}
+        <RecipeInfoFormSection
+          recipeInfo={recipeInfo}
+          handleRecipeInfoChange={handleRecipeInfoChange}
         />
         <Divider />
         <Typography variant="h5" sx={{mb: '1rem'}}>Ingredients</Typography>
