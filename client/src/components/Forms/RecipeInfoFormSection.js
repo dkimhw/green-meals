@@ -2,10 +2,11 @@ import React from 'react'
 import { TextField, FormControl, MenuItem, Select, InputLabel } from '@mui/material'
 import classes from './RecipeInfoFormSection.module.css'
 
-// Cooking time number and servings unit
-// Prep time number and prep time unit
+
+// servings unit
+// notes section
+// public/private
 // Add time section?
-// Servings
 const RecipeInfoFormSection = (props) => {
   return (
     <React.Fragment>
@@ -35,8 +36,8 @@ const RecipeInfoFormSection = (props) => {
       />
       <div className={classes['form-group']}>
         <TextField
-          id="cooking-time"
-          name="cookingTime"
+          id="prep-time"
+          name="prepTime"
           variant="outlined"
           label="Prep Time"
           type="number"
@@ -46,13 +47,41 @@ const RecipeInfoFormSection = (props) => {
           onChange={props.recipeInfo.handleRecipeInfoChange}
         />
         <FormControl fullWidth>
-          <InputLabel id="cooking-time-type">Prep Time Qty</InputLabel>
+          <InputLabel id="prep-time-type">Prep Time Qty</InputLabel>
+          <Select
+            labelId="prep-time-type-label"
+            id="prep-time-type"
+            label="prepTimeType"
+            defaultValue="mins"
+            value={props.recipeInfo.prepTimeType}
+            onChange={props.recipeInfo.handleRecipeInfoChange}
+            >
+            <MenuItem value={'mins'}>mins</MenuItem>
+            <MenuItem value={'hours'}>hours</MenuItem>
+            <MenuItem value={'days'}>days</MenuItem>
+          </Select>
+        </FormControl>
+      </div>
+      <div className={classes['form-group']}>
+        <TextField
+          id="cooking-time"
+          name="cookingTime"
+          variant="outlined"
+          label="Cooking Time"
+          type="number"
+          // className={classes['form-input']}
+          // InputLabelProps={{ shrink: true, sx: {'fontSize': '1.25rem'} }}
+          value={props.recipeInfo.cookingTime}
+          onChange={props.recipeInfo.handleRecipeInfoChange}
+        />
+        <FormControl fullWidth>
+          <InputLabel id="cooking-time-type">Cooking Time Qty</InputLabel>
           <Select
             labelId="cooking-time-type-label"
             id="cooking-time-type"
             label="cookingTimeType"
             defaultValue="mins"
-            value={props.recipeInfo.prepTimeType}
+            value={props.recipeInfo.cookingTimeType}
             onChange={props.recipeInfo.handleRecipeInfoChange}
             >
             <MenuItem value={'mins'}>mins</MenuItem>

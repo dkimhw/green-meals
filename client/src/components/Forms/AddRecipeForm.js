@@ -5,6 +5,7 @@ import classes from './AddRecipeForm.module.css';
 import IngredientsFormSection from './IngredientsFormSection';
 import RecipeInstructionsFormSection from './RecipeInstructionsFormSection';
 import RecipeInfoFormSection from './RecipeInfoFormSection';
+import RecipeNotesFormSection from './RecipeNotesFormSection';
 import FormCard from '../UI/FormCard';
 import Divider from '../UI/Divider';
 import axios from 'axios';
@@ -14,6 +15,9 @@ const initialValues = {
   recipeDescription: "",
   prepTime: "",
   prepTimeType: "mins",
+  cookinTime: "",
+  cookinTimeType: "mins",
+  recipeNotes: "",
 }
 
 const ingredientsInputs = [
@@ -133,7 +137,12 @@ const AddRecipeForm = () => {
           removeRecipeInstruction={removeRecipeInstruction}
           handleRecipeInstructionChange={handleRecipeInstructionChange}
         />
-
+        <Divider />
+        <RecipeNotesFormSection
+          recipeInfo={recipeInfo}
+          handleRecipeInfoChange={handleRecipeInfoChange}
+        />
+        <Divider />
         <Button variant="outlined" type="submit">Submit</Button>
       </form>
     </FormCard>

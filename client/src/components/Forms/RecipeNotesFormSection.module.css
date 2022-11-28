@@ -1,0 +1,12 @@
+
+.note-input-group {
+  display: grid;
+  grid-template-columns: 1fr;
+  margin-bottom: 1.25rem;
+}
+
+.form-notes-input {
+  margin-top: 1.25rem !important;
+  margin-bottom: 1.25rem !important;
+  width: 375px;
+}
