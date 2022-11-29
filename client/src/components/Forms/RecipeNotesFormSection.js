@@ -1,41 +1,58 @@
 
 import React from 'react';
-import { TextField, InputLabel } from '@mui/material'
+import { TextField, InputLabel, IconButton, Button } from '@mui/material'
 import classes from './RecipeNotesFormSection.module.css'
+import CloseIcon from '@mui/icons-material/Close';
 
 // Add functionality to add additional notes
 const RecipeNotesFormSection = (props) => {
   return (
-    <React.Fragment>
-      <div className={classes['note-input-group']}>
-        <InputLabel id="note-title">Title</InputLabel>
-        <TextField
-          id="note-title"
-          name="noteTitle"
-          placeholder="e.g. Cook's Tips"
-          variant="standard"
-          className={classes['form-notes-input']}
-          value={props.recipeInfo.recipeName || "e.g. Cook's Tips"}
-          onChange={props.handleRecipeInfoChange}
-          />
-      </div>
-      <div className={classes['note-input-group']}>
-        <InputLabel id="recipe-notes">Note</InputLabel>
-        <TextField
-          id="recipe-notes"
-          name="recipeNotes"
-          multiline
-          variant="standard"
-          rows={4}
-          className={classes['form-notes-input']}
-          placeholder="Write your recipe notes here..."
-          InputLabelProps={{ shrink: true, sx: {'fontSize': '1.25rem'} }}
-          value={props.recipeInfo.recipeNotes || ''}
-          onChange={props.handleRecipeInfoChange}
-        />
-      </div>
-
-    </React.Fragment>
+    <div className={classes['notes-form-section']}>
+      {props.recipeNotes.map((note) => {
+       return(
+        <div key={note.id}>
+          <div className={classes['note-input-group']}>
+            <InputLabel id={`note-title-${note.id}`} className={classes['note-label']}>Title</InputLabel>
+            <TextField
+              id={`note-title-${note.id}`}
+              name={`note-title-${note.id}`}
+              placeholder="e.g. Cook's Tips"
+              variant="standard"
+              className={`${classes['form-notes-input']} ${classes['note-input']}`}
+              value={note.noteTitle || ""}
+              onChange={props.handleRecipeNoteTitleChange}
+            />
+            <IconButton
+              id={`remove-note-${note.id}`}
+              color="primary"
+              onClick={() => props.removeRecipeNote(note.id)}
+              aria-label="remove ingredient"
+              component="label"
+              className={classes['note-remove-btn']}
+            >
+              <CloseIcon sx={{fontSize: '1.25rem'}}/>
+            </IconButton>
+          </div>
+          <div className={classes['note-input-group']}>
+            <InputLabel id={`note-${note.id}`} className={classes['note-label']}>Note</InputLabel>
+            <TextField
+              id={`note-${note.id}`}
+              name={`note-${note.id}`}
+              multiline
+              variant="standard"
+              rows={4}
+              className={`${classes['form-notes-input']} ${classes['note-input']}`}
+              placeholder="Write your recipe notes here..."
+              InputLabelProps={{ shrink: true, sx: {'fontSize': '1.25rem'} }}
+              value={note.note || ''}
+              onChange={props.handleRecipeNoteChange}
+            />
+          </div>
+        </div>
+        )
+      })}
+      <Button variant="contained" color="primary" sx={{mb: '1rem'}} onClick={props.addRecipeNote}>Add Note</Button>
+    </div>
   )
 }
 

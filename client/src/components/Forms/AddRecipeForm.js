@@ -17,7 +17,6 @@ const initialValues = {
   prepTimeType: "mins",
   cookinTime: "",
   cookinTimeType: "mins",
-  recipeNotes: "",
 }
 
 const ingredientsInputs = [
@@ -32,12 +31,17 @@ const recipeInstructionsIntitalValue = [
   { id: 2, order: 3, instruction: '', placeholder: 'Add another instruction' },
 ]
 
+const recipeNotesInitialValue = [
+  { id: 0, noteTitle: '', note: '' },
+]
+
 // https://github.com/bradtraversy/react_step_form/tree/master/src/components
 // Breaking apart long forms into components
 const AddRecipeForm = () => {
   const [recipeInfo, setRecipeInfo] = useState({initialValues});
   const [recipeIngredients, setRecipeIngredients] = useState(ingredientsInputs);
   const [recipeInstructions, setRecipeInstructions] = useState(recipeInstructionsIntitalValue);
+  const [recipeNotes, setRecipeNotes] = useState(recipeNotesInitialValue)
 
   // Recipe Info changes
   const handleRecipeInfoChange = async (event) => {
@@ -94,6 +98,45 @@ const AddRecipeForm = () => {
     setRecipeInstructions(values);
   };
 
+  // Recipe notes handlers //
+  const addRecipeNote = () => {
+    let maxId = Math.max(...recipeNotes.map(instruction => instruction.id));
+    maxId < 0 ? maxId = 0 : maxId = maxId + 1;
+    setRecipeNotes([...recipeNotes, { id: maxId, noteTitle: '', notes: '' }]);
+  };
+
+  const removeRecipeNote = (id) => {
+    const values = [...recipeNotes];
+    values.splice(values.findIndex(value => value.id === id), 1);
+    values.forEach((value, index) => {
+      value.id = index;
+      // value.order = index + 1;
+    });
+    setRecipeNotes(values);
+  };
+
+  const handleRecipeNoteTitleChange = (event) => {
+    event.preventDefault();
+    let splitIdLen = event.target.id.split('-').length
+    const id = event.target.id.split('-')[splitIdLen - 1];
+    let findIdx = recipeNotes.findIndex(note => note.id === parseInt(id));
+    const values = [...recipeNotes];
+    values[findIdx].noteTitle = event.target.value;
+    setRecipeNotes(values);
+  };
+
+
+  const handleRecipeNoteChange = (event) => {
+    event.preventDefault();
+    let splitIdLen = event.target.id.split('-').length
+    const id = event.target.id.split('-')[splitIdLen - 1];
+    let findIdx = recipeNotes.findIndex(note => note.id === parseInt(id));
+    const values = [...recipeNotes];
+    values[findIdx].note = event.target.value;
+    setRecipeNotes(values);
+  };
+
+
   // Submit Recipe Info //
   const submitHandler = async (event) => {
     event.preventDefault();
@@ -139,8 +182,11 @@ const AddRecipeForm = () => {
         />
         <Divider />
         <RecipeNotesFormSection
-          recipeInfo={recipeInfo}
-          handleRecipeInfoChange={handleRecipeInfoChange}
+          recipeNotes={recipeNotes}
+          addRecipeNote={addRecipeNote}
+          removeRecipeNote={removeRecipeNote}
+          handleRecipeNoteTitleChange={handleRecipeNoteTitleChange}
+          handleRecipeNoteChange={handleRecipeNoteChange}
         />
         <Divider />
         <Button variant="outlined" type="submit">Submit</Button>

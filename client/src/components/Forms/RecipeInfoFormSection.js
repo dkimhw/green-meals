@@ -4,9 +4,7 @@ import classes from './RecipeInfoFormSection.module.css'
 
 
 // servings unit
-// notes section
 // public/private
-// Add time section?
 const RecipeInfoFormSection = (props) => {
   return (
     <React.Fragment>
