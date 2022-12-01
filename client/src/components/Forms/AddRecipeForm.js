@@ -5,6 +5,7 @@ import classes from './AddRecipeForm.module.css';
 import IngredientsFormSection from './IngredientsFormSection';
 import RecipeInstructionsFormSection from './RecipeInstructionsFormSection';
 import RecipeInfoFormSection from './RecipeInfoFormSection';
+import RecipeTimeFormSection from './RecipeTimeFormSection';
 import RecipeNotesFormSection from './RecipeNotesFormSection';
 import FormCard from '../UI/FormCard';
 import Divider from '../UI/Divider';
@@ -17,6 +18,7 @@ const initialValues = {
   prepTimeType: "mins",
   cookinTime: "",
   cookinTimeType: "mins",
+  servings: "",
 }
 
 const ingredientsInputs = [
@@ -179,6 +181,12 @@ const AddRecipeForm = () => {
           addRecipeInstruction={addRecipeInstruction}
           removeRecipeInstruction={removeRecipeInstruction}
           handleRecipeInstructionChange={handleRecipeInstructionChange}
+        />
+        <Divider />
+        <Typography variant="h5" sx={{mb: '1rem'}}>Cooking Time</Typography>
+        <RecipeTimeFormSection
+          recipeInfo={recipeInfo}
+          handleRecipeInfoChange={handleRecipeInfoChange}
         />
         <Divider />
         <RecipeNotesFormSection
