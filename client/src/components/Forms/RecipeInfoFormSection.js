@@ -31,13 +31,13 @@ const RecipeInfoFormSection = (props) => {
         onChange={props.handleRecipeInfoChange}
       />
       <TextField
-        id="servings"
-        name="servings"
+        id="serving-size"
+        name="servingSize"
         variant="outlined"
         label="Servings"
         type="number"
         className={classes['form-input']}
-        value={props.recipeInfo.servings || ''}
+        value={props.recipeInfo.servingSize || ''}
         onChange={props.handleRecipeInfoChange}
       />
     </React.Fragment>

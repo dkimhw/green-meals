@@ -14,7 +14,7 @@ const RecipeTimeFormSection = (props) => {
           variant="outlined"
           label="Prep Time"
           type="number"
-          value={props.recipeInfo.prepTime}
+          value={props.recipeInfo.prepTime || ''}
           onChange={props.handleRecipeInfoChange}
         />
         <FormControl fullWidth>
@@ -23,11 +23,11 @@ const RecipeTimeFormSection = (props) => {
             labelId="prep-time-type-label"
             id="prep-time-type"
             label="prepTimeType"
-            defaultValue="mins"
+            defaultValue="minutes"
             value={props.recipeInfo.prepTimeType}
             onChange={props.handleRecipeInfoChange}
             >
-            <MenuItem value={'mins'}>mins</MenuItem>
+            <MenuItem value={'minutes'}>mins</MenuItem>
             <MenuItem value={'hours'}>hours</MenuItem>
             <MenuItem value={'days'}>days</MenuItem>
           </Select>
@@ -40,7 +40,7 @@ const RecipeTimeFormSection = (props) => {
           variant="outlined"
           label="Cooking Time"
           type="number"
-          value={props.recipeInfo.cookingTime}
+          value={props.recipeInfo.cookingTime || ''}
           onChange={props.handleRecipeInfoChange}
         />
         <FormControl fullWidth>
@@ -49,11 +49,11 @@ const RecipeTimeFormSection = (props) => {
             labelId="cooking-time-type-label"
             id="cooking-time-type"
             label="cookingTimeType"
-            defaultValue="mins"
+            defaultValue="minutes"
             value={props.recipeInfo.cookingTimeType}
             onChange={props.handleRecipeInfoChange}
             >
-            <MenuItem value={'mins'}>mins</MenuItem>
+            <MenuItem value={'minutes'}>mins</MenuItem>
             <MenuItem value={'hours'}>hours</MenuItem>
             <MenuItem value={'days'}>days</MenuItem>
           </Select>

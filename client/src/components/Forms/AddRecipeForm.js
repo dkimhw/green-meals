@@ -7,6 +7,7 @@ import RecipeInstructionsFormSection from './RecipeInstructionsFormSection';
 import RecipeInfoFormSection from './RecipeInfoFormSection';
 import RecipeTimeFormSection from './RecipeTimeFormSection';
 import RecipeNotesFormSection from './RecipeNotesFormSection';
+import RecipePublicPrivateFormSection from './RecipePublicPrivateFormSection';
 import FormCard from '../UI/FormCard';
 import Divider from '../UI/Divider';
 import axios from 'axios';
@@ -15,10 +16,11 @@ const initialValues = {
   recipeName: "",
   recipeDescription: "",
   prepTime: "",
-  prepTimeType: "mins",
+  prepTimeType: "minutes",
   cookinTime: "",
-  cookinTimeType: "mins",
-  servings: "",
+  cookinTimeType: "minutes",
+  servingSize: "",
+  recipePrivacyStatus: "public",
 }
 
 const ingredientsInputs = [
@@ -145,12 +147,21 @@ const AddRecipeForm = () => {
     console.log('submitted');
     console.log('Recipe info:', recipeInfo);
     console.log('Recipe ingredients:', recipeIngredients);
+    console.log('Recipe directions:', recipeInstructions);
+    console.log('Recipe notes:', recipeNotes);
     // Send to server
     const recipeFormInfo = {
       recipeName: recipeInfo.recipeName,
       recipeDescription: recipeInfo.recipeDescription,
+      cookingTime: recipeInfo.cookingTime,
+      cookingTimeQty: recipeInfo.cookingTimeQty,
+      prepTime: recipeInfo.prepTime,
+      prepTimeQty: recipeInfo.prepTimeQty,
+      servingSize: recipeInfo.servingSize,
+      recipePrivacyStatus: recipeInfo.recipePrivacyStatus,
       recipeIngredients: recipeIngredients,
       recipeInstructions: recipeInstructions,
+      recipeNotes: recipeNotes,
     };
     let result = await axios.post('http://localhost:5051/api/recipes/create', recipeFormInfo)
     console.log(result);
@@ -197,7 +208,11 @@ const AddRecipeForm = () => {
           handleRecipeNoteChange={handleRecipeNoteChange}
         />
         <Divider />
-        <Button variant="outlined" type="submit">Submit</Button>
+        <RecipePublicPrivateFormSection
+          recipeInfo={recipeInfo}
+          handleRecipeInfoChange={handleRecipeInfoChange}
+        />
+        <Button variant="outlined" type="submit" sx={{mt: '1.5rem'}}>Submit</Button>
       </form>
     </FormCard>
   )
