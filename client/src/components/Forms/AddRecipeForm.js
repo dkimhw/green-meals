@@ -1,9 +1,13 @@
 import React from 'react';
 import { useState } from 'react';
-import { TextField, Button, Typography } from '@mui/material';
+import { Button, Typography } from '@mui/material';
 import classes from './AddRecipeForm.module.css';
 import IngredientsFormSection from './IngredientsFormSection';
 import RecipeInstructionsFormSection from './RecipeInstructionsFormSection';
+import RecipeInfoFormSection from './RecipeInfoFormSection';
+import RecipeTimeFormSection from './RecipeTimeFormSection';
+import RecipeNotesFormSection from './RecipeNotesFormSection';
+import RecipePublicPrivateFormSection from './RecipePublicPrivateFormSection';
 import FormCard from '../UI/FormCard';
 import Divider from '../UI/Divider';
 import axios from 'axios';
@@ -11,6 +15,12 @@ import axios from 'axios';
 const initialValues = {
   recipeName: "",
   recipeDescription: "",
+  prepTime: "",
+  prepTimeType: "minutes",
+  cookinTime: "",
+  cookinTimeType: "minutes",
+  servingSize: "",
+  recipePrivacyStatus: "public",
 }
 
 const ingredientsInputs = [
@@ -25,12 +35,17 @@ const recipeInstructionsIntitalValue = [
   { id: 2, order: 3, instruction: '', placeholder: 'Add another instruction' },
 ]
 
+const recipeNotesInitialValue = [
+  { id: 0, noteTitle: '', note: '' },
+]
+
 // https://github.com/bradtraversy/react_step_form/tree/master/src/components
 // Breaking apart long forms into components
 const AddRecipeForm = () => {
   const [recipeInfo, setRecipeInfo] = useState({initialValues});
   const [recipeIngredients, setRecipeIngredients] = useState(ingredientsInputs);
   const [recipeInstructions, setRecipeInstructions] = useState(recipeInstructionsIntitalValue);
+  const [recipeNotes, setRecipeNotes] = useState(recipeNotesInitialValue)
 
   // Recipe Info changes
   const handleRecipeInfoChange = async (event) => {
@@ -87,18 +102,66 @@ const AddRecipeForm = () => {
     setRecipeInstructions(values);
   };
 
+  // Recipe notes handlers //
+  const addRecipeNote = () => {
+    let maxId = Math.max(...recipeNotes.map(instruction => instruction.id));
+    maxId < 0 ? maxId = 0 : maxId = maxId + 1;
+    setRecipeNotes([...recipeNotes, { id: maxId, noteTitle: '', notes: '' }]);
+  };
+
+  const removeRecipeNote = (id) => {
+    const values = [...recipeNotes];
+    values.splice(values.findIndex(value => value.id === id), 1);
+    values.forEach((value, index) => {
+      value.id = index;
+      // value.order = index + 1;
+    });
+    setRecipeNotes(values);
+  };
+
+  const handleRecipeNoteTitleChange = (event) => {
+    event.preventDefault();
+    let splitIdLen = event.target.id.split('-').length
+    const id = event.target.id.split('-')[splitIdLen - 1];
+    let findIdx = recipeNotes.findIndex(note => note.id === parseInt(id));
+    const values = [...recipeNotes];
+    values[findIdx].noteTitle = event.target.value;
+    setRecipeNotes(values);
+  };
+
+
+  const handleRecipeNoteChange = (event) => {
+    event.preventDefault();
+    let splitIdLen = event.target.id.split('-').length
+    const id = event.target.id.split('-')[splitIdLen - 1];
+    let findIdx = recipeNotes.findIndex(note => note.id === parseInt(id));
+    const values = [...recipeNotes];
+    values[findIdx].note = event.target.value;
+    setRecipeNotes(values);
+  };
+
+
   // Submit Recipe Info //
   const submitHandler = async (event) => {
     event.preventDefault();
     console.log('submitted');
     console.log('Recipe info:', recipeInfo);
     console.log('Recipe ingredients:', recipeIngredients);
+    console.log('Recipe directions:', recipeInstructions);
+    console.log('Recipe notes:', recipeNotes);
     // Send to server
     const recipeFormInfo = {
       recipeName: recipeInfo.recipeName,
       recipeDescription: recipeInfo.recipeDescription,
+      cookingTime: recipeInfo.cookingTime,
+      cookingTimeQty: recipeInfo.cookingTimeQty,
+      prepTime: recipeInfo.prepTime,
+      prepTimeQty: recipeInfo.prepTimeQty,
+      servingSize: recipeInfo.servingSize,
+      recipePrivacyStatus: recipeInfo.recipePrivacyStatus,
       recipeIngredients: recipeIngredients,
       recipeInstructions: recipeInstructions,
+      recipeNotes: recipeNotes,
     };
     let result = await axios.post('http://localhost:5051/api/recipes/create', recipeFormInfo)
     console.log(result);
@@ -110,29 +173,9 @@ const AddRecipeForm = () => {
   return (
     <FormCard>
       <form className={classes.form} onSubmit={submitHandler}>
-        <TextField
-          id="recipe-name"
-          name="recipeName"
-          placeholder="Write your recipe name here..."
-          variant="standard"
-          label="Recipe Name"
-          className={classes['form-input']}
-          InputLabelProps={{ shrink: true, sx: {'fontSize': '1.25rem'} }}
-          value={recipeInfo.recipeName || ''}
-          onChange={handleRecipeInfoChange}
-        />
-        <TextField
-          id="recipe-description"
-          label="Recipe Description"
-          name="recipeDescription"
-          multiline
-          variant="standard"
-          rows={4}
-          placeholder="Write your recipe description here..."
-          className={classes['form-input']}
-          InputLabelProps={{ shrink: true, sx: {'fontSize': '1.25rem'} }}
-          value={recipeInfo.recipeDescription || ''}
-          onChange={handleRecipeInfoChange}
+        <RecipeInfoFormSection
+          recipeInfo={recipeInfo}
+          handleRecipeInfoChange={handleRecipeInfoChange}
         />
         <Divider />
         <Typography variant="h5" sx={{mb: '1rem'}}>Ingredients</Typography>
@@ -150,8 +193,26 @@ const AddRecipeForm = () => {
           removeRecipeInstruction={removeRecipeInstruction}
           handleRecipeInstructionChange={handleRecipeInstructionChange}
         />
-
-        <Button variant="outlined" type="submit">Submit</Button>
+        <Divider />
+        <Typography variant="h5" sx={{mb: '1rem'}}>Cooking Time</Typography>
+        <RecipeTimeFormSection
+          recipeInfo={recipeInfo}
+          handleRecipeInfoChange={handleRecipeInfoChange}
+        />
+        <Divider />
+        <RecipeNotesFormSection
+          recipeNotes={recipeNotes}
+          addRecipeNote={addRecipeNote}
+          removeRecipeNote={removeRecipeNote}
+          handleRecipeNoteTitleChange={handleRecipeNoteTitleChange}
+          handleRecipeNoteChange={handleRecipeNoteChange}
+        />
+        <Divider />
+        <RecipePublicPrivateFormSection
+          recipeInfo={recipeInfo}
+          handleRecipeInfoChange={handleRecipeInfoChange}
+        />
+        <Button variant="outlined" type="submit" sx={{mt: '1.5rem'}}>Submit</Button>
       </form>
     </FormCard>
   )

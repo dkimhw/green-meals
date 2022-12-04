@@ -9,8 +9,22 @@ export const index = async (req, res, next) => {
 
 export const createRecipe = async (req, res) => {
   console.log("request body", req.body);
-  const { recipeName, recipeDescription, recipeIngredients, recipeInstructions } = req.body;
+  // Parse request body
+  const {
+    recipeName
+    , recipeDescription
+    , cookingTime
+    , cookingTimeQty
+    , prepTime
+    , prepTimeQty
+    , servingSize
+    , recipePrivacyStatus
+    , recipeIngredients
+    , recipeInstructions
+    , recipeNotes
+  } = req.body;
 
+  // Parse directions, ingredients, and notes for bulk create
   const ingredients = recipeIngredients.map(ingredient => {
     return {
       ingredient_name: ingredient.ingredient_name,
@@ -24,10 +38,23 @@ export const createRecipe = async (req, res) => {
     }
   });
 
+  const notes = recipeNotes.map(note => {
+    return {
+      title: note.noteTitle,
+      text: note.note
+    }
+  });
+
   const newRecipe = await models.Recipe.create(
     {
       recipe_name: recipeName
       , recipe_description: recipeDescription
+      , cooking_time: cookingTime
+      , cooking_time_qty: cookingTimeQty
+      , prep_time: prepTime
+      , prep_time_qty: prepTimeQty
+      , serving_size: servingSize
+      , recipe_privacy_status: recipePrivacyStatus
       , ingredients: ingredients
     }, {
       include: [models.Ingredient]
@@ -40,6 +67,15 @@ export const createRecipe = async (req, res) => {
         instruction_order_number: instruction.instruction_order_number,
         instruction_text: instruction.instruction_text,
         recipe_id: newRecipe.id
+      }
+    })
+  );
+
+  await models.RecipeNote.bulkCreate(
+    notes.map(note => {
+      return {
+        title: note.title,
+        text: note.text,
       }
     })
   );
