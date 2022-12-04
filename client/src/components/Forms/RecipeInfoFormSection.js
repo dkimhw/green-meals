@@ -2,7 +2,6 @@ import React from 'react'
 import { TextField } from '@mui/material'
 import classes from './RecipeInfoFormSection.module.css'
 
-// public/private section
 const RecipeInfoFormSection = (props) => {
   return (
     <React.Fragment>
