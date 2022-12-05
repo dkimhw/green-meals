@@ -1,5 +1,5 @@
 import React from 'react'
-import { TextField } from '@mui/material'
+import { TextField, Button } from '@mui/material'
 import classes from './RecipeInfoFormSection.module.css'
 
 const RecipeInfoFormSection = (props) => {
@@ -39,6 +39,16 @@ const RecipeInfoFormSection = (props) => {
         value={props.recipeInfo.servingSize || ''}
         onChange={props.handleRecipeInfoChange}
       />
+      <Button
+        variant="contained"
+        component="label"
+      >
+        Upload an Image
+        <input
+          type="file"
+          hidden
+        />
+      </Button>
     </React.Fragment>
   )
 }

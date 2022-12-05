@@ -172,7 +172,7 @@ const AddRecipeForm = () => {
 
   return (
     <FormCard>
-      <form className={classes.form} onSubmit={submitHandler}>
+      <form className={classes.form} onSubmit={submitHandler} method="post" enctype="multipart/form-data">
         <RecipeInfoFormSection
           recipeInfo={recipeInfo}
           handleRecipeInfoChange={handleRecipeInfoChange}
