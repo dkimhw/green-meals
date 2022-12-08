@@ -45,7 +45,9 @@ const AddRecipeForm = () => {
   const [recipeInfo, setRecipeInfo] = useState({initialValues});
   const [recipeIngredients, setRecipeIngredients] = useState(ingredientsInputs);
   const [recipeInstructions, setRecipeInstructions] = useState(recipeInstructionsIntitalValue);
-  const [recipeNotes, setRecipeNotes] = useState(recipeNotesInitialValue)
+  const [recipeNotes, setRecipeNotes] = useState(recipeNotesInitialValue);
+  const [uploadedFile, setUploadedFile] = useState(null);
+
 
   // Recipe Info changes
   const handleRecipeInfoChange = async (event) => {
@@ -129,7 +131,6 @@ const AddRecipeForm = () => {
     setRecipeNotes(values);
   };
 
-
   const handleRecipeNoteChange = (event) => {
     event.preventDefault();
     let splitIdLen = event.target.id.split('-').length
@@ -140,15 +141,24 @@ const AddRecipeForm = () => {
     setRecipeNotes(values);
   };
 
+  // Handle file change
+  const handleFileInput = (event) => {
+    setUploadedFile(event.target.files[0]);
+  }
+
+
 
   // Submit Recipe Info //
   const submitHandler = async (event) => {
     event.preventDefault();
     console.log('submitted');
-    console.log('Recipe info:', recipeInfo);
-    console.log('Recipe ingredients:', recipeIngredients);
-    console.log('Recipe directions:', recipeInstructions);
-    console.log('Recipe notes:', recipeNotes);
+    // console.log('Recipe info:', recipeInfo);
+    // console.log('Recipe ingredients:', recipeIngredients);
+    // console.log('Recipe directions:', recipeInstructions);
+    // console.log('Recipe notes:', recipeNotes);
+    console.log(uploadedFile);
+
+
     // Send to server
     const recipeFormInfo = {
       recipeName: recipeInfo.recipeName,
@@ -162,6 +172,7 @@ const AddRecipeForm = () => {
       recipeIngredients: recipeIngredients,
       recipeInstructions: recipeInstructions,
       recipeNotes: recipeNotes,
+      file: uploadedFile
     };
     let result = await axios.post('http://localhost:5051/api/recipes/create', recipeFormInfo)
     console.log(result);
@@ -172,10 +183,11 @@ const AddRecipeForm = () => {
 
   return (
     <FormCard>
-      <form className={classes.form} onSubmit={submitHandler} method="post" enctype="multipart/form-data">
+      <form className={classes.form} onSubmit={submitHandler} method="post" encTypec="multipart/form-data">
         <RecipeInfoFormSection
           recipeInfo={recipeInfo}
           handleRecipeInfoChange={handleRecipeInfoChange}
+          handleFileInput={handleFileInput}
         />
         <Divider />
         <Typography variant="h5" sx={{mb: '1rem'}}>Ingredients</Typography>

@@ -12,9 +12,10 @@ const uploadFile = async (req, res) => {
 
     // Create S3 instance which will be used in uploading photo to s3 bucket.
     const s3 = new AWS.S3({
-    accessKeyId: accessKeyId,              // accessKeyId that is stored in .env file
-    secretAccessKey: secretAccessKey       // secretAccessKey is also store in .env file
+      accessKeyId: accessKeyId,              // accessKeyId that is stored in .env file
+      secretAccessKey: secretAccessKey       // secretAccessKey is also store in .env file
     });
+
 
     const params = {
       Bucket: bucketName,
@@ -22,6 +23,9 @@ const uploadFile = async (req, res) => {
       Body: req.file.buffer,                    // Body which will contain the image in buffer format
       ContentType: "image/jpeg"                 // Necessary to define the image content-type to view the photo in the browser with the link
     };
+
+    console.log("Params: ", params);
+
 
     let s3Upload = await s3.upload(params, (err, data) => {
       if (err) {
