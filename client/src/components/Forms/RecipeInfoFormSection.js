@@ -1,5 +1,5 @@
 import React from 'react'
-import { TextField, Button } from '@mui/material'
+import { TextField } from '@mui/material'
 import classes from './RecipeInfoFormSection.module.css'
 
 // Image preview: https://stackoverflow.com/questions/69035352/how-to-show-image-upload-previews-with-react
@@ -40,19 +40,14 @@ const RecipeInfoFormSection = (props) => {
         value={props.recipeInfo.servingSize || ''}
         onChange={props.handleRecipeInfoChange}
       />
-      <Button
-        variant="contained"
-        component="label"
-      >
-        Upload an Image
-        <input
-          type="file"
-          name="image"
-          id="formFile"
-          onChange={props.handleFileInput}
-          hidden
-        />
-      </Button>
+      Upload an Image
+      <input
+        type="file"
+        name="image"
+        id="formFile"
+        onChange={props.handleFileInput}
+
+      />
     </React.Fragment>
   )
 }

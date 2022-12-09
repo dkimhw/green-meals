@@ -172,18 +172,38 @@ const AddRecipeForm = () => {
       recipeIngredients: recipeIngredients,
       recipeInstructions: recipeInstructions,
       recipeNotes: recipeNotes,
-      file: uploadedFile
+      image: uploadedFile
     };
-    let result = await axios.post('http://localhost:5051/api/recipes/create', recipeFormInfo)
-    console.log(result);
+    // const recipeFormData = new FormData();
+    // recipeFormData.append('recipeName', recipeInfo.recipeName);
+    // recipeFormData.append('recipeDescription', recipeInfo.recipeDescription);
+    // recipeFormData.append('cookingTime', recipeInfo.cookingTime);
+    // recipeFormData.append('cookingTimeQty', recipeInfo.cookingTimeQty);
+    // recipeFormData.append('prepTime', recipeInfo.prepTime);
+    // recipeFormData.append('prepTimeQty', recipeInfo.prepTimeQty);
+    // recipeFormData.append('recipePrivacyStatus', recipeInfo.recipePrivacyStatus);
+    // recipeFormData.append('recipeIngredients', recipeIngredients);
+    // recipeFormData.append('recipeInstructions', recipeInstructions);
+    // recipeFormData.append('recipeNotes', recipeNotes);
+    // recipeFormData.append('image', uploadedFile);
+    // console.log(recipeFormData);
+    const response = await axios({
+      method: "post",
+      url: "http://localhost:5051/api/recipes/create",
+      data: recipeFormInfo,
+      headers: { "Content-Type": "multipart/form-data" },
+    })
+    console.log(response);
+    console.log(recipeFormInfo);
+    // console.log(recipeFormInfo);
 
     // Clear form inputs
     setRecipeInfo({ recipeName: "", recipeDescription: "" });
   }
-
+  // encType="multipart/form-data"
   return (
     <FormCard>
-      <form className={classes.form} onSubmit={submitHandler} method="post" encTypec="multipart/form-data">
+      <form className={classes.form} onSubmit={submitHandler} method="post">
         <RecipeInfoFormSection
           recipeInfo={recipeInfo}
           handleRecipeInfoChange={handleRecipeInfoChange}

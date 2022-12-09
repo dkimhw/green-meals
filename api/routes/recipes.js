@@ -13,7 +13,7 @@ const storage = multer.memoryStorage({
 });
 
 // Defines filefilter for what image types are allowed to be uploaded
-const fileFilter = (req, file, cb) => {
+const imageFilter = (req, file, cb) => {
   if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/jpg') {
       cb(null, true)
   } else {
@@ -22,7 +22,7 @@ const fileFilter = (req, file, cb) => {
 };
 
 // Defines the upload variable for the configuration of photo being uploaded
-const upload = multer({ storage: storage, fileFilter: fileFilter });
+const upload = multer({ storage: storage, fileFilter: imageFilter });
 
 router.route('/getAll').get(recipesController.index)
 router.route('/create').post(

@@ -9,7 +9,7 @@ export const index = async (req, res, next) => {
 };
 
 export const createRecipe = async (req, res) => {
-  // console.log("request body", req.body);
+  console.log("request body", req.body);
   // Parse request body
   const {
     recipeName
@@ -24,6 +24,7 @@ export const createRecipe = async (req, res) => {
     , recipeInstructions
     , recipeNotes
   } = req.body;
+
 
   // Parse directions, ingredients, and notes for bulk create
   const ingredients = recipeIngredients.map(ingredient => {
@@ -82,10 +83,10 @@ export const createRecipe = async (req, res) => {
   );
 
   // Upload image file
-  // let s3Data = await uploadFile(req, res);
-  // console.log("Request data: ", req.file);
-  // let imageKey = s3Data.Key;
-  // console.log(imageKey);
+  let s3Data = await uploadFile(req, res);
+  console.log("Request data: ", req.file);
+  let imageKey = s3Data.Key;
+  console.log(imageKey);
 
   res.json({ message: "Recipe saved!" });
 }
