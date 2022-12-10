@@ -19,7 +19,8 @@ const uploadFile = async (req, res) => {
 
     const params = {
       Bucket: bucketName,
-      Key: req.user._id + req.file.originalname,               // Name of the image
+      Key: req.file.originalname,
+      // Key: req.user._id + req.file.originalname,               // Name of the image
       Body: req.file.buffer,                    // Body which will contain the image in buffer format
       ContentType: "image/jpeg"                 // Necessary to define the image content-type to view the photo in the browser with the link
     };

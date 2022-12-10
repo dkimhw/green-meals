@@ -47,7 +47,7 @@ const AddRecipeForm = () => {
   const [recipeInstructions, setRecipeInstructions] = useState(recipeInstructionsIntitalValue);
   const [recipeNotes, setRecipeNotes] = useState(recipeNotesInitialValue);
   const [uploadedFile, setUploadedFile] = useState(null);
-
+  const [fileData, setFileData] = useState(null);
 
   // Recipe Info changes
   const handleRecipeInfoChange = async (event) => {
@@ -104,7 +104,7 @@ const AddRecipeForm = () => {
     setRecipeInstructions(values);
   };
 
-  // Recipe notes handlers //
+  // Recipe notes handlers
   const addRecipeNote = () => {
     let maxId = Math.max(...recipeNotes.map(instruction => instruction.id));
     maxId < 0 ? maxId = 0 : maxId = maxId + 1;
@@ -144,18 +144,23 @@ const AddRecipeForm = () => {
   // Handle file change
   const handleFileInput = (event) => {
     setUploadedFile(event.target.files[0]);
+    const reader = new FileReader();
+    reader.addEventListener("load", () => {
+      setFileData(reader.result);
+    });
+    reader.readAsDataURL(event.target.files[0]);
   }
 
-
+  const removeFileInput = (event) => {
+    //event.target.value = null;
+    setFileData(null);
+    setUploadedFile(null);
+  }
 
   // Submit Recipe Info //
   const submitHandler = async (event) => {
     event.preventDefault();
     console.log('submitted');
-    // console.log('Recipe info:', recipeInfo);
-    // console.log('Recipe ingredients:', recipeIngredients);
-    // console.log('Recipe directions:', recipeInstructions);
-    // console.log('Recipe notes:', recipeNotes);
     console.log(uploadedFile);
 
 
@@ -208,6 +213,8 @@ const AddRecipeForm = () => {
           recipeInfo={recipeInfo}
           handleRecipeInfoChange={handleRecipeInfoChange}
           handleFileInput={handleFileInput}
+          removeFileInput={removeFileInput}
+          fileData={fileData}
         />
         <Divider />
         <Typography variant="h5" sx={{mb: '1rem'}}>Ingredients</Typography>

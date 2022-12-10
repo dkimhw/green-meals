@@ -5,3 +5,18 @@
   margin-bottom: 1.25rem !important;
   width: 300px;
 }
+
+.uploaded-img {
+  margin-top: 1rem;
+  height: 10rem;
+  object-fit: cover;
+}
+
+.img-group {
+  margin-top: 1rem;
+  display: grid;
+  max-width: 20rem;
+  place-items: center;
+  grid-template-columns: 1fr 1rem;
+  column-gap: 3rem;
+}
