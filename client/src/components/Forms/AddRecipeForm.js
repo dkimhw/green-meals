@@ -41,6 +41,8 @@ const recipeNotesInitialValue = [
 
 // https://github.com/bradtraversy/react_step_form/tree/master/src/components
 // Breaking apart long forms into components
+
+// Multiple Files: https://www.techgeeknext.com/react/multiple-files-upload-example
 const AddRecipeForm = () => {
   const [recipeInfo, setRecipeInfo] = useState({initialValues});
   const [recipeIngredients, setRecipeIngredients] = useState(ingredientsInputs);
@@ -116,7 +118,6 @@ const AddRecipeForm = () => {
     values.splice(values.findIndex(value => value.id === id), 1);
     values.forEach((value, index) => {
       value.id = index;
-      // value.order = index + 1;
     });
     setRecipeNotes(values);
   };
@@ -152,7 +153,7 @@ const AddRecipeForm = () => {
   }
 
   const removeFileInput = (event) => {
-    //event.target.value = null;
+    // event.target.value = null;
     setFileData(null);
     setUploadedFile(null);
   }
@@ -162,7 +163,6 @@ const AddRecipeForm = () => {
     event.preventDefault();
     console.log('submitted');
     console.log(uploadedFile);
-
 
     // Send to server
     const recipeFormInfo = {

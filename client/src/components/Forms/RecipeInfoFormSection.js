@@ -46,8 +46,8 @@ const RecipeInfoFormSection = (props) => {
         type="file"
         name="image"
         id="formFile"
+        multiple
         onChange={props.handleFileInput}
-
       />
       {props.fileData && <div className={classes['img-group']}>
         <img

@@ -12,6 +12,7 @@ const storage = multer.memoryStorage({
   }
 });
 
+// file.mimetype == "image/png"
 // Defines filefilter for what image types are allowed to be uploaded
 const imageFilter = (req, file, cb) => {
   if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/jpg') {
