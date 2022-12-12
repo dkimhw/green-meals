@@ -16,7 +16,6 @@ const uploadFile = async (req, res) => {
       secretAccessKey: secretAccessKey       // secretAccessKey is also store in .env file
     });
 
-
     const params = {
       Bucket: bucketName,
       Key: req.file.originalname,

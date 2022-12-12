@@ -27,7 +27,8 @@ const upload = multer({ storage: storage, fileFilter: imageFilter });
 
 router.route('/getAll').get(recipesController.index)
 router.route('/create').post(
-  upload.single("image"),
+  // upload.single("image"),
+  upload.array("images", 3),
   recipesController.createRecipe
 )
 

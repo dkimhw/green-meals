@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button, Typography } from '@mui/material';
 import classes from './AddRecipeForm.module.css';
 import IngredientsFormSection from './IngredientsFormSection';
@@ -43,13 +43,14 @@ const recipeNotesInitialValue = [
 // Breaking apart long forms into components
 
 // Multiple Files: https://www.techgeeknext.com/react/multiple-files-upload-example
+// https://www.positronx.io/react-multiple-files-upload-with-node-express-tutorial/
 const AddRecipeForm = () => {
   const [recipeInfo, setRecipeInfo] = useState({initialValues});
   const [recipeIngredients, setRecipeIngredients] = useState(ingredientsInputs);
   const [recipeInstructions, setRecipeInstructions] = useState(recipeInstructionsIntitalValue);
   const [recipeNotes, setRecipeNotes] = useState(recipeNotesInitialValue);
-  const [uploadedFile, setUploadedFile] = useState(null);
-  const [fileData, setFileData] = useState(null);
+  const [uploadedFiles, setUploadedFiles] = useState([]);
+  const [filesData, setFilesData] = useState(null);
 
   // Recipe Info changes
   const handleRecipeInfoChange = async (event) => {
@@ -143,26 +144,64 @@ const AddRecipeForm = () => {
   };
 
   // Handle file change
-  const handleFileInput = (event) => {
-    setUploadedFile(event.target.files[0]);
-    const reader = new FileReader();
-    reader.addEventListener("load", () => {
-      setFileData(reader.result);
-    });
-    reader.readAsDataURL(event.target.files[0]);
+  const handleFileInput = async (event) => {
+    console.log(...event.target.files);
+    let files = event.target.files;
+    // let imagesArray = [];
+    // for (let i = 0; i < event.target.files.length; i++) {
+    //   imagesArray.push(URL.createObjectURL(event.target.files[i]));
+    // }
+
+    // console.log(imagesArray);
+
+    if (files && files !== undefined) {
+      setUploadedFiles([...files]);
+    } else {
+      console.log('file error');
+    }
+
+    // const reader = new FileReader();
+    // reader.addEventListener("load", () => {
+    //   setFileData(reader.result);
+    // });
+    // reader.readAsDataURL(event.target.files[0]);
   }
 
-  const removeFileInput = (event) => {
+  useEffect(() => {
+    const newFilesData = [];
+    for (let file of uploadedFiles) {
+      newFilesData.push(URL.createObjectURL(file));
+    }
+    setFilesData(newFilesData);
+  }, [uploadedFiles])
+
+  const removeFileInput = (idx) => {
     // event.target.value = null;
-    setFileData(null);
-    setUploadedFile(null);
+    console.log(idx);
+    const values = [...filesData];
+    values.splice(values.findIndex((value, index) => index === idx), 1);
+    // values.forEach((value, index) => {
+    //   value.id = index;
+    // });
+
+
+    setFilesData(values);
+    // const images = uploadedFiles['files'];
+    // images.splice(images.findIndex(image => image[0] === fileName), 1);
+    // setUploadedFiles({ files: images });
+
+
+
+    // setFilesData(null);
+    // setUploadedFiles(null);
   }
 
   // Submit Recipe Info //
   const submitHandler = async (event) => {
     event.preventDefault();
     console.log('submitted');
-    console.log(uploadedFile);
+    console.log(uploadedFiles);
+    console.log(URL.createObjectURL(uploadedFiles[0]))
 
     // Send to server
     const recipeFormInfo = {
@@ -177,7 +216,7 @@ const AddRecipeForm = () => {
       recipeIngredients: recipeIngredients,
       recipeInstructions: recipeInstructions,
       recipeNotes: recipeNotes,
-      image: uploadedFile
+      image: uploadedFiles
     };
     // const recipeFormData = new FormData();
     // recipeFormData.append('recipeName', recipeInfo.recipeName);
@@ -205,7 +244,8 @@ const AddRecipeForm = () => {
     // Clear form inputs
     setRecipeInfo({ recipeName: "", recipeDescription: "" });
   }
-  // encType="multipart/form-data"
+
+
   return (
     <FormCard>
       <form className={classes.form} onSubmit={submitHandler} method="post">
@@ -214,7 +254,7 @@ const AddRecipeForm = () => {
           handleRecipeInfoChange={handleRecipeInfoChange}
           handleFileInput={handleFileInput}
           removeFileInput={removeFileInput}
-          fileData={fileData}
+          filesData={filesData}
         />
         <Divider />
         <Typography variant="h5" sx={{mb: '1rem'}}>Ingredients</Typography>

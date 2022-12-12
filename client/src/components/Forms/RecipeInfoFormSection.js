@@ -44,24 +44,24 @@ const RecipeInfoFormSection = (props) => {
       Upload an Image
       <input
         type="file"
-        name="image"
+        name="images"
         id="formFile"
         multiple
         onChange={props.handleFileInput}
       />
-      {props.fileData && <div className={classes['img-group']}>
-        <img
-          id="image-1"
-          name="image-1"
-          src={props.fileData}
-          className={classes['uploaded-img']}
-          alt=""
-        />
-        <IconButton aria-label="remove ingredient" component="label" onClick={props.removeFileInput}>
-          <CloseIcon sx={{fontSize: '1.75rem'}}/>
-        </IconButton>
-      </div>}
-
+      {props.filesData ? props.filesData.map( (file, idx) => {
+        return (<div className={classes['img-group']} key={idx}>
+          <img
+            id={`image-${idx}`}
+            name={`image-${idx}`}
+            src={file}
+            className={classes['uploaded-img']}
+            alt=""
+          />
+          <IconButton aria-label="remove image" component="label" onClick={() => props.removeFileInput(idx)}>
+            <CloseIcon sx={{fontSize: '1.75rem'}}/>
+          </IconButton>
+        </div>) }) : ""}
     </React.Fragment>
   )
 }
