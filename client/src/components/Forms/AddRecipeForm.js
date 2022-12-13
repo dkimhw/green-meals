@@ -147,24 +147,12 @@ const AddRecipeForm = () => {
   const handleFileInput = async (event) => {
     console.log(...event.target.files);
     let files = event.target.files;
-    // let imagesArray = [];
-    // for (let i = 0; i < event.target.files.length; i++) {
-    //   imagesArray.push(URL.createObjectURL(event.target.files[i]));
-    // }
-
-    // console.log(imagesArray);
 
     if (files && files !== undefined) {
-      setUploadedFiles([...files]);
+      setUploadedFiles([...uploadedFiles, ...files]);
     } else {
       console.log('file error');
     }
-
-    // const reader = new FileReader();
-    // reader.addEventListener("load", () => {
-    //   setFileData(reader.result);
-    // });
-    // reader.readAsDataURL(event.target.files[0]);
   }
 
   useEffect(() => {
@@ -176,24 +164,15 @@ const AddRecipeForm = () => {
   }, [uploadedFiles])
 
   const removeFileInput = (idx) => {
-    // event.target.value = null;
-    console.log(idx);
+    // Remove the image blob url from file data
     const values = [...filesData];
     values.splice(values.findIndex((value, index) => index === idx), 1);
-    // values.forEach((value, index) => {
-    //   value.id = index;
-    // });
-
-
     setFilesData(values);
-    // const images = uploadedFiles['files'];
-    // images.splice(images.findIndex(image => image[0] === fileName), 1);
-    // setUploadedFiles({ files: images });
 
-
-
-    // setFilesData(null);
-    // setUploadedFiles(null);
+    // Remove file data from state uploadedFiles
+    const images = [...uploadedFiles];
+    images.splice(images.findIndex((valude, index)=> index === idx), 1);
+    setUploadedFiles(images);
   }
 
   // Submit Recipe Info //
@@ -218,19 +197,7 @@ const AddRecipeForm = () => {
       recipeNotes: recipeNotes,
       image: uploadedFiles
     };
-    // const recipeFormData = new FormData();
-    // recipeFormData.append('recipeName', recipeInfo.recipeName);
-    // recipeFormData.append('recipeDescription', recipeInfo.recipeDescription);
-    // recipeFormData.append('cookingTime', recipeInfo.cookingTime);
-    // recipeFormData.append('cookingTimeQty', recipeInfo.cookingTimeQty);
-    // recipeFormData.append('prepTime', recipeInfo.prepTime);
-    // recipeFormData.append('prepTimeQty', recipeInfo.prepTimeQty);
-    // recipeFormData.append('recipePrivacyStatus', recipeInfo.recipePrivacyStatus);
-    // recipeFormData.append('recipeIngredients', recipeIngredients);
-    // recipeFormData.append('recipeInstructions', recipeInstructions);
-    // recipeFormData.append('recipeNotes', recipeNotes);
-    // recipeFormData.append('image', uploadedFile);
-    // console.log(recipeFormData);
+
     const response = await axios({
       method: "post",
       url: "http://localhost:5051/api/recipes/create",
@@ -239,9 +206,8 @@ const AddRecipeForm = () => {
     })
     console.log(response);
     console.log(recipeFormInfo);
-    // console.log(recipeFormInfo);
 
-    // Clear form inputs
+    // Clear form inputs - need to add more
     setRecipeInfo({ recipeName: "", recipeDescription: "" });
   }
 
