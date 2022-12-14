@@ -2,6 +2,7 @@ import React from 'react'
 import { TextField, IconButton } from '@mui/material'
 import classes from './RecipeInfoFormSection.module.css'
 import CloseIcon from '@mui/icons-material/Close';
+import FormInputAlert from '../UI/FormInputAlert';
 
 // Image preview: https://stackoverflow.com/questions/69035352/how-to-show-image-upload-previews-with-react
 const RecipeInfoFormSection = (props) => {
@@ -49,6 +50,11 @@ const RecipeInfoFormSection = (props) => {
         multiple
         onChange={props.handleFileInput}
       />
+      {props.fileErrors ? props.fileErrors.map((error, idx) => {
+        return (
+          <FormInputAlert msg={error} />
+        );
+      }) : "" }
       {props.filesData ? props.filesData.map( (file, idx) => {
         return (<div className={classes['img-group']} key={idx}>
           <img

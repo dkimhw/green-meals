@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Button, Typography } from '@mui/material';
 import classes from './AddRecipeForm.module.css';
 import IngredientsFormSection from './IngredientsFormSection';
@@ -11,6 +11,8 @@ import RecipePublicPrivateFormSection from './RecipePublicPrivateFormSection';
 import FormCard from '../UI/FormCard';
 import Divider from '../UI/Divider';
 import axios from 'axios';
+import useFormImagesUpload from '../../hooks/useFormImagesUpload';
+import { isValidNumberOfImagesUploaded } from '../../utils/validateInputs';
 
 const initialValues = {
   recipeName: "",
@@ -49,8 +51,8 @@ const AddRecipeForm = () => {
   const [recipeIngredients, setRecipeIngredients] = useState(ingredientsInputs);
   const [recipeInstructions, setRecipeInstructions] = useState(recipeInstructionsIntitalValue);
   const [recipeNotes, setRecipeNotes] = useState(recipeNotesInitialValue);
-  const [uploadedFiles, setUploadedFiles] = useState([]);
-  const [filesData, setFilesData] = useState(null);
+  const { handleFileInput, removeFileInput, filesData, uploadedFiles, fileErrors } = useFormImagesUpload(isValidNumberOfImagesUploaded);
+
 
   // Recipe Info changes
   const handleRecipeInfoChange = async (event) => {
@@ -143,38 +145,6 @@ const AddRecipeForm = () => {
     setRecipeNotes(values);
   };
 
-  // Handle file change
-  const handleFileInput = async (event) => {
-    console.log(...event.target.files);
-    let files = event.target.files;
-
-    if (files && files !== undefined) {
-      setUploadedFiles([...uploadedFiles, ...files]);
-    } else {
-      console.log('file error');
-    }
-  }
-
-  useEffect(() => {
-    const newFilesData = [];
-    for (let file of uploadedFiles) {
-      newFilesData.push(URL.createObjectURL(file));
-    }
-    setFilesData(newFilesData);
-  }, [uploadedFiles])
-
-  const removeFileInput = (idx) => {
-    // Remove the image blob url from file data
-    const values = [...filesData];
-    values.splice(values.findIndex((value, index) => index === idx), 1);
-    setFilesData(values);
-
-    // Remove file data from state uploadedFiles
-    const images = [...uploadedFiles];
-    images.splice(images.findIndex((valude, index)=> index === idx), 1);
-    setUploadedFiles(images);
-  }
-
   // Submit Recipe Info //
   const submitHandler = async (event) => {
     event.preventDefault();
@@ -221,6 +191,7 @@ const AddRecipeForm = () => {
           handleFileInput={handleFileInput}
           removeFileInput={removeFileInput}
           filesData={filesData}
+          fileErrors={fileErrors}
         />
         <Divider />
         <Typography variant="h5" sx={{mb: '1rem'}}>Ingredients</Typography>
