@@ -52,7 +52,7 @@ const RecipeInfoFormSection = (props) => {
       />
       {props.fileErrors ? props.fileErrors.map((error, idx) => {
         return (
-          <FormInputAlert msg={error} />
+          <FormInputAlert key={idx} msg={error} />
         );
       }) : "" }
       {props.filesData ? props.filesData.map( (file, idx) => {
