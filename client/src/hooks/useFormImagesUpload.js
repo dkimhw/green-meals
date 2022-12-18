@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 
 const MAX_IMAGES = 3;
+const MAX_FILE_SIZE = 4120 // 5MB
 
 const useFormImagesUpload = (validate) => {
   const [uploadedFiles, setUploadedFiles] = useState([]);
@@ -12,19 +13,17 @@ const useFormImagesUpload = (validate) => {
   const handleFileInput = async (event) => {
     let files = event.target.files;
     let newFiles = [...uploadedFiles, ...files]
-    let imageValidation = validate(newFiles, MAX_IMAGES, event);
-    let isValid = imageValidation[0];
-    let errMsg = imageValidation[1];
+    let imageValidation = validate(newFiles, MAX_IMAGES, MAX_FILE_SIZE, event);
+    //let isValid = imageValidation[0];
+    let errMsgs = imageValidation.filter(image => image[1]).map(image => image[1]);
 
-    // console.log("valid num of images", isValid);
-
-    if (files && files !== undefined && isValid) {
+    if (files && files !== undefined && errMsgs.length === 0) {
       setUploadedFiles([...uploadedFiles, ...files]);
     }
 
-    console.log(errMsg);
-    if (!isValid) {
-      setFileErrors([...fileErrors, errMsg]);
+    console.log(errMsgs);
+    if (errMsgs.length > 0) {
+      setFileErrors([...fileErrors, ...errMsgs]);
     }
   }
 

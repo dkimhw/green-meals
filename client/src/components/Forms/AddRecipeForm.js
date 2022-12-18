@@ -12,7 +12,7 @@ import FormCard from '../UI/FormCard';
 import Divider from '../UI/Divider';
 import axios from 'axios';
 import useFormImagesUpload from '../../hooks/useFormImagesUpload';
-import { isValidNumberOfImagesUploaded } from '../../utils/validateInputs';
+import { isValidImagesUploaded } from '../../utils/validateInputs';
 
 const initialValues = {
   recipeName: "",
@@ -51,7 +51,7 @@ const AddRecipeForm = () => {
   const [recipeIngredients, setRecipeIngredients] = useState(ingredientsInputs);
   const [recipeInstructions, setRecipeInstructions] = useState(recipeInstructionsIntitalValue);
   const [recipeNotes, setRecipeNotes] = useState(recipeNotesInitialValue);
-  const { handleFileInput, removeFileInput, filesData, uploadedFiles, fileErrors } = useFormImagesUpload(isValidNumberOfImagesUploaded);
+  const { handleFileInput, removeFileInput, filesData, uploadedFiles, fileErrors } = useFormImagesUpload(isValidImagesUploaded);
 
 
   // Recipe Info changes
