@@ -18,11 +18,11 @@ const initialValues = {
   recipeName: "",
   recipeDescription: "",
   prepTime: "",
-  prepTimeType: "minutes",
-  cookinTime: "",
-  cookinTimeType: "minutes",
+  prepTimeType: "",
+  cookingTime: "",
+  cookingTimeType: "",
   servingSize: "",
-  recipePrivacyStatus: "public",
+  recipePrivacyStatus: "",
 }
 
 const ingredientsInputs = [
@@ -56,6 +56,8 @@ const AddRecipeForm = () => {
 
   // Recipe Info changes
   const handleRecipeInfoChange = async (event) => {
+    console.log(event.target.name);
+    console.log(event.target.value);
     setRecipeInfo({ ...recipeInfo, [event.target.name]: event.target.value });
   }
 
@@ -149,24 +151,42 @@ const AddRecipeForm = () => {
   const submitHandler = async (event) => {
     event.preventDefault();
     console.log('submitted');
-    console.log(uploadedFiles);
-    console.log(URL.createObjectURL(uploadedFiles[0]))
 
-    // Send to server
-    const recipeFormInfo = {
-      recipeName: recipeInfo.recipeName,
-      recipeDescription: recipeInfo.recipeDescription,
-      cookingTime: recipeInfo.cookingTime,
-      cookingTimeQty: recipeInfo.cookingTimeQty,
-      prepTime: recipeInfo.prepTime,
-      prepTimeQty: recipeInfo.prepTimeQty,
-      servingSize: recipeInfo.servingSize,
-      recipePrivacyStatus: recipeInfo.recipePrivacyStatus,
-      recipeIngredients: recipeIngredients,
-      recipeInstructions: recipeInstructions,
-      recipeNotes: recipeNotes,
-      image: uploadedFiles
-    };
+    // // Send to server
+    // const recipeFormInfo = {
+    //   recipeName: recipeInfo.recipeName,
+    //   recipeDescription: recipeInfo.recipeDescription,
+    //   cookingTime: recipeInfo.cookingTime,
+    //   cookingTimeQty: recipeInfo.cookingTimeQty,
+    //   prepTime: recipeInfo.prepTime,
+    //   prepTimeQty: recipeInfo.prepTimeQty,
+    //   servingSize: recipeInfo.servingSize,
+    //   recipePrivacyStatus: recipeInfo.recipePrivacyStatus,
+    //   recipeIngredients: recipeIngredients,
+    //   recipeInstructions: recipeInstructions,
+    //   recipeNotes: recipeNotes,
+    //   images: uploadedFiles,
+    // };
+    console.log("recipeInfo ", recipeInfo)
+    console.log("cookingTime", recipeInfo.cookingTimeType)
+    console.log("prepTimeType", recipeInfo.prepTimeType)
+
+    const recipeFormInfo = new FormData();
+    recipeFormInfo.append('recipeName', recipeInfo.recipeName);
+    recipeFormInfo.append('recipeDescription', recipeInfo.recipeDescription);
+    recipeFormInfo.append('cookingTime', recipeInfo.cookingTime);
+    recipeFormInfo.append('cookingTimeQty', recipeInfo.cookingTimeType);
+    recipeFormInfo.append('prepTime', recipeInfo.prepTime);
+    recipeFormInfo.append('prepTimeQty', recipeInfo.prepTimeType);
+    recipeFormInfo.append('servingSize', recipeInfo.servingSize);
+    recipeFormInfo.append('recipePrivacyStatus', recipeInfo.recipePrivacyStatus);
+    recipeFormInfo.append('recipeIngredients', JSON.stringify(recipeIngredients));
+    recipeFormInfo.append('recipeInstructions',  JSON.stringify(recipeInstructions));
+    recipeFormInfo.append('recipeNotes',  JSON.stringify(recipeNotes));
+
+    uploadedFiles.forEach(image => {
+      recipeFormInfo.append('images', image);
+    });
 
     const response = await axios({
       method: "post",
@@ -175,7 +195,6 @@ const AddRecipeForm = () => {
       headers: { "Content-Type": "multipart/form-data" },
     })
     console.log(response);
-    console.log(recipeFormInfo);
 
     // Clear form inputs - need to add more
     setRecipeInfo({ recipeName: "", recipeDescription: "" });

@@ -20,6 +20,8 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(cors()); // Allow cross-origin requests
 
+
+
 // Routes
 app.get('/', (req, res) => {
   res.send('Hello World!');
@@ -36,6 +38,12 @@ app.use('/api/recipes', recipesRoutes);
 //   .catch((err) => {
 //     console.log("Failed to sync db: " + err.message);
 //   });
+
+app.use((error, req, res, next) => {
+  const message = `This is the rejected field -> ${error.field}`;
+  console.log(message);
+  return res.status(500).send(message)
+});
 
 // force: true
 const PORT = process.env.PORT;

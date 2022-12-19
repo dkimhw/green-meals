@@ -8,7 +8,7 @@ const router = express.Router();
 // Add storage for image upload
 const storage = multer.memoryStorage({
   destination: function (req, file, cb) {
-      cb(null, '')
+    cb(null, '')
   }
 });
 
@@ -28,7 +28,7 @@ const upload = multer({ storage: storage, fileFilter: imageFilter });
 router.route('/getAll').get(recipesController.index)
 router.route('/create').post(
   // upload.single("image"),
-  upload.array("images", 3),
+  upload.array("images"),
   recipesController.createRecipe
 )
 

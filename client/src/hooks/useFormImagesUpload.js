@@ -12,12 +12,13 @@ const useFormImagesUpload = (validate) => {
 
   const handleFileInput = async (event) => {
     let files = event.target.files;
+    console.log(files);
     let newFiles = [...uploadedFiles, ...files]
     let imageValidation = validate(newFiles, MAX_IMAGES, MAX_FILE_SIZE, event);
     let errMsgs = imageValidation.filter(image => image[1]).map(image => image[1]);
 
     if (files && files !== undefined && errMsgs.length === 0) {
-      setUploadedFiles([...uploadedFiles, ...files]);
+      setUploadedFiles(newFiles);
     }
 
     console.log("imgArray: ",imageValidation);

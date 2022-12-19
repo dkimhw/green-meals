@@ -8,8 +8,7 @@ const RecipePublicPrivateFormSection = (props) => {
       <FormLabel id="private-public-radio-buttons-group-label">Make this recipe public?</FormLabel>
       <RadioGroup
         aria-labelledby="private-public-radio-buttons-group-label"
-        defaultValue="public"
-        name="private-public-radio-input"
+        name="recipePrivacyStatus"
         value={props.recipeInfo.recipePrivacyStatus}
         onChange={props.handleRecipeInfoChange}
       >
