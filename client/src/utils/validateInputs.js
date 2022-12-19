@@ -12,10 +12,11 @@ const isValidNumberOfImagesUploaded = (imagesArr, limit, event) => {
 }
 
 const isValidImageSize = (imagesArr, fileSizeLimit, event) => {
-  for (let file in imagesArr) {
+  for (let file of imagesArr) {
     let fileSize = file.size / 1024;
     if (fileSize > fileSizeLimit) {
-      return [false, `One or more images are over the file size limit (${fileSizeLimit})`];
+      event.preventDefault();
+      return [false, `One or more images are over the file size limit (max ${fileSizeLimit} bytes)`];
     }
   }
 

@@ -14,14 +14,14 @@ const useFormImagesUpload = (validate) => {
     let files = event.target.files;
     let newFiles = [...uploadedFiles, ...files]
     let imageValidation = validate(newFiles, MAX_IMAGES, MAX_FILE_SIZE, event);
-    //let isValid = imageValidation[0];
     let errMsgs = imageValidation.filter(image => image[1]).map(image => image[1]);
 
     if (files && files !== undefined && errMsgs.length === 0) {
       setUploadedFiles([...uploadedFiles, ...files]);
     }
 
-    console.log(errMsgs);
+    console.log("imgArray: ",imageValidation);
+    console.log("errMsgs: ", errMsgs);
     if (errMsgs.length > 0) {
       setFileErrors([...fileErrors, ...errMsgs]);
     }
