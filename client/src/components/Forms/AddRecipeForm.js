@@ -11,14 +11,16 @@ import RecipePublicPrivateFormSection from './RecipePublicPrivateFormSection';
 import FormCard from '../UI/FormCard';
 import Divider from '../UI/Divider';
 import axios from 'axios';
+import useFormImagesUpload from '../../hooks/useFormImagesUpload';
+import { isValidImagesUploaded } from '../../utils/validateInputs';
 
 const initialValues = {
   recipeName: "",
   recipeDescription: "",
   prepTime: "",
   prepTimeType: "minutes",
-  cookinTime: "",
-  cookinTimeType: "minutes",
+  cookingTime: "",
+  cookingTimeType: "minutes",
   servingSize: "",
   recipePrivacyStatus: "public",
 }
@@ -41,14 +43,21 @@ const recipeNotesInitialValue = [
 
 // https://github.com/bradtraversy/react_step_form/tree/master/src/components
 // Breaking apart long forms into components
+
+// Multiple Files: https://www.techgeeknext.com/react/multiple-files-upload-example
+// https://www.positronx.io/react-multiple-files-upload-with-node-express-tutorial/
 const AddRecipeForm = () => {
-  const [recipeInfo, setRecipeInfo] = useState({initialValues});
+  const [recipeInfo, setRecipeInfo] = useState(initialValues);
   const [recipeIngredients, setRecipeIngredients] = useState(ingredientsInputs);
   const [recipeInstructions, setRecipeInstructions] = useState(recipeInstructionsIntitalValue);
-  const [recipeNotes, setRecipeNotes] = useState(recipeNotesInitialValue)
+  const [recipeNotes, setRecipeNotes] = useState(recipeNotesInitialValue);
+  const { handleFileInput, removeFileInput, filesData, uploadedFiles, fileErrors } = useFormImagesUpload(isValidImagesUploaded);
+
 
   // Recipe Info changes
   const handleRecipeInfoChange = async (event) => {
+    console.log(event.target.name);
+    console.log(event.target.value);
     setRecipeInfo({ ...recipeInfo, [event.target.name]: event.target.value });
   }
 
@@ -102,7 +111,7 @@ const AddRecipeForm = () => {
     setRecipeInstructions(values);
   };
 
-  // Recipe notes handlers //
+  // Recipe notes handlers
   const addRecipeNote = () => {
     let maxId = Math.max(...recipeNotes.map(instruction => instruction.id));
     maxId < 0 ? maxId = 0 : maxId = maxId + 1;
@@ -114,7 +123,6 @@ const AddRecipeForm = () => {
     values.splice(values.findIndex(value => value.id === id), 1);
     values.forEach((value, index) => {
       value.id = index;
-      // value.order = index + 1;
     });
     setRecipeNotes(values);
   };
@@ -129,7 +137,6 @@ const AddRecipeForm = () => {
     setRecipeNotes(values);
   };
 
-
   const handleRecipeNoteChange = (event) => {
     event.preventDefault();
     let splitIdLen = event.target.id.split('-').length
@@ -140,42 +147,70 @@ const AddRecipeForm = () => {
     setRecipeNotes(values);
   };
 
-
   // Submit Recipe Info //
   const submitHandler = async (event) => {
     event.preventDefault();
     console.log('submitted');
-    console.log('Recipe info:', recipeInfo);
-    console.log('Recipe ingredients:', recipeIngredients);
-    console.log('Recipe directions:', recipeInstructions);
-    console.log('Recipe notes:', recipeNotes);
-    // Send to server
-    const recipeFormInfo = {
-      recipeName: recipeInfo.recipeName,
-      recipeDescription: recipeInfo.recipeDescription,
-      cookingTime: recipeInfo.cookingTime,
-      cookingTimeQty: recipeInfo.cookingTimeQty,
-      prepTime: recipeInfo.prepTime,
-      prepTimeQty: recipeInfo.prepTimeQty,
-      servingSize: recipeInfo.servingSize,
-      recipePrivacyStatus: recipeInfo.recipePrivacyStatus,
-      recipeIngredients: recipeIngredients,
-      recipeInstructions: recipeInstructions,
-      recipeNotes: recipeNotes,
-    };
-    let result = await axios.post('http://localhost:5051/api/recipes/create', recipeFormInfo)
-    console.log(result);
 
-    // Clear form inputs
+    // // Send to server
+    // const recipeFormInfo = {
+    //   recipeName: recipeInfo.recipeName,
+    //   recipeDescription: recipeInfo.recipeDescription,
+    //   cookingTime: recipeInfo.cookingTime,
+    //   cookingTimeQty: recipeInfo.cookingTimeQty,
+    //   prepTime: recipeInfo.prepTime,
+    //   prepTimeQty: recipeInfo.prepTimeQty,
+    //   servingSize: recipeInfo.servingSize,
+    //   recipePrivacyStatus: recipeInfo.recipePrivacyStatus,
+    //   recipeIngredients: recipeIngredients,
+    //   recipeInstructions: recipeInstructions,
+    //   recipeNotes: recipeNotes,
+    //   images: uploadedFiles,
+    // };
+    console.log("recipeInfo ", recipeInfo)
+    console.log("cookingTime", recipeInfo.cookingTimeType)
+    console.log("prepTimeType", recipeInfo.prepTimeType)
+
+    const recipeFormInfo = new FormData();
+    recipeFormInfo.append('recipeName', recipeInfo.recipeName);
+    recipeFormInfo.append('recipeDescription', recipeInfo.recipeDescription);
+    recipeFormInfo.append('cookingTime', recipeInfo.cookingTime);
+    recipeFormInfo.append('cookingTimeQty', recipeInfo.cookingTimeType);
+    recipeFormInfo.append('prepTime', recipeInfo.prepTime);
+    recipeFormInfo.append('prepTimeQty', recipeInfo.prepTimeType);
+    recipeFormInfo.append('servingSize', recipeInfo.servingSize);
+    recipeFormInfo.append('recipePrivacyStatus', recipeInfo.recipePrivacyStatus);
+    recipeFormInfo.append('recipeIngredients', JSON.stringify(recipeIngredients));
+    recipeFormInfo.append('recipeInstructions',  JSON.stringify(recipeInstructions));
+    recipeFormInfo.append('recipeNotes',  JSON.stringify(recipeNotes));
+
+    uploadedFiles.forEach(image => {
+      recipeFormInfo.append('images', image);
+    });
+
+    const response = await axios({
+      method: "post",
+      url: "http://localhost:5051/api/recipes/create",
+      data: recipeFormInfo,
+      headers: { "Content-Type": "multipart/form-data" },
+    })
+    console.log(response);
+
+    // Clear form inputs - need to add more
     setRecipeInfo({ recipeName: "", recipeDescription: "" });
   }
 
+
   return (
     <FormCard>
-      <form className={classes.form} onSubmit={submitHandler}>
+      <form className={classes.form} onSubmit={submitHandler} method="post">
         <RecipeInfoFormSection
           recipeInfo={recipeInfo}
           handleRecipeInfoChange={handleRecipeInfoChange}
+          handleFileInput={handleFileInput}
+          removeFileInput={removeFileInput}
+          filesData={filesData}
+          fileErrors={fileErrors}
         />
         <Divider />
         <Typography variant="h5" sx={{mb: '1rem'}}>Ingredients</Typography>

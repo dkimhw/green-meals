@@ -18,7 +18,7 @@ const getRecipeNoteModel = (sequelize, { DataTypes }) => {
     , {
       updatedAt: 'updated_at',
       createdAt: 'created_at',
-      recipeID: 'recipe_id'
+      recipeId: 'recipe_id'
   });
 
   RecipeNote.associate = (models) => {
