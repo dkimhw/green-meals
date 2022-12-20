@@ -11,7 +11,7 @@ const getImageModel = (sequelize, { DataTypes }) => {
     , {
       updatedAt: 'updated_at',
       createdAt: 'created_at',
-      recipeID: 'recipe_id'
+      recipeId: 'recipe_id'
   });
 
   RecipeImage.associate = (models) => {

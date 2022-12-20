@@ -52,6 +52,7 @@ const RecipeTimeFormSection = (props) => {
             label="cookingTimeType"
             value={props.recipeInfo.cookingTimeType}
             onChange={props.handleRecipeInfoChange}
+            onLoad={props.handleRecipeInfoChange}
             >
             <MenuItem value={'minutes'}>minutes</MenuItem>
             <MenuItem value={'hours'}>hours</MenuItem>

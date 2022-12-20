@@ -8,6 +8,7 @@ export const index = async (req, res, next) => {
   res.send(allRecipes)
 };
 
+// This needs to be improved - should be able to use just one create method to insert everything
 export const createRecipe = async (req, res) => {
   // Parse request body
   let {
@@ -32,7 +33,6 @@ export const createRecipe = async (req, res) => {
     }
   });
 
-  // console.log("check ingredients: ", ingredients);
   let instructions = JSON.parse(recipeInstructions);
   instructions = instructions.map(instruction => {
     return {
@@ -65,12 +65,17 @@ export const createRecipe = async (req, res) => {
     }
   );
 
+  console.log("newRecipe: ", newRecipe);
+  console.log("newRecipe id: ", newRecipe.dataValues.id);
+  console.log("newRecipe id2: ", newRecipe.id);
+
+
   await models.Instruction.bulkCreate(
     instructions.map(instruction => {
       return {
         instruction_order_number: instruction.instruction_order_number,
         instruction_text: instruction.instruction_text,
-        recipe_id: newRecipe.id
+        recipeId: newRecipe.dataValues.id
       }
     })
   );
@@ -80,7 +85,7 @@ export const createRecipe = async (req, res) => {
       return {
         title: note.title,
         text: note.text,
-        recipe_id: newRecipe.id,
+        recipeId: newRecipe.dataValues.id,
       }
     })
   );
@@ -88,14 +93,14 @@ export const createRecipe = async (req, res) => {
   // Upload image file
   // let s3Data = await uploadFile(req, res);
   console.log("req.files", req.files);
-  let s3ImageData = await uploadFiles(req, res, newRecipe.id);
+  let s3ImageData = await uploadFiles(req, res, newRecipe.dataValues.id);
   console.log("recipe.js: ", s3ImageData);
 
   await models.RecipeImage.bulkCreate(
     s3ImageData.map(image => {
       return {
         image_key: image.Key,
-        recipe_id: newRecipe.id,
+        recipeId: newRecipe.dataValues.id,
       }
     })
   );

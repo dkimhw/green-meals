@@ -18,11 +18,11 @@ const initialValues = {
   recipeName: "",
   recipeDescription: "",
   prepTime: "",
-  prepTimeType: "",
+  prepTimeType: "minutes",
   cookingTime: "",
-  cookingTimeType: "",
+  cookingTimeType: "minutes",
   servingSize: "",
-  recipePrivacyStatus: "",
+  recipePrivacyStatus: "public",
 }
 
 const ingredientsInputs = [
@@ -47,7 +47,7 @@ const recipeNotesInitialValue = [
 // Multiple Files: https://www.techgeeknext.com/react/multiple-files-upload-example
 // https://www.positronx.io/react-multiple-files-upload-with-node-express-tutorial/
 const AddRecipeForm = () => {
-  const [recipeInfo, setRecipeInfo] = useState({initialValues});
+  const [recipeInfo, setRecipeInfo] = useState(initialValues);
   const [recipeIngredients, setRecipeIngredients] = useState(ingredientsInputs);
   const [recipeInstructions, setRecipeInstructions] = useState(recipeInstructionsIntitalValue);
   const [recipeNotes, setRecipeNotes] = useState(recipeNotesInitialValue);

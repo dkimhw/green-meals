@@ -17,7 +17,7 @@ const getInstructionModel = (sequelize, { DataTypes }) => {
   }, {
     updatedAt: 'updated_at',
     createdAt: 'created_at',
-    recipeID: 'recipe_id'
+    recipeId: 'recipe_id'
   });
 
   Instruction.associate = (models) => {
