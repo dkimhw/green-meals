@@ -1,5 +1,5 @@
 import models from '../models/index.js';
-import uploadFile from '../utils/imageUpload.js';
+import uploadFiles from '../utils/imageUpload.js';
 
 export const index = async (req, res, next) => {
   const recipesModel = models.Recipe;
@@ -80,15 +80,26 @@ export const createRecipe = async (req, res) => {
       return {
         title: note.title,
         text: note.text,
+        recipe_id: newRecipe.id,
       }
     })
   );
 
   // Upload image file
   // let s3Data = await uploadFile(req, res);
-  console.log("Request data: ", req.files);
-  // let imageKey = s3Data.Key;
-  // console.log(imageKey);
+  console.log("req.files", req.files);
+  let s3ImageData = await uploadFiles(req, res, newRecipe.id);
+  console.log("recipe.js: ", s3ImageData);
+
+  await models.RecipeImage.bulkCreate(
+    s3ImageData.map(image => {
+      return {
+        image_key: image.Key,
+        recipe_id: newRecipe.id,
+      }
+    })
+  );
+
 
   res.json({ message: "Recipe saved!" });
 }
