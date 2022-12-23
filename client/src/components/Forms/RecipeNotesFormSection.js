@@ -15,12 +15,12 @@ const RecipeNotesFormSection = (props) => {
             <InputLabel id={`note-title-${note.id}`} className={classes['note-label']}>Title</InputLabel>
             <TextField
               id={`note-title-${note.id}`}
-              name={`note-title-${note.id}`}
+              name='noteTitle'
               placeholder="e.g. Cook's Tips"
               variant="standard"
               className={`${classes['form-notes-input']} ${classes['note-input']}`}
               value={note.noteTitle || ""}
-              onChange={props.handleRecipeNoteTitleChange}
+              onChange={props.handleRecipeNoteChange}
             />
             <IconButton
               id={`remove-note-${note.id}`}
@@ -37,7 +37,7 @@ const RecipeNotesFormSection = (props) => {
             <InputLabel id={`note-${note.id}`} className={classes['note-label']}>Note</InputLabel>
             <TextField
               id={`note-${note.id}`}
-              name={`note-${note.id}`}
+              name='note'
               multiline
               variant="standard"
               rows={4}

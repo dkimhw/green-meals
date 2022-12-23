@@ -7,12 +7,12 @@ import CloseIcon from '@mui/icons-material/Close';
 const AddIngredientsFormSection = (props) => {
   return (
     <React.Fragment>
-      {props.ingredients.map((input) => {
+      {props.ingredients ? props.ingredients.map((input) => {
         return (
           <div className={classes['ingredients-form-group']} key={input.id}>
             <TextField
               id={`recipe-name-${input.id}`}
-              name={`recipe-name-${input.id}`}
+              name='ingredientName'
               placeholder={input.placeholder}
               defaultValue=""
               onChange={props.handleIngredientNameChange}
@@ -25,7 +25,7 @@ const AddIngredientsFormSection = (props) => {
             </IconButton>
           </div>
         )
-      })}
+      }) : ''}
 
       <Button variant="contained" color="primary" sx={{mb: '1rem', display: 'flex', justifyContent: 'center'}} onClick={props.addIngredient}>Add Ingredient</Button>
     </React.Fragment>

@@ -12,6 +12,7 @@ import FormCard from '../UI/FormCard';
 import Divider from '../UI/Divider';
 import axios from 'axios';
 import useFormImagesUpload from '../../hooks/useFormImagesUpload';
+import useMultipleInputs from '../../hooks/useMultipleInputs';
 import { isValidImagesUploaded } from '../../utils/validateInputs';
 
 const initialValues = {
@@ -26,9 +27,9 @@ const initialValues = {
 }
 
 const ingredientsInputs = [
-  { id: 0, ingredient_name: '', placeholder: 'e.g. Flour' },
-  { id: 1, ingredient_name: '', placeholder: 'e.g. Sugar' },
-  { id: 2, ingredient_name: '', placeholder: 'e.g. Olive oil' },
+  { id: 0, ingredientName: '', placeholder: 'e.g. Flour' },
+  { id: 1, ingredientName: '', placeholder: 'e.g. Sugar' },
+  { id: 2, ingredientName: '', placeholder: 'e.g. Olive oil' },
 ]
 
 const recipeInstructionsIntitalValue = [
@@ -48,9 +49,19 @@ const recipeNotesInitialValue = [
 // https://www.positronx.io/react-multiple-files-upload-with-node-express-tutorial/
 const AddRecipeForm = () => {
   const [recipeInfo, setRecipeInfo] = useState(initialValues);
-  const [recipeIngredients, setRecipeIngredients] = useState(ingredientsInputs);
+  const {
+    inputArray: recipeIngredients
+    , addInput: addIngredient
+    , removeInput: removeIngredient
+    , handleChange: handleIngredientNameChange
+  } = useMultipleInputs(ingredientsInputs, { id: 0, ingredient_name: '', placeholder: 'Add a new ingredient' });
   const [recipeInstructions, setRecipeInstructions] = useState(recipeInstructionsIntitalValue);
-  const [recipeNotes, setRecipeNotes] = useState(recipeNotesInitialValue);
+  const {
+    inputArray: recipeNotes
+    , addInput: addRecipeNote
+    , removeInput: removeRecipeNote
+    , handleChange: handleRecipeNoteChange
+  } = useMultipleInputs(recipeNotesInitialValue, { id: 0, noteTitle: '', note: '' });
   const { handleFileInput, removeFileInput, filesData, uploadedFiles, fileErrors } = useFormImagesUpload(isValidImagesUploaded);
 
 
@@ -60,29 +71,6 @@ const AddRecipeForm = () => {
     console.log(event.target.value);
     setRecipeInfo({ ...recipeInfo, [event.target.name]: event.target.value });
   }
-
-  // Add new ingredient handlers //
-  const addIngredient = () => {
-    let maxId = Math.max(...recipeIngredients.map(ingredient => ingredient.id));
-    maxId < 0 ? maxId = 0 : maxId = maxId + 1;
-    setRecipeIngredients([...recipeIngredients, { id: maxId, ingredient_name: '', placeholder: 'Add a new ingredient' }]);
-  };
-
-  const removeIngredient = (id) => {
-    const values = [...recipeIngredients];
-    values.splice(values.findIndex(value => value.id === id), 1);
-    setRecipeIngredients(values);
-  };
-
-  const handleIngredientNameChange = (event) => {
-    event.preventDefault();
-    let splitIdLen = event.target.id.split('-').length
-    const id = event.target.id.split('-')[splitIdLen - 1];
-    let findIdx = recipeIngredients.findIndex(ingredient => ingredient.id === parseInt(id));
-    const values = [...recipeIngredients];
-    values[findIdx].ingredient_name = event.target.value;
-    setRecipeIngredients(values);
-  };
 
   // Recipe instructions handlers //
   const addRecipeInstruction = () => {
@@ -111,62 +99,10 @@ const AddRecipeForm = () => {
     setRecipeInstructions(values);
   };
 
-  // Recipe notes handlers
-  const addRecipeNote = () => {
-    let maxId = Math.max(...recipeNotes.map(instruction => instruction.id));
-    maxId < 0 ? maxId = 0 : maxId = maxId + 1;
-    setRecipeNotes([...recipeNotes, { id: maxId, noteTitle: '', notes: '' }]);
-  };
-
-  const removeRecipeNote = (id) => {
-    const values = [...recipeNotes];
-    values.splice(values.findIndex(value => value.id === id), 1);
-    values.forEach((value, index) => {
-      value.id = index;
-    });
-    setRecipeNotes(values);
-  };
-
-  const handleRecipeNoteTitleChange = (event) => {
-    event.preventDefault();
-    let splitIdLen = event.target.id.split('-').length
-    const id = event.target.id.split('-')[splitIdLen - 1];
-    let findIdx = recipeNotes.findIndex(note => note.id === parseInt(id));
-    const values = [...recipeNotes];
-    values[findIdx].noteTitle = event.target.value;
-    setRecipeNotes(values);
-  };
-
-  const handleRecipeNoteChange = (event) => {
-    event.preventDefault();
-    let splitIdLen = event.target.id.split('-').length
-    const id = event.target.id.split('-')[splitIdLen - 1];
-    let findIdx = recipeNotes.findIndex(note => note.id === parseInt(id));
-    const values = [...recipeNotes];
-    values[findIdx].note = event.target.value;
-    setRecipeNotes(values);
-  };
-
   // Submit Recipe Info //
   const submitHandler = async (event) => {
     event.preventDefault();
     console.log('submitted');
-
-    // // Send to server
-    // const recipeFormInfo = {
-    //   recipeName: recipeInfo.recipeName,
-    //   recipeDescription: recipeInfo.recipeDescription,
-    //   cookingTime: recipeInfo.cookingTime,
-    //   cookingTimeQty: recipeInfo.cookingTimeQty,
-    //   prepTime: recipeInfo.prepTime,
-    //   prepTimeQty: recipeInfo.prepTimeQty,
-    //   servingSize: recipeInfo.servingSize,
-    //   recipePrivacyStatus: recipeInfo.recipePrivacyStatus,
-    //   recipeIngredients: recipeIngredients,
-    //   recipeInstructions: recipeInstructions,
-    //   recipeNotes: recipeNotes,
-    //   images: uploadedFiles,
-    // };
     console.log("recipeInfo ", recipeInfo)
     console.log("cookingTime", recipeInfo.cookingTimeType)
     console.log("prepTimeType", recipeInfo.prepTimeType)
@@ -197,7 +133,7 @@ const AddRecipeForm = () => {
     console.log(response);
 
     // Clear form inputs - need to add more
-    setRecipeInfo({ recipeName: "", recipeDescription: "" });
+    setRecipeInfo(initialValues);
   }
 
 
@@ -239,7 +175,6 @@ const AddRecipeForm = () => {
           recipeNotes={recipeNotes}
           addRecipeNote={addRecipeNote}
           removeRecipeNote={removeRecipeNote}
-          handleRecipeNoteTitleChange={handleRecipeNoteTitleChange}
           handleRecipeNoteChange={handleRecipeNoteChange}
         />
         <Divider />

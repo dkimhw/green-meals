@@ -29,7 +29,7 @@ export const createRecipe = async (req, res) => {
   let ingredients = JSON.parse(recipeIngredients);
   ingredients = ingredients.map(ingredient => {
     return {
-      ingredient_name: ingredient.ingredient_name,
+      ingredient_name: ingredient.ingredientName,
     }
   });
 
