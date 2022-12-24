@@ -1,7 +1,7 @@
 
 import { useState } from 'react';
 
-const useMultipleInputs = (intialValues, defaultValue) => {
+const useMultipleInputs = (intialValues, defaultValue, validate) => {
   const [inputArray, setInputArray] = useState(intialValues);
 
   const addInput = () => {
@@ -29,11 +29,22 @@ const useMultipleInputs = (intialValues, defaultValue) => {
     setInputArray(values);
   };
 
+  const onBlur = (event) => {
+    let currentInputVal = event.target.value;
+    let validateInput = validate(currentInputVal);
+    if (validateInput[0] === false) {
+      return validateInput;
+    } else {
+      return [true, null];
+    }
+  }
+
   return {
     inputArray
     , addInput
     , removeInput
     , handleChange
+    , onBlur
   }
 }
 

@@ -16,6 +16,7 @@ const AddIngredientsFormSection = (props) => {
               placeholder={input.placeholder}
               defaultValue=""
               onChange={props.handleIngredientNameChange}
+              onBlur={props.handleIngredientBlur}
               variant="outlined"
               values={input.ingredient_name}
               label="Ingredient Name"

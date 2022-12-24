@@ -34,9 +34,9 @@ export const createRecipe = async (req, res) => {
   });
 
   let instructions = JSON.parse(recipeInstructions);
-  instructions = instructions.map(instruction => {
+  instructions = instructions.map((instruction, idx) => {
     return {
-      instruction_order_number: instruction.order,
+      instruction_order_number: idx + 1,
       instruction_text: instruction.instruction
     }
   });

@@ -54,8 +54,14 @@ const AddRecipeForm = () => {
     , addInput: addIngredient
     , removeInput: removeIngredient
     , handleChange: handleIngredientNameChange
+    , onBlur: handleIngredientBlur
   } = useMultipleInputs(ingredientsInputs, { id: 0, ingredient_name: '', placeholder: 'Add a new ingredient' });
-  const [recipeInstructions, setRecipeInstructions] = useState(recipeInstructionsIntitalValue);
+  const {
+    inputArray: recipeInstructions
+    , addInput: addRecipeInstruction
+    , removeInput: removeRecipeInstruction
+    , handleChange: handleRecipeInstructionChange
+  } = useMultipleInputs(recipeInstructionsIntitalValue, { id: 0, instruction: '', placeholder: 'Add another instruction' });
   const {
     inputArray: recipeNotes
     , addInput: addRecipeNote
@@ -64,40 +70,12 @@ const AddRecipeForm = () => {
   } = useMultipleInputs(recipeNotesInitialValue, { id: 0, noteTitle: '', note: '' });
   const { handleFileInput, removeFileInput, filesData, uploadedFiles, fileErrors } = useFormImagesUpload(isValidImagesUploaded);
 
-
   // Recipe Info changes
   const handleRecipeInfoChange = async (event) => {
     console.log(event.target.name);
     console.log(event.target.value);
     setRecipeInfo({ ...recipeInfo, [event.target.name]: event.target.value });
   }
-
-  // Recipe instructions handlers //
-  const addRecipeInstruction = () => {
-    let maxId = Math.max(...recipeInstructions.map(instruction => instruction.id));
-    maxId < 0 ? maxId = 0 : maxId = maxId + 1;
-    setRecipeInstructions([...recipeInstructions, { id: maxId, order: maxId + 1, instruction: '', placeholder: 'Add another instruction' }]);
-  };
-
-  const removeRecipeInstruction = (id) => {
-    const values = [...recipeInstructions];
-    values.splice(values.findIndex(value => value.id === id), 1);
-    values.forEach((value, index) => {
-      value.id = index;
-      value.order = index + 1;
-    });
-    setRecipeInstructions(values);
-  };
-
-  const handleRecipeInstructionChange = (event) => {
-    event.preventDefault();
-    let splitIdLen = event.target.id.split('-').length
-    const id = event.target.id.split('-')[splitIdLen - 1];
-    let findIdx = recipeInstructions.findIndex(instruction => instruction.id === parseInt(id));
-    const values = [...recipeInstructions];
-    values[findIdx].instruction = event.target.value;
-    setRecipeInstructions(values);
-  };
 
   // Submit Recipe Info //
   const submitHandler = async (event) => {
@@ -155,6 +133,7 @@ const AddRecipeForm = () => {
           addIngredient={addIngredient}
           removeIngredient={removeIngredient}
           handleIngredientNameChange={handleIngredientNameChange}
+          handleIngredientBlur={handleIngredientBlur}
         />
         <Divider />
         <Typography variant="h5" sx={{mb: '1rem'}}>Directions</Typography>

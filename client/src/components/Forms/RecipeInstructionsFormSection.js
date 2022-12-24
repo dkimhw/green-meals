@@ -7,14 +7,14 @@ import CloseIcon from '@mui/icons-material/Close';
 const RecipeInstructionsFormSection = (props) => {
   return (
     <div className={classes['ingredients-form-section']}>
-      {props.instructions.map((input) => {
+      {props.instructions.map((input, idx) => {
         return (
           <div className={classes['ingredients-form-group']} key={input.id}>
             <TextField
               id={`instruction-${input.id}`}
-              name={`instruction-${input.id}`}
+              name='instruction'
               placeholder={input.placeholder}
-              label={`Step ${input.order}`}
+              label={`Step ${idx + 1}`}
               multiline
               maxRows={4}
               value={input.instruction}

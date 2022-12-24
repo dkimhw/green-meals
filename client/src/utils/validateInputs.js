@@ -33,3 +33,21 @@ export const isValidImagesUploaded = (imagesArr, numOfFiles, fileSizeLimit, even
 
   return errors;
 }
+
+export const isValidStringInput = (str) => {
+  if (str.trim() === '') {
+    return [false, 'Please fill out this field.'];
+  } else if (typeof str !== "string" || /[0-9]+/g.test(str)) {
+    return [false, 'Please enter a valid input.']
+  }
+
+  return true;
+}
+
+export const validateEmail = (email) => {
+  return String(email)
+    .toLowerCase()
+    .match(
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    );
+};
