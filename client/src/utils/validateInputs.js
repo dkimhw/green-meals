@@ -36,12 +36,12 @@ export const isValidImagesUploaded = (imagesArr, numOfFiles, fileSizeLimit, even
 
 export const isValidStringInput = (str) => {
   if (str.trim() === '') {
-    return [false, 'Please fill out this field.'];
+    return [true, 'Please fill out this field.'];
   } else if (typeof str !== "string" || /[0-9]+/g.test(str)) {
-    return [false, 'Please enter a valid input.']
+    return [true, 'Please enter a valid input.']
   }
 
-  return true;
+  return [false, null];
 }
 
 export const validateEmail = (email) => {

@@ -26,17 +26,27 @@ const useMultipleInputs = (intialValues, defaultValue, validate) => {
     let findIdx = inputArray.findIndex(input => input.id === parseInt(id));
     const values = [...inputArray];
     values[findIdx][event.target.name] = event.target.value;
+
+    // Validate
+    let validVal = validate(event.target.value);
+    console.log("validVal: ", validVal);
+    // let hasError = !validVal[0]// && values[findIdx]['touched'];
+
+    values[findIdx]['hasError'] = validVal[0];
+    values[findIdx]['error'] = validVal[1];
+    console.log("values: ", values);
+
     setInputArray(values);
   };
 
   const onBlur = (event) => {
-    let currentInputVal = event.target.value;
-    let validateInput = validate(currentInputVal);
-    if (validateInput[0] === false) {
-      return validateInput;
-    } else {
-      return [true, null];
-    }
+    event.preventDefault();
+    let splitIdLen = event.target.id.split('-').length
+    const id = event.target.id.split('-')[splitIdLen - 1];
+    let findIdx = inputArray.findIndex(input => input.id === parseInt(id));
+    const values = [...inputArray];
+    values[findIdx]['touched'] = true;
+    setInputArray(values);
   }
 
   return {

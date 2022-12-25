@@ -3,28 +3,33 @@ import React from 'react';
 import { TextField, Button, IconButton } from '@mui/material';
 import classes from './IngredientsFormSection.module.css';
 import CloseIcon from '@mui/icons-material/Close';
+import FormInputAlert from '../UI/FormInputAlert';
+
 
 const AddIngredientsFormSection = (props) => {
   return (
     <React.Fragment>
       {props.ingredients ? props.ingredients.map((input) => {
         return (
-          <div className={classes['ingredients-form-group']} key={input.id}>
-            <TextField
-              id={`recipe-name-${input.id}`}
-              name='ingredientName'
-              placeholder={input.placeholder}
-              defaultValue=""
-              onChange={props.handleIngredientNameChange}
-              onBlur={props.handleIngredientBlur}
-              variant="outlined"
-              values={input.ingredient_name}
-              label="Ingredient Name"
-            />
-            <IconButton id={`remove-recipe-name-${input.id}`}  color="primary" onClick={() => props.removeIngredient(input.id)} aria-label="remove ingredient" component="label">
-              <CloseIcon sx={{fontSize: '1.75rem'}}/>
-            </IconButton>
-          </div>
+          <React.Fragment key={input.id}>
+            <div className={classes['ingredients-form-group']} >
+              <TextField
+                id={`recipe-name-${input.id}`}
+                name='ingredientName'
+                placeholder={input.placeholder}
+                defaultValue=""
+                onChange={props.handleIngredientNameChange}
+                onBlur={props.handleIngredientBlur}
+                variant="outlined"
+                values={input.ingredient_name}
+                label="Ingredient Name"
+              />
+              <IconButton id={`remove-recipe-name-${input.id}`}  color="primary" onClick={() => props.removeIngredient(input.id)} aria-label="remove ingredient" component="label">
+                <CloseIcon sx={{fontSize: '1.75rem'}}/>
+              </IconButton>
+            </div>
+            {input.hasError ? <FormInputAlert msg={input.error} /> : '' }
+          </React.Fragment>
         )
       }) : ''}
 

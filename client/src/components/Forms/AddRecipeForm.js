@@ -13,7 +13,7 @@ import Divider from '../UI/Divider';
 import axios from 'axios';
 import useFormImagesUpload from '../../hooks/useFormImagesUpload';
 import useMultipleInputs from '../../hooks/useMultipleInputs';
-import { isValidImagesUploaded } from '../../utils/validateInputs';
+import { isValidImagesUploaded, isValidStringInput } from '../../utils/validateInputs';
 
 const initialValues = {
   recipeName: "",
@@ -27,9 +27,9 @@ const initialValues = {
 }
 
 const ingredientsInputs = [
-  { id: 0, ingredientName: '', placeholder: 'e.g. Flour' },
-  { id: 1, ingredientName: '', placeholder: 'e.g. Sugar' },
-  { id: 2, ingredientName: '', placeholder: 'e.g. Olive oil' },
+  { id: 0, ingredientName: '', placeholder: 'e.g. Flour', hasError: false, error: '', touched: false },
+  { id: 1, ingredientName: '', placeholder: 'e.g. Sugar', hasError: false, error: '', touched: false },
+  { id: 2, ingredientName: '', placeholder: 'e.g. Olive oil', hasError: false, error: '', touched: false },
 ]
 
 const recipeInstructionsIntitalValue = [
@@ -55,7 +55,7 @@ const AddRecipeForm = () => {
     , removeInput: removeIngredient
     , handleChange: handleIngredientNameChange
     , onBlur: handleIngredientBlur
-  } = useMultipleInputs(ingredientsInputs, { id: 0, ingredient_name: '', placeholder: 'Add a new ingredient' });
+  } = useMultipleInputs(ingredientsInputs, { id: 0, ingredient_name: '', placeholder: 'Add a new ingredient', hasError: false, error: '', touched: false }, isValidStringInput);
   const {
     inputArray: recipeInstructions
     , addInput: addRecipeInstruction
