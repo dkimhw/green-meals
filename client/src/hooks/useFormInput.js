@@ -5,8 +5,10 @@ const useFormInput = (validateInputValue) => {
   const [isTouched, setIsTouched] = useState(false);
 
   // Validate and check for errors if input has been touched
-  const valueIsValid = validateInputValue(enteredValue);
+  const valueIsValid = validateInputValue(enteredValue)[0];
   const hasError = !valueIsValid && isTouched;
+
+  console.log(hasError);
 
   // Handler fo blur event
   const blurInputHandler = () => {

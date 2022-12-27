@@ -13,6 +13,7 @@ import Divider from '../UI/Divider';
 import axios from 'axios';
 import useFormImagesUpload from '../../hooks/useFormImagesUpload';
 import useMultipleInputs from '../../hooks/useMultipleInputs';
+import useFormInput from '../../hooks/useFormInput';
 import { isValidImagesUploaded, isValidStringInput } from '../../utils/validateInputs';
 
 const initialValues = {
@@ -48,6 +49,23 @@ const recipeNotesInitialValue = [
 // Multiple Files: https://www.techgeeknext.com/react/multiple-files-upload-example
 // https://www.positronx.io/react-multiple-files-upload-with-node-express-tutorial/
 const AddRecipeForm = () => {
+  const {
+    value: recipeName
+    , hasError: hasRecipeNameInputError
+    , isValid: isRecipenameInputValid
+    , blurInputHandler: recipeNameBlurInputHandler
+    , valueChangeHandler: recipeNameChangeHandler
+    , resetInput: recipeNameReset
+  } = useFormInput(isValidStringInput);
+  const {
+    value: recipeDescription
+    , hasError: hasrecipeDescriptionInputError
+    , isValid: isrecipeDescriptionValid
+    , blurInputHandler: recipeDescriptionBlurInputHandler
+    , valueChangeHandler: recipeDescriptionChangeHandler
+    , resetInput: recipeDescriptionReset
+  } = useFormInput(isValidStringInput)
+
   const [recipeInfo, setRecipeInfo] = useState(initialValues);
   const {
     inputArray: recipeIngredients
@@ -121,6 +139,19 @@ const AddRecipeForm = () => {
         <RecipeInfoFormSection
           recipeInfo={recipeInfo}
           handleRecipeInfoChange={handleRecipeInfoChange}
+          // Recipe Name
+          recipeName={recipeName}
+          hasRecipeNameInputError={hasRecipeNameInputError}
+          isRecipenameInputValid={isRecipenameInputValid}
+          recipeNameBlurInputHandler={recipeNameBlurInputHandler}
+          recipeNameChangeHandler={recipeNameChangeHandler}
+
+          // Recipe Description
+          recipeDescription={recipeDescription}
+          hasrecipeDescriptionInputError={hasrecipeDescriptionInputError}
+          recipeDescriptionBlurInputHandler={recipeDescriptionBlurInputHandler}
+          recipeDescriptionChangeHandler={recipeDescriptionChangeHandler}
+
           handleFileInput={handleFileInput}
           removeFileInput={removeFileInput}
           filesData={filesData}

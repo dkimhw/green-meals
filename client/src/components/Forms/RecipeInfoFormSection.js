@@ -12,25 +12,31 @@ const RecipeInfoFormSection = (props) => {
         id="recipe-name"
         name="recipeName"
         placeholder="Write your recipe name here..."
-        variant="standard"
+        variant="outlined"
         label="Recipe Name"
-        className={classes['form-input']}
+        error={props.hasRecipeNameInputError}
+        helperText={props.hasRecipeNameInputError ? 'Please enter in a valid input.' : ''}
+        className={`${classes['form-input']}`}
         InputLabelProps={{ shrink: true, sx: {'fontSize': '1.25rem'} }}
-        value={props.recipeInfo.recipeName || ''}
-        onChange={props.handleRecipeInfoChange}
+        value={props.recipeName || ''}
+        onChange={props.recipeNameChangeHandler}
+        onBlur={props.recipeNameBlurInputHandler}
       />
       <TextField
         id="recipe-description"
         label="Recipe Description"
         name="recipeDescription"
         multiline
-        variant="standard"
+        variant="outlined"
         rows={4}
         placeholder="Write your recipe description here..."
+        error={props.hasrecipeDescriptionInputError}
+        helperText={props.hasrecipeDescriptionInputError ? 'Please enter in a valid input.' : ''}
         className={classes['form-input']}
         InputLabelProps={{ shrink: true, sx: {'fontSize': '1.25rem'} }}
-        value={props.recipeInfo.recipeDescription || ''}
-        onChange={props.handleRecipeInfoChange}
+        value={props.recipeDescription || ''}
+        onChange={props.recipeDescriptionChangeHandler}
+        onBlur={props.recipeDescriptionBlurInputHandler}
       />
       <TextField
         id="serving-size"
