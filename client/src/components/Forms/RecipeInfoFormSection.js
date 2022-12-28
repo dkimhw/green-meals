@@ -15,7 +15,7 @@ const RecipeInfoFormSection = (props) => {
         variant="outlined"
         label="Recipe Name"
         error={props.hasRecipeNameInputError}
-        helperText={props.hasRecipeNameInputError ? 'Please enter in a valid input.' : ''}
+        helperText={props.hasRecipeNameInputError ? props.recipeNameErrorMsg : ''}
         className={`${classes['form-input']}`}
         InputLabelProps={{ shrink: true, sx: {'fontSize': '1.25rem'} }}
         value={props.recipeName || ''}
@@ -30,8 +30,8 @@ const RecipeInfoFormSection = (props) => {
         variant="outlined"
         rows={4}
         placeholder="Write your recipe description here..."
-        error={props.hasrecipeDescriptionInputError}
-        helperText={props.hasrecipeDescriptionInputError ? 'Please enter in a valid input.' : ''}
+        error={props.hasRecipeDescriptionInputError}
+        helperText={props.hasRecipeDescriptionInputError ? props.recipeDescriptionErrorMsg : ''}
         className={classes['form-input']}
         InputLabelProps={{ shrink: true, sx: {'fontSize': '1.25rem'} }}
         value={props.recipeDescription || ''}
@@ -44,9 +44,12 @@ const RecipeInfoFormSection = (props) => {
         variant="outlined"
         label="Servings"
         type="number"
+        error={props.hasServingSizeInputError}
+        helperText={props.hasServingSizeInputError ? props.servingSizeErrorMsg : ''}
         className={classes['form-input']}
-        value={props.recipeInfo.servingSize || ''}
-        onChange={props.handleRecipeInfoChange}
+        value={props.servingSize || ''}
+        onChange={props.servingSizeChangeHandler}
+        onBlur={props.servingSizeBlurInputHandler}
       />
       Upload an Image
       <input

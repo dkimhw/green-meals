@@ -1,7 +1,6 @@
 
 // https://www.positronx.io/react-form-validation-tutorial-with-example/
 
-// Give a function: fieldName, e.event.target or state value, and error message
 const isValidNumberOfImagesUploaded = (imagesArr, limit, event) => {
   if (imagesArr.length > limit) {
     event.preventDefault();
@@ -34,14 +33,42 @@ export const isValidImagesUploaded = (imagesArr, numOfFiles, fileSizeLimit, even
   return errors;
 }
 
-export const isValidStringInput = (str) => {
+export const validateString = (str) => {
   if (str.trim() === '') {
-    return [false, 'Please fill out this field.'];
+    return {
+      isValid: false,
+      errorMsg: 'Please fill out this field.'
+    };
   } else if (typeof str !== "string" || /[0-9]+/g.test(str)) {
-    return [false, 'Please enter a valid input.']
+    return {
+      isValid: false,
+      errorMsg: 'Please enter a valid string.'
+    };
   }
 
-  return [true, null];
+  return {
+    isValid: true,
+    errorMsg: null
+  };
+}
+
+export const validateNumber = (num) => {
+  if (num.trim() === '') {
+    return {
+      isValid: false,
+      errorMsg: 'Please fill out this field.'
+    };
+  } else if (typeof num !== "number" && !/[0-9]+/g.test(num)) {
+    return {
+      isValid: false,
+      errorMsg: 'Please enter a valid number.'
+    };
+  }
+
+  return {
+    isValid: true,
+    errorMsg: null
+  };
 }
 
 export const validateEmail = (email) => {

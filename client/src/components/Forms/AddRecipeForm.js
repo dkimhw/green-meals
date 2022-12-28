@@ -14,7 +14,7 @@ import axios from 'axios';
 import useFormImagesUpload from '../../hooks/useFormImagesUpload';
 import useMultipleInputs from '../../hooks/useMultipleInputs';
 import useFormInput from '../../hooks/useFormInput';
-import { isValidImagesUploaded, isValidStringInput } from '../../utils/validateInputs';
+import { isValidImagesUploaded, validateString, validateNumber } from '../../utils/validateInputs';
 
 const initialValues = {
   recipeName: "",
@@ -51,20 +51,33 @@ const recipeNotesInitialValue = [
 const AddRecipeForm = () => {
   const {
     value: recipeName
-    , hasError: hasRecipeNameInputError
     , isValid: isRecipenameInputValid
+    , hasError: hasRecipeNameInputError
+    , errMsg: recipeNameErrorMsg
     , blurInputHandler: recipeNameBlurInputHandler
     , valueChangeHandler: recipeNameChangeHandler
     , resetInput: recipeNameReset
-  } = useFormInput(isValidStringInput);
+  } = useFormInput(validateString);
+
   const {
     value: recipeDescription
-    , hasError: hasrecipeDescriptionInputError
-    , isValid: isrecipeDescriptionValid
+    , isValid: isRecipeDescriptionValid
+    , hasError: hasRecipeDescriptionInputError
+    , errMsg: recipeDescriptionErrorMsg
     , blurInputHandler: recipeDescriptionBlurInputHandler
     , valueChangeHandler: recipeDescriptionChangeHandler
     , resetInput: recipeDescriptionReset
-  } = useFormInput(isValidStringInput)
+  } = useFormInput(validateString);
+
+  const {
+    value: servingSize
+    , isValid: isServingSizeValid
+    , hasError: hasServingSizeInputError
+    , errMsg: servingSizeErrorMsg
+    , blurInputHandler: servingSizeBlurInputHandler
+    , valueChangeHandler: servingSizeChangeHandler
+    , resetInput: servingSizeReset
+  } = useFormInput(validateNumber)
 
   const [recipeInfo, setRecipeInfo] = useState(initialValues);
   const {
@@ -73,7 +86,7 @@ const AddRecipeForm = () => {
     , removeInput: removeIngredient
     , handleChange: handleIngredientNameChange
     , onBlur: handleIngredientBlur
-  } = useMultipleInputs(ingredientsInputs, { id: 0, ingredient_name: '', placeholder: 'Add a new ingredient', hasError: false, error: '', touched: false }, isValidStringInput);
+  } = useMultipleInputs(ingredientsInputs, { id: 0, ingredient_name: '', placeholder: 'Add a new ingredient', hasError: false, error: '', touched: false }, validateString);
   const {
     inputArray: recipeInstructions
     , addInput: addRecipeInstruction
@@ -99,39 +112,40 @@ const AddRecipeForm = () => {
   const submitHandler = async (event) => {
     event.preventDefault();
     console.log('submitted');
-    console.log("recipeInfo ", recipeInfo)
-    console.log("cookingTime", recipeInfo.cookingTimeType)
-    console.log("prepTimeType", recipeInfo.prepTimeType)
 
-    const recipeFormInfo = new FormData();
-    recipeFormInfo.append('recipeName', recipeInfo.recipeName);
-    recipeFormInfo.append('recipeDescription', recipeInfo.recipeDescription);
-    recipeFormInfo.append('cookingTime', recipeInfo.cookingTime);
-    recipeFormInfo.append('cookingTimeQty', recipeInfo.cookingTimeType);
-    recipeFormInfo.append('prepTime', recipeInfo.prepTime);
-    recipeFormInfo.append('prepTimeQty', recipeInfo.prepTimeType);
-    recipeFormInfo.append('servingSize', recipeInfo.servingSize);
-    recipeFormInfo.append('recipePrivacyStatus', recipeInfo.recipePrivacyStatus);
-    recipeFormInfo.append('recipeIngredients', JSON.stringify(recipeIngredients));
-    recipeFormInfo.append('recipeInstructions',  JSON.stringify(recipeInstructions));
-    recipeFormInfo.append('recipeNotes',  JSON.stringify(recipeNotes));
+    if (isRecipeDescriptionValid && isRecipenameInputValid && isServingSizeValid) {
+      const recipeFormInfo = new FormData();
+      recipeFormInfo.append('recipeName', recipeInfo.recipeName);
+      recipeFormInfo.append('recipeDescription', recipeInfo.recipeDescription);
+      recipeFormInfo.append('cookingTime', recipeInfo.cookingTime);
+      recipeFormInfo.append('cookingTimeQty', recipeInfo.cookingTimeType);
+      recipeFormInfo.append('prepTime', recipeInfo.prepTime);
+      recipeFormInfo.append('prepTimeQty', recipeInfo.prepTimeType);
+      recipeFormInfo.append('servingSize', recipeInfo.servingSize);
+      recipeFormInfo.append('recipePrivacyStatus', recipeInfo.recipePrivacyStatus);
+      recipeFormInfo.append('recipeIngredients', JSON.stringify(recipeIngredients));
+      recipeFormInfo.append('recipeInstructions',  JSON.stringify(recipeInstructions));
+      recipeFormInfo.append('recipeNotes',  JSON.stringify(recipeNotes));
 
-    uploadedFiles.forEach(image => {
-      recipeFormInfo.append('images', image);
-    });
+      uploadedFiles.forEach(image => {
+        recipeFormInfo.append('images', image);
+      });
 
-    const response = await axios({
-      method: "post",
-      url: "http://localhost:5051/api/recipes/create",
-      data: recipeFormInfo,
-      headers: { "Content-Type": "multipart/form-data" },
-    })
-    console.log(response);
+      const response = await axios({
+        method: "post",
+        url: "http://localhost:5051/api/recipes/create",
+        data: recipeFormInfo,
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      console.log(response);
 
-    // Clear form inputs - need to add more
-    setRecipeInfo(initialValues);
-  }
+      // Clear form inputs
+      recipeNameReset();
+      recipeDescriptionReset();
+      servingSizeReset();
 
+    }
+  };
 
   return (
     <FormCard>
@@ -142,16 +156,26 @@ const AddRecipeForm = () => {
           // Recipe Name
           recipeName={recipeName}
           hasRecipeNameInputError={hasRecipeNameInputError}
+          recipeNameErrorMsg={recipeNameErrorMsg}
           isRecipenameInputValid={isRecipenameInputValid}
           recipeNameBlurInputHandler={recipeNameBlurInputHandler}
           recipeNameChangeHandler={recipeNameChangeHandler}
 
           // Recipe Description
           recipeDescription={recipeDescription}
-          hasrecipeDescriptionInputError={hasrecipeDescriptionInputError}
+          hasRecipeDescriptionInputError={hasRecipeDescriptionInputError}
+          recipeDescriptionErrorMsg={recipeDescriptionErrorMsg}
           recipeDescriptionBlurInputHandler={recipeDescriptionBlurInputHandler}
           recipeDescriptionChangeHandler={recipeDescriptionChangeHandler}
 
+          // Serving Size
+          servingSize={servingSize}
+          hasServingSizeInputError={hasServingSizeInputError}
+          servingSizeErrorMsg={servingSizeErrorMsg}
+          servingSizeBlurInputHandler={servingSizeBlurInputHandler}
+          servingSizeChangeHandler={servingSizeChangeHandler}
+
+          // File Inputs
           handleFileInput={handleFileInput}
           removeFileInput={removeFileInput}
           filesData={filesData}
