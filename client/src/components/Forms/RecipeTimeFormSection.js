@@ -14,8 +14,11 @@ const RecipeTimeFormSection = (props) => {
           variant="outlined"
           label="Prep Time"
           type="number"
-          value={props.recipeInfo.prepTime || ''}
-          onChange={props.handleRecipeInfoChange}
+          value={props.prepTime || ''}
+          error={props.hasPrepTimeInputError}
+          helperText={props.hasPrepTimeInputError ? props.prepTimeErrorMsg : ''}
+          onChange={props.prepTimeChangeHandler}
+          onBlur={props.prepTimeBlurInputHandler}
         />
         <FormControl fullWidth>
           <InputLabel id="prep-time-type">Prep Time Qty</InputLabel>
@@ -40,8 +43,11 @@ const RecipeTimeFormSection = (props) => {
           variant="outlined"
           label="Cooking Time"
           type="number"
-          value={props.recipeInfo.cookingTime || ''}
-          onChange={props.handleRecipeInfoChange}
+          value={props.cookingTime || ''}
+          error={props.hasCookingTimeInputError}
+          helperText={props.hasCookingTimeInputError ? props.cookingTimeErrorMsg : ''}
+          onChange={props.cookingTimeChangeHandler}
+          onBlur={props.cookingTimeBlurInputHandler}
         />
         <FormControl fullWidth>
           <InputLabel id="cooking-time-type">Cooking Time Qty</InputLabel>

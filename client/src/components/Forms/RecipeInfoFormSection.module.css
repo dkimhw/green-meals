@@ -1,9 +1,11 @@
 
 
 .form-input {
-  margin-top: 1.25rem !important;
-  margin-bottom: 1.25rem !important;
+  margin-top: 1rem !important;
+  margin-bottom: 1rem !important;
+  max-width: 350px;
   width: 300px;
+  transition: all .25s linear;
 }
 
 .uploaded-img {
@@ -19,4 +21,9 @@
   place-items: center;
   grid-template-columns: 1fr 1rem;
   column-gap: 3rem;
+}
+
+.invalid-textfield {
+  border: 1px solid #b40e0e;
+  background-color: #fddddd;
 }

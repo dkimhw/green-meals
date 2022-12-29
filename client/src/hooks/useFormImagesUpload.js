@@ -21,8 +21,6 @@ const useFormImagesUpload = (validate) => {
       setUploadedFiles(newFiles);
     }
 
-    console.log("imgArray: ",imageValidation);
-    console.log("errMsgs: ", errMsgs);
     if (errMsgs.length > 0) {
       setFileErrors([...fileErrors, ...errMsgs]);
     }
@@ -48,7 +46,7 @@ const useFormImagesUpload = (validate) => {
     setUploadedFiles(images);
   }
 
-  return { handleFileInput, removeFileInput, uploadedFiles, filesData, fileErrors}
+  return { handleFileInput, removeFileInput, uploadedFiles, filesData, fileErrors }
 }
 
 export default useFormImagesUpload;
