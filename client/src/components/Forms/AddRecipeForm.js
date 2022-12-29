@@ -28,9 +28,9 @@ const initialValues = {
 }
 
 const ingredientsInputs = [
-  { id: 0, ingredientName: '', placeholder: 'e.g. Flour', hasError: false, error: '', touched: false },
-  { id: 1, ingredientName: '', placeholder: 'e.g. Sugar', hasError: false, error: '', touched: false },
-  { id: 2, ingredientName: '', placeholder: 'e.g. Olive oil', hasError: false, error: '', touched: false },
+  { id: 0, ingredientName: '', placeholder: 'e.g. Flour', hasError: false, errorMsg: '', touched: false },
+  { id: 1, ingredientName: '', placeholder: 'e.g. Sugar', hasError: false, errorMsg: '', touched: false },
+  { id: 2, ingredientName: '', placeholder: 'e.g. Olive oil', hasError: false, errorMsg: '', touched: false },
 ]
 
 const recipeInstructionsIntitalValue = [
@@ -49,6 +49,7 @@ const recipeNotesInitialValue = [
 // Multiple Files: https://www.techgeeknext.com/react/multiple-files-upload-example
 // https://www.positronx.io/react-multiple-files-upload-with-node-express-tutorial/
 const AddRecipeForm = () => {
+  // Input custom hooks
   const {
     value: recipeName
     , isValid: isRecipenameInputValid
@@ -77,9 +78,31 @@ const AddRecipeForm = () => {
     , blurInputHandler: servingSizeBlurInputHandler
     , valueChangeHandler: servingSizeChangeHandler
     , resetInput: servingSizeReset
-  } = useFormInput(validateNumber)
+  } = useFormInput(validateNumber);
+
+  const {
+    value: prepTime
+    , isValid: isPrepTimeValid
+    , hasError: hasPrepTimeInputError
+    , errMsg: prepTimeErrorMsg
+    , blurInputHandler: prepTimeBlurInputHandler
+    , valueChangeHandler: prepTimeChangeHandler
+    , resetInput: prepTimeReset
+  } = useFormInput(validateNumber);
+
+  const {
+    value: cookingTime
+    , isValid: isCookingTimeValid
+    , hasError: hasCookingTimeInputError
+    , errMsg: cookingTimeErrorMsg
+    , blurInputHandler: cookingTimeBlurInputHandler
+    , valueChangeHandler: cookingTimeChangeHandler
+    , resetInput: cookingTimeReset
+  } = useFormInput(validateNumber);
 
   const [recipeInfo, setRecipeInfo] = useState(initialValues);
+
+  // Grouped multipe inputs
   const {
     inputArray: recipeIngredients
     , addInput: addIngredient
@@ -87,12 +110,15 @@ const AddRecipeForm = () => {
     , handleChange: handleIngredientNameChange
     , onBlur: handleIngredientBlur
   } = useMultipleInputs(ingredientsInputs, { id: 0, ingredient_name: '', placeholder: 'Add a new ingredient', hasError: false, error: '', touched: false }, validateString);
+
   const {
     inputArray: recipeInstructions
     , addInput: addRecipeInstruction
     , removeInput: removeRecipeInstruction
     , handleChange: handleRecipeInstructionChange
-  } = useMultipleInputs(recipeInstructionsIntitalValue, { id: 0, instruction: '', placeholder: 'Add another instruction' });
+    , onBlur: handleRecipeInstructionBlur
+  } = useMultipleInputs(recipeInstructionsIntitalValue, { id: 0, instruction: '', placeholder: 'Add another instruction' }, validateString);
+
   const {
     inputArray: recipeNotes
     , addInput: addRecipeNote
@@ -113,7 +139,7 @@ const AddRecipeForm = () => {
     event.preventDefault();
     console.log('submitted');
 
-    if (isRecipeDescriptionValid && isRecipenameInputValid && isServingSizeValid) {
+    if (isRecipeDescriptionValid && isRecipenameInputValid && isServingSizeValid && isPrepTimeValid && isCookingTimeValid) {
       const recipeFormInfo = new FormData();
       recipeFormInfo.append('recipeName', recipeInfo.recipeName);
       recipeFormInfo.append('recipeDescription', recipeInfo.recipeDescription);
@@ -143,6 +169,8 @@ const AddRecipeForm = () => {
       recipeNameReset();
       recipeDescriptionReset();
       servingSizeReset();
+      prepTimeReset();
+      cookingTimeReset();
 
     }
   };
@@ -197,12 +225,27 @@ const AddRecipeForm = () => {
           addRecipeInstruction={addRecipeInstruction}
           removeRecipeInstruction={removeRecipeInstruction}
           handleRecipeInstructionChange={handleRecipeInstructionChange}
+          handleRecipeInstructionBlur={handleRecipeInstructionBlur}
         />
         <Divider />
         <Typography variant="h5" sx={{mb: '1rem'}}>Cooking Time</Typography>
         <RecipeTimeFormSection
           recipeInfo={recipeInfo}
           handleRecipeInfoChange={handleRecipeInfoChange}
+
+          // Prep Time
+          prepTime={prepTime}
+          hasPrepTimeInputError={hasPrepTimeInputError}
+          prepTimeErrorMsg={prepTimeErrorMsg}
+          prepTimeBlurInputHandler={prepTimeBlurInputHandler}
+          prepTimeChangeHandler={prepTimeChangeHandler}
+
+          // Cooking Time
+          cookingTime={cookingTime}
+          hasCookingTimeInputError={hasCookingTimeInputError}
+          cookingTimeErrorMsg={cookingTimeErrorMsg}
+          cookingTimeBlurInputHandler={cookingTimeBlurInputHandler}
+          cookingTimeChangeHandler={cookingTimeChangeHandler}
         />
         <Divider />
         <RecipeNotesFormSection

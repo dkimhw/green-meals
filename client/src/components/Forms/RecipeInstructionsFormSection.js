@@ -15,10 +15,13 @@ const RecipeInstructionsFormSection = (props) => {
               name='instruction'
               placeholder={input.placeholder}
               label={`Step ${idx + 1}`}
+              error={input.hasError}
+              helperText={input.hasError ? input.errorMsg : '' }
               multiline
               maxRows={4}
               value={input.instruction}
               onChange={props.handleRecipeInstructionChange}
+              onBlur={props.handleRecipeInstructionBlur}
             />
             <IconButton id={`remove-instruction-${input.id}`}  color="primary" onClick={() => props.removeRecipeInstruction(input.id)} aria-label="remove ingredient" component="label">
               <CloseIcon sx={{fontSize: '1.75rem'}}/>

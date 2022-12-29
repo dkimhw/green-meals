@@ -9,11 +9,9 @@ const useMultipleInputs = (intialValues, defaultValue, validate) => {
   const validateInput = (val, isTouched, validateFunc) => {
     // Validate
     let validVal = validateFunc(val);
-    console.log("validVal: ", validVal);
-    let hasError = !validVal[0] && isTouched;
-    console.log("hasError: ", hasError);
+    let hasError = !validVal['isValid'] && isTouched;
 
-    return [hasError, validVal[1]];
+    return { hasError: hasError, errorMsg: validVal['errorMsg'] };
   }
 
   const addInput = () => {
@@ -39,11 +37,10 @@ const useMultipleInputs = (intialValues, defaultValue, validate) => {
     const values = [...inputArray];
     values[findIdx][event.target.name] = event.target.value;
 
-    let isValid = validateInput(event.target.value, true, validate);
-    console.log(isValid);
-    values[findIdx]['hasError'] = isValid[0];
-    values[findIdx]['error'] = isValid[1];
-    console.log("values: ", values);
+    let validated = validateInput(event.target.value, true, validate);
+    console.log(validated)
+    values[findIdx]['hasError'] = validated['hasError'];
+    values[findIdx]['errorMsg'] = validated['errorMsg'];
 
     setInputArray(values);
   };
@@ -57,11 +54,9 @@ const useMultipleInputs = (intialValues, defaultValue, validate) => {
     values[findIdx]['touched'] = true;
 
     // Validate error on blur
-    let isValid = validateInput(event.target.value, true, validate);
-    console.log(isValid);
-    values[findIdx]['hasError'] = isValid[0];
-    values[findIdx]['error'] = isValid[1];
-    console.log("values: ", values);
+    let validated = validateInput(event.target.value, true, validate);
+    values[findIdx]['hasError'] = validated['hasError'];
+    values[findIdx]['errorMsg'] = validated['errorMsg'];
 
     setInputArray(values);
   }
