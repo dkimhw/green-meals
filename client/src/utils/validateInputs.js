@@ -78,3 +78,31 @@ export const validateEmail = (email) => {
       /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
     );
 };
+
+export const validateTimeType = (timeType) => {
+  if (['minutes', 'hours', 'days'].includes(timeType)) {
+    return {
+      isValid: true,
+      errorMsg: null
+    }
+  } else {
+    return {
+      isValid: false,
+      errorMsg: `Please select a value from the dropdown.`
+    }
+  }
+}
+
+export const validatePrivacyStatus = (privacyStatus) => {
+  if (['public', 'private'].includes(privacyStatus)) {
+    return {
+      isValid: true,
+      errorMsg: null
+    }
+  } else {
+    return {
+      isValid: false,
+      errorMsg: `Please select a value from the dropdown.`
+    }
+  }
+}

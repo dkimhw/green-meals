@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { TextField, FormControl, MenuItem, Select, InputLabel } from '@mui/material';
+import { TextField, FormControl, MenuItem, Select, InputLabel, FormHelperText } from '@mui/material';
 import classes from './RecipeTimeFormSection.module.css';
 
 const RecipeTimeFormSection = (props) => {
@@ -20,20 +20,23 @@ const RecipeTimeFormSection = (props) => {
           onChange={props.prepTimeChangeHandler}
           onBlur={props.prepTimeBlurInputHandler}
         />
-        <FormControl fullWidth>
+        <FormControl fullWidth error={props.hasPrepTimeTypeInputError}>
           <InputLabel id="prep-time-type">Prep Time Qty</InputLabel>
           <Select
             labelId="prep-time-type-label"
             id="prep-time-type"
             label="prepTimeType"
             name="prepTimeType"
-            value={props.recipeInfo.prepTimeType}
-            onChange={props.handleRecipeInfoChange}
+            // helperText={props.hasPrepTimeTypeInputError ? props.prepTimeTypeErrorMsg : ''}
+            value={props.prepTimeType}
+            onChange={props.prepTimeTypeChangeHandler}
+            onBlur={props.prepTimeTypeBlurInputHandler}
             >
             <MenuItem value={'minutes'}>minutes</MenuItem>
             <MenuItem value={'hours'}>hours</MenuItem>
             <MenuItem value={'days'}>days</MenuItem>
           </Select>
+          {props.hasPrepTimeTypeInputError ? <FormHelperText>{props.prepTimeTypeErrorMsg}</FormHelperText> : ''}
         </FormControl>
       </div>
       <div className={classes['form-group']}>
@@ -49,21 +52,22 @@ const RecipeTimeFormSection = (props) => {
           onChange={props.cookingTimeChangeHandler}
           onBlur={props.cookingTimeBlurInputHandler}
         />
-        <FormControl fullWidth>
+        <FormControl fullWidth error={props.hasCookingTimeTypeInputError}>
           <InputLabel id="cooking-time-type">Cooking Time Qty</InputLabel>
           <Select
             labelId="cooking-time-type-label"
             id="cooking-time-type"
             name="cookingTimeType"
             label="cookingTimeType"
-            value={props.recipeInfo.cookingTimeType}
-            onChange={props.handleRecipeInfoChange}
-            onLoad={props.handleRecipeInfoChange}
-            >
+            value={props.cookingTimeType}
+            onChange={props.cookingTimeTypeChangeHandler}
+            onBlur={props.cookingTimeTypeBlurInputHandler}
+          >
             <MenuItem value={'minutes'}>minutes</MenuItem>
             <MenuItem value={'hours'}>hours</MenuItem>
             <MenuItem value={'days'}>days</MenuItem>
           </Select>
+          {props.hasCookingTimeTypeInputError ? <FormHelperText>{props.cookingTimeTypeErrorMsg}</FormHelperText> : ''}
         </FormControl>
       </div>
     </React.Fragment>
