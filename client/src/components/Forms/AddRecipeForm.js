@@ -1,5 +1,4 @@
 import React from 'react';
-import { useState } from 'react';
 import { Button, Typography } from '@mui/material';
 import classes from './AddRecipeForm.module.css';
 import IngredientsFormSection from './IngredientsFormSection';
@@ -149,7 +148,16 @@ const AddRecipeForm = () => {
   const submitHandler = async (event) => {
     event.preventDefault();
     console.log('submitted');
+
+    // Once the submit button has been clicked we need to make sure the input fields have been marked as touched
     recipeNameBlurInputHandler();
+    recipeDescriptionBlurInputHandler();
+    servingSizeBlurInputHandler();
+    prepTimeBlurInputHandler();
+    prepTimeTypeBlurInputHandler();
+    cookingTimeBlurInputHandler();
+    cookingTimeTypeBlurInputHandler();
+    recipePrivacyStatusBlurInputHandler();
 
     if (isRecipeDescriptionValid && isRecipenameInputValid && isServingSizeValid
         && isPrepTimeValid && isCookingTimeValid && isPrepTimeTypeValid
