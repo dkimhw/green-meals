@@ -6,26 +6,45 @@ import CloseIcon from '@mui/icons-material/Close';
 
 // Add functionality to add additional notes
 const RecipeNotesFormSection = (props) => {
+  // Combine the two arrays
+  let recipeNotes = [];
+  for (let idx = 0; idx < props.recipeNoteTitles.length; idx += 1) {
+    recipeNotes.push([props.recipeNoteTitles[idx], props.recipeNoteMessages[idx]])
+  };
+
+  console.log(recipeNotes);
+
+  // const removeRecipeNote = (id) => {
+  //   props.removeRecipeNoteMessages(id);
+  //   props.handleRecipeNoteTitlesChange(id);
+  // }
+
   return (
     <div className={classes['notes-form-section']}>
-      {props.recipeNotes.map((note) => {
+      {recipeNotes ? recipeNotes.map((note) => {
        return(
-        <div key={note.id}>
+        <div key={note[0].id}>
           <div className={classes['note-input-group']}>
-            <InputLabel id={`note-title-${note.id}`} className={classes['note-label']}>Title</InputLabel>
+            <InputLabel id={`note-title-${note[0].id}`} className={classes['note-label']}>Title</InputLabel>
             <TextField
-              id={`note-title-${note.id}`}
+              id={`note-title-${note[0].id}`}
               name='noteTitle'
               placeholder="e.g. Cook's Tips"
               variant="standard"
               className={`${classes['form-notes-input']} ${classes['note-input']}`}
-              value={note.noteTitle || ""}
-              onChange={props.handleRecipeNoteChange}
+              value={note[0].noteTitle || ""}
+              error={note[0].hasError}
+              helperText={note[0].hasError ? note[0].errorMsg : '' }
+              onChange={props.handleRecipeNoteTitlesChange}
+              onBlur={props.handleRecipeNoteTitlesBlur}
             />
             <IconButton
-              id={`remove-note-${note.id}`}
+              id={`remove-note-${note[0].id}`}
               color="primary"
-              onClick={() => props.removeRecipeNote(note.id)}
+              onClick={() => {
+                props.removeRecipeNoteTitles(note[0].id);
+                props.removeRecipeNoteMessages(note[0].id);
+              }}
               aria-label="remove ingredient"
               component="label"
               className={classes['note-remove-btn']}
@@ -34,9 +53,9 @@ const RecipeNotesFormSection = (props) => {
             </IconButton>
           </div>
           <div className={classes['note-input-group']}>
-            <InputLabel id={`note-${note.id}`} className={classes['note-label']}>Note</InputLabel>
+            <InputLabel id={`note-${note[1].id}`} className={classes['note-label']}>Note</InputLabel>
             <TextField
-              id={`note-${note.id}`}
+              id={`note-${note[1].id}`}
               name='note'
               multiline
               variant="standard"
@@ -44,14 +63,26 @@ const RecipeNotesFormSection = (props) => {
               className={`${classes['form-notes-input']} ${classes['note-input']}`}
               placeholder="Write your recipe notes here..."
               InputLabelProps={{ shrink: true, sx: {'fontSize': '1.25rem'} }}
-              value={note.note || ''}
-              onChange={props.handleRecipeNoteChange}
+              error={note[1].hasError}
+              helperText={note[1].hasError ? note[1].errorMsg : '' }
+              value={note[1].note || ''}
+              onChange={props.handleRecipeNoteMessagesChange}
+              onBlur={props.handleRecipeNoteMessagesBlur}
             />
           </div>
         </div>
         )
-      })}
-      <Button variant="contained" color="primary" sx={{mb: '1rem'}} onClick={props.addRecipeNote}>Add Note</Button>
+      }) : '' }
+      <Button
+        variant="contained"
+        color="primary"
+        sx={{mb: '1rem'}}
+        onClick={() => {
+          props.addRecipeNoteTitles();
+          props.addRecipeNoteMessages();
+        }}>
+        Add Note
+      </Button>
     </div>
   )
 }

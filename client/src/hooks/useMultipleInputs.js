@@ -23,7 +23,7 @@ const useMultipleInputs = (intialValues, defaultValue, validate) => {
 
   // For this not sure how "order" part will be set for recipe directions
   const removeInput = (id) => {
-    console.log(inputArray);
+    console.log("id", id);
     const values = [...inputArray];
     values.splice(values.findIndex(value => value.id === id), 1);
     setInputArray(values);

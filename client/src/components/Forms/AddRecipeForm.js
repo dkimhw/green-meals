@@ -27,9 +27,13 @@ const recipeInstructionsIntitalValue = [
   { id: 2, order: 3, instruction: '', placeholder: 'Add another instruction' },
 ]
 
-const recipeNotesInitialValue = [
-  { id: 0, noteTitle: '', note: '' },
-]
+const recipeNoteTitlesInitialValue = [
+  { id: 0, noteTitle: '' },
+];
+
+const recipeNoteMessagesInitialValue = [
+  { id: 0, note: '' },
+];
 
 // https://github.com/bradtraversy/react_step_form/tree/master/src/components
 // Breaking apart long forms into components
@@ -136,13 +140,28 @@ const AddRecipeForm = () => {
   } = useMultipleInputs(recipeInstructionsIntitalValue, { id: 0, instruction: '', placeholder: 'Add another instruction' }, validateString);
 
   const {
-    inputArray: recipeNotes
-    , addInput: addRecipeNote
-    , removeInput: removeRecipeNote
-    , handleChange: handleRecipeNoteChange
-    , onBlur: handleRecipeNoteBlur
-  } = useMultipleInputs(recipeNotesInitialValue, { id: 0, noteTitle: '', note: '' });
-  const { handleFileInput, removeFileInput, filesData, uploadedFiles, fileErrors } = useFormImagesUpload(isValidImagesUploaded);
+    inputArray: recipeNoteTitles
+    , addInput: addRecipeNoteTitles
+    , removeInput: removeRecipeNoteTitles
+    , handleChange: handleRecipeNoteTitlesChange
+    , onBlur: handleRecipeNoteTitlesBlur
+  } = useMultipleInputs(recipeNoteTitlesInitialValue, { id: 0, noteTitle: ''}, validateString);
+
+  const {
+    inputArray: recipeNoteMessages
+    , addInput: addRecipeNoteMessages
+    , removeInput: removeRecipeNoteMessages
+    , handleChange: handleRecipeNoteMessagesChange
+    , onBlur: handleRecipeNoteMessagesBlur
+  } = useMultipleInputs(recipeNoteMessagesInitialValue, { id: 0, note: '' }, validateString);
+
+  const {
+    handleFileInput,
+    removeFileInput,
+    filesData,
+    uploadedFiles,
+    fileErrors
+  } = useFormImagesUpload(isValidImagesUploaded);
 
   // Submit Recipe Info //
   const submitHandler = async (event) => {
@@ -173,7 +192,8 @@ const AddRecipeForm = () => {
       recipeFormInfo.append('recipePrivacyStatus', recipePrivacyStatus);
       recipeFormInfo.append('recipeIngredients', JSON.stringify(recipeIngredients));
       recipeFormInfo.append('recipeInstructions',  JSON.stringify(recipeInstructions));
-      recipeFormInfo.append('recipeNotes',  JSON.stringify(recipeNotes));
+      recipeFormInfo.append('recipeNoteMessages',  JSON.stringify(recipeNoteMessages));
+      recipeFormInfo.append('recipeNoteTitles',  JSON.stringify(recipeNoteTitles));
 
       uploadedFiles.forEach(image => {
         recipeFormInfo.append('images', image);
@@ -282,11 +302,19 @@ const AddRecipeForm = () => {
         />
         <Divider />
         <RecipeNotesFormSection
-          recipeNotes={recipeNotes}
-          addRecipeNote={addRecipeNote}
-          removeRecipeNote={removeRecipeNote}
-          handleRecipeNoteChange={handleRecipeNoteChange}
-          handleRecipeNoteBlur={handleRecipeNoteBlur}
+          // Title
+          recipeNoteTitles={recipeNoteTitles}
+          addRecipeNoteTitles={addRecipeNoteTitles}
+          removeRecipeNoteTitles={removeRecipeNoteTitles}
+          handleRecipeNoteTitlesChange={handleRecipeNoteTitlesChange}
+          handleRecipeNoteTitlesBlur={handleRecipeNoteTitlesBlur}
+
+          // Note
+          recipeNoteMessages={recipeNoteMessages}
+          addRecipeNoteMessages={addRecipeNoteMessages}
+          removeRecipeNoteMessages={removeRecipeNoteMessages}
+          handleRecipeNoteMessagesChange={handleRecipeNoteMessagesChange}
+          handleRecipeNoteMessagesBlur={handleRecipeNoteMessagesBlur}
         />
         <Divider />
         <RecipePublicPrivateFormSection

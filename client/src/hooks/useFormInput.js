@@ -8,7 +8,6 @@ const useFormInput = (validateInputValue, initialValues = '') => {
   const validation = validateInputValue(enteredValue);
   const valueIsValid = validation['isValid'];
   const errMsg = validation['errorMsg'];
-  console.log(errMsg);
   const hasError = !valueIsValid && isTouched;
 
   // Handler fo blur event
