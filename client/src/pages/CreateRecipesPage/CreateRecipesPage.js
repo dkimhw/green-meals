@@ -3,15 +3,17 @@ import React from 'react';
 import { Container } from '@mui/material';
 import PageTitle from '../../components/UI/PageTitle';
 import AddRecipeForm from '../../components/Forms/AddRecipeForm';
-/*
+import TopBanner from '../../components/UI/TopBanner';
 
-title, description, prep time in minutes, cooking time in minutes, servings
-
-*/
 const CreateRecipes = () => {
   return (
-    <Container>
-      <PageTitle>Add Recipe</PageTitle>
+   <Container>
+      {/* <PageTitle>Add Recipe</PageTitle> */}
+      <TopBanner classStyles={{
+        top: '7.5%',
+        left: '0',
+        background: "url(/add-recipe-background-header-img.png) top repeat-x"
+      }}/>
       <AddRecipeForm />
     </Container>
   );

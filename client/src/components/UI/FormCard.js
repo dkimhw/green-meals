@@ -1,15 +1,13 @@
-import * as React from 'react';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
 
-const FormCard = (props) =>  {
+import { Card } from '@mui/material';
+import classes from './FormCard.module.css';
+
+const FormCard = (props) => {
   return (
-    <Card sx={{ minWidth: 500, marginTop: '3rem', backgroundColor: '#fff' }}>
-      <CardContent>
-        {props.children}
-      </CardContent>
+    <Card className={classes['card-form']} sx={{boxShadow: 'rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px'}}>
+      {props.children}
     </Card>
-  );
-}
+  )
+};
 
 export default FormCard;

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button, Typography } from '@mui/material';
+import FormCard from '../UI/FormCard';
 import classes from './AddRecipeForm.module.css';
 import IngredientsFormSection from './IngredientsFormSection';
 import RecipeInstructionsFormSection from './RecipeInstructionsFormSection';
@@ -7,7 +8,6 @@ import RecipeInfoFormSection from './RecipeInfoFormSection';
 import RecipeTimeFormSection from './RecipeTimeFormSection';
 import RecipeNotesFormSection from './RecipeNotesFormSection';
 import RecipePublicPrivateFormSection from './RecipePublicPrivateFormSection';
-import FormCard from '../UI/FormCard';
 import Divider from '../UI/Divider';
 import axios from 'axios';
 import useFormImagesUpload from '../../hooks/useFormImagesUpload';
@@ -218,7 +218,6 @@ const AddRecipeForm = () => {
       recipePrivacyStatusReset();
     }
   };
-
   return (
     <FormCard>
       <form className={classes.form} onSubmit={submitHandler} method="post">
