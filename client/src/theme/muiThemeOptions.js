@@ -21,6 +21,7 @@ export const appTheme = createTheme({
     type: 'light',
     primary: {
       main: '#3f51b5',
+      lightMain: '#a0b9de'
     },
     secondary: {
       main: '#f50057',

@@ -5,4 +5,5 @@
   left: 0;
   height: 10rem;
   z-index: -10;
+  content: ''
 }

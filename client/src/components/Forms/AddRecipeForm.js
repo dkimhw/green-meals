@@ -13,6 +13,7 @@ import axios from 'axios';
 import useFormImagesUpload from '../../hooks/useFormImagesUpload';
 import useMultipleInputs from '../../hooks/useMultipleInputs';
 import useFormInput from '../../hooks/useFormInput';
+import SectionTitle from '../UI/SectionTitle';
 import { isValidImagesUploaded, validateString, validateNumber, validateTimeType, validatePrivacyStatus } from '../../utils/validateInputs';
 
 const ingredientsInputs = [
@@ -220,6 +221,7 @@ const AddRecipeForm = () => {
   };
   return (
     <FormCard>
+      <SectionTitle>Add a Recipe</SectionTitle>
       <form className={classes.form} onSubmit={submitHandler} method="post">
         <RecipeInfoFormSection
           // Recipe Name
