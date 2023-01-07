@@ -12,8 +12,6 @@ const RecipeNotesFormSection = (props) => {
     recipeNotes.push([props.recipeNoteTitles[idx], props.recipeNoteMessages[idx]])
   };
 
-  console.log(recipeNotes);
-
   // const removeRecipeNote = (id) => {
   //   props.removeRecipeNoteMessages(id);
   //   props.handleRecipeNoteTitlesChange(id);
@@ -30,7 +28,7 @@ const RecipeNotesFormSection = (props) => {
               id={`note-title-${note[0].id}`}
               name='noteTitle'
               placeholder="e.g. Cook's Tips"
-              variant="standard"
+              variant="outlined"
               className={`${classes['form-notes-input']} ${classes['note-input']}`}
               value={note[0].noteTitle || ""}
               error={note[0].hasError}
@@ -58,7 +56,7 @@ const RecipeNotesFormSection = (props) => {
               id={`note-${note[1].id}`}
               name='note'
               multiline
-              variant="standard"
+              variant="outlined"
               rows={4}
               className={`${classes['form-notes-input']} ${classes['note-input']}`}
               placeholder="Write your recipe notes here..."

@@ -1,24 +1,19 @@
 
 .note-input-group {
   display: grid;
-  grid-template-columns: 1fr 50px;
-  grid-template-rows: auto 1fr;
-  grid-template-areas:
-    "note-label note-label"
-    "note-input note-remove-btn";
-  margin-bottom: 1.25rem;
-}
-
-.note-label {
-  grid-area: note-label;
-}
-
-.note-input {
-  grid-area: note-input;
+  position: relative;
+  row-gap: 0;
+  grid-template-rows: 1.25rem 1fr;
+  /* grid-template-columns: minmax(300px, 1fr);
+  grid-template-rows: auto 1fr; */
+  margin-bottom: 1rem;
 }
 
 .note-remove-btn {
-  grid-area: note-remove-btn;
+  position: absolute !important;
+  font-size: 1rem;
+  top: 40%;
+  right: -12.5%;
 }
 
 .form-notes-input {
