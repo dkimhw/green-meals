@@ -1,4 +1,11 @@
 
+.card-form {
+  max-width: 550px;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  margin-right: auto;
+  margin-left: auto;
+}
 
 .form {
   margin-top: 1.5rem;

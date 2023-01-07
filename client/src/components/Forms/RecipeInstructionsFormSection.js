@@ -23,7 +23,13 @@ const RecipeInstructionsFormSection = (props) => {
               onChange={props.handleRecipeInstructionChange}
               onBlur={props.handleRecipeInstructionBlur}
             />
-            <IconButton id={`remove-instruction-${input.id}`}  color="primary" onClick={() => props.removeRecipeInstruction(input.id)} aria-label="remove ingredient" component="label">
+            <IconButton
+              id={`remove-instruction-${input.id}`}
+              color="primary" onClick={() => props.removeRecipeInstruction(input.id)}
+              aria-label="remove ingredient"
+              component="label"
+              className={classes['close-btn']}
+            >
               <CloseIcon sx={{fontSize: '1.75rem'}}/>
             </IconButton>
           </div>

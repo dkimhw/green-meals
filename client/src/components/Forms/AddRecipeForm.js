@@ -1,6 +1,6 @@
 import React from 'react';
-import { useState } from 'react';
 import { Button, Typography } from '@mui/material';
+import FormCard from '../UI/FormCard';
 import classes from './AddRecipeForm.module.css';
 import IngredientsFormSection from './IngredientsFormSection';
 import RecipeInstructionsFormSection from './RecipeInstructionsFormSection';
@@ -8,24 +8,13 @@ import RecipeInfoFormSection from './RecipeInfoFormSection';
 import RecipeTimeFormSection from './RecipeTimeFormSection';
 import RecipeNotesFormSection from './RecipeNotesFormSection';
 import RecipePublicPrivateFormSection from './RecipePublicPrivateFormSection';
-import FormCard from '../UI/FormCard';
 import Divider from '../UI/Divider';
 import axios from 'axios';
 import useFormImagesUpload from '../../hooks/useFormImagesUpload';
 import useMultipleInputs from '../../hooks/useMultipleInputs';
 import useFormInput from '../../hooks/useFormInput';
-import { isValidImagesUploaded, validateString, validateNumber } from '../../utils/validateInputs';
-
-const initialValues = {
-  recipeName: "",
-  recipeDescription: "",
-  prepTime: "",
-  prepTimeType: "minutes",
-  cookingTime: "",
-  cookingTimeType: "minutes",
-  servingSize: "",
-  recipePrivacyStatus: "public",
-}
+import SectionTitle from '../UI/SectionTitle';
+import { isValidImagesUploaded, validateString, validateNumber, validateTimeType, validatePrivacyStatus } from '../../utils/validateInputs';
 
 const ingredientsInputs = [
   { id: 0, ingredientName: '', placeholder: 'e.g. Flour', hasError: false, errorMsg: '', touched: false },
@@ -39,9 +28,13 @@ const recipeInstructionsIntitalValue = [
   { id: 2, order: 3, instruction: '', placeholder: 'Add another instruction' },
 ]
 
-const recipeNotesInitialValue = [
-  { id: 0, noteTitle: '', note: '' },
-]
+const recipeNoteTitlesInitialValue = [
+  { id: 0, noteTitle: '' },
+];
+
+const recipeNoteMessagesInitialValue = [
+  { id: 0, note: '' },
+];
 
 // https://github.com/bradtraversy/react_step_form/tree/master/src/components
 // Breaking apart long forms into components
@@ -91,6 +84,16 @@ const AddRecipeForm = () => {
   } = useFormInput(validateNumber);
 
   const {
+    value: prepTimeType
+    , isValid: isPrepTimeTypeValid
+    , hasError: hasPrepTimeTypeInputError
+    , errMsg: prepTimeTypeErrorMsg
+    , blurInputHandler: prepTimeTypeBlurInputHandler
+    , valueChangeHandler: prepTimeTypeChangeHandler
+    , resetInput: prepTimeTypeReset
+  } = useFormInput(validateTimeType, 'minutes');
+
+  const {
     value: cookingTime
     , isValid: isCookingTimeValid
     , hasError: hasCookingTimeInputError
@@ -100,7 +103,25 @@ const AddRecipeForm = () => {
     , resetInput: cookingTimeReset
   } = useFormInput(validateNumber);
 
-  const [recipeInfo, setRecipeInfo] = useState(initialValues);
+  const {
+    value: cookingTimeType
+    , isValid: isCookingTimeTypeValid
+    , hasError: hasCookingTimeTypeInputError
+    , errMsg: cookingTimeTypeErrorMsg
+    , blurInputHandler: cookingTimeTypeBlurInputHandler
+    , valueChangeHandler: cookingTimeTypeChangeHandler
+    , resetInput: cookingTimeTypeReset
+  } = useFormInput(validateTimeType, 'minutes');
+
+  const {
+    value: recipePrivacyStatus
+    , isValid: isRecipePrivacyStatusValid
+    , hasError: hasRecipePrivacyStatusInputError
+    , errMsg: recipePrivacyStatusErrorMsg
+    , blurInputHandler: recipePrivacyStatusBlurInputHandler
+    , valueChangeHandler: recipePrivacyStatusChangeHandler
+    , resetInput: recipePrivacyStatusReset
+  } = useFormInput(validatePrivacyStatus, 'public');
 
   // Grouped multipe inputs
   const {
@@ -120,38 +141,60 @@ const AddRecipeForm = () => {
   } = useMultipleInputs(recipeInstructionsIntitalValue, { id: 0, instruction: '', placeholder: 'Add another instruction' }, validateString);
 
   const {
-    inputArray: recipeNotes
-    , addInput: addRecipeNote
-    , removeInput: removeRecipeNote
-    , handleChange: handleRecipeNoteChange
-  } = useMultipleInputs(recipeNotesInitialValue, { id: 0, noteTitle: '', note: '' });
-  const { handleFileInput, removeFileInput, filesData, uploadedFiles, fileErrors } = useFormImagesUpload(isValidImagesUploaded);
+    inputArray: recipeNoteTitles
+    , addInput: addRecipeNoteTitles
+    , removeInput: removeRecipeNoteTitles
+    , handleChange: handleRecipeNoteTitlesChange
+    , onBlur: handleRecipeNoteTitlesBlur
+  } = useMultipleInputs(recipeNoteTitlesInitialValue, { id: 0, noteTitle: ''}, validateString);
 
-  // Recipe Info changes
-  const handleRecipeInfoChange = async (event) => {
-    console.log(event.target.name);
-    console.log(event.target.value);
-    setRecipeInfo({ ...recipeInfo, [event.target.name]: event.target.value });
-  }
+  const {
+    inputArray: recipeNoteMessages
+    , addInput: addRecipeNoteMessages
+    , removeInput: removeRecipeNoteMessages
+    , handleChange: handleRecipeNoteMessagesChange
+    , onBlur: handleRecipeNoteMessagesBlur
+  } = useMultipleInputs(recipeNoteMessagesInitialValue, { id: 0, note: '' }, validateString);
+
+  const {
+    handleFileInput,
+    removeFileInput,
+    filesData,
+    uploadedFiles,
+    fileErrors
+  } = useFormImagesUpload(isValidImagesUploaded);
 
   // Submit Recipe Info //
   const submitHandler = async (event) => {
     event.preventDefault();
     console.log('submitted');
 
-    if (isRecipeDescriptionValid && isRecipenameInputValid && isServingSizeValid && isPrepTimeValid && isCookingTimeValid) {
+    // Once the submit button has been clicked we need to make sure the input fields have been marked as touched
+    recipeNameBlurInputHandler();
+    recipeDescriptionBlurInputHandler();
+    servingSizeBlurInputHandler();
+    prepTimeBlurInputHandler();
+    prepTimeTypeBlurInputHandler();
+    cookingTimeBlurInputHandler();
+    cookingTimeTypeBlurInputHandler();
+    recipePrivacyStatusBlurInputHandler();
+
+    if (isRecipeDescriptionValid && isRecipenameInputValid && isServingSizeValid
+        && isPrepTimeValid && isCookingTimeValid && isPrepTimeTypeValid
+        && isCookingTimeTypeValid && isRecipePrivacyStatusValid) {
       const recipeFormInfo = new FormData();
-      recipeFormInfo.append('recipeName', recipeInfo.recipeName);
-      recipeFormInfo.append('recipeDescription', recipeInfo.recipeDescription);
-      recipeFormInfo.append('cookingTime', recipeInfo.cookingTime);
-      recipeFormInfo.append('cookingTimeQty', recipeInfo.cookingTimeType);
-      recipeFormInfo.append('prepTime', recipeInfo.prepTime);
-      recipeFormInfo.append('prepTimeQty', recipeInfo.prepTimeType);
-      recipeFormInfo.append('servingSize', recipeInfo.servingSize);
-      recipeFormInfo.append('recipePrivacyStatus', recipeInfo.recipePrivacyStatus);
+      recipeFormInfo.append('recipeName', recipeName);
+      recipeFormInfo.append('recipeDescription', recipeDescription);
+      recipeFormInfo.append('cookingTime', cookingTime);
+      recipeFormInfo.append('cookingTimeQty', cookingTimeType);
+      recipeFormInfo.append('prepTime', prepTime);
+      recipeFormInfo.append('prepTimeQty', prepTimeType);
+      recipeFormInfo.append('servingSize', servingSize);
+      recipeFormInfo.append('recipePrivacyStatus', recipePrivacyStatus);
       recipeFormInfo.append('recipeIngredients', JSON.stringify(recipeIngredients));
       recipeFormInfo.append('recipeInstructions',  JSON.stringify(recipeInstructions));
-      recipeFormInfo.append('recipeNotes',  JSON.stringify(recipeNotes));
+      recipeFormInfo.append('recipeNoteMessages',  JSON.stringify(recipeNoteMessages));
+      recipeFormInfo.append('recipeNoteTitles',  JSON.stringify(recipeNoteTitles));
 
       uploadedFiles.forEach(image => {
         recipeFormInfo.append('images', image);
@@ -170,17 +213,17 @@ const AddRecipeForm = () => {
       recipeDescriptionReset();
       servingSizeReset();
       prepTimeReset();
+      prepTimeTypeReset();
       cookingTimeReset();
-
+      cookingTimeTypeReset();
+      recipePrivacyStatusReset();
     }
   };
-
   return (
     <FormCard>
+      <SectionTitle>Add a Recipe</SectionTitle>
       <form className={classes.form} onSubmit={submitHandler} method="post">
         <RecipeInfoFormSection
-          recipeInfo={recipeInfo}
-          handleRecipeInfoChange={handleRecipeInfoChange}
           // Recipe Name
           recipeName={recipeName}
           hasRecipeNameInputError={hasRecipeNameInputError}
@@ -230,9 +273,6 @@ const AddRecipeForm = () => {
         <Divider />
         <Typography variant="h5" sx={{mb: '1rem'}}>Cooking Time</Typography>
         <RecipeTimeFormSection
-          recipeInfo={recipeInfo}
-          handleRecipeInfoChange={handleRecipeInfoChange}
-
           // Prep Time
           prepTime={prepTime}
           hasPrepTimeInputError={hasPrepTimeInputError}
@@ -240,24 +280,50 @@ const AddRecipeForm = () => {
           prepTimeBlurInputHandler={prepTimeBlurInputHandler}
           prepTimeChangeHandler={prepTimeChangeHandler}
 
+          // Prep Time Type
+          prepTimeType={prepTimeType}
+          hasPrepTimeTypeInputError={hasPrepTimeTypeInputError}
+          prepTimeTypeErrorMsg={prepTimeTypeErrorMsg}
+          prepTimeTypeBlurInputHandler={prepTimeTypeBlurInputHandler}
+          prepTimeTypeChangeHandler={prepTimeTypeChangeHandler}
+
           // Cooking Time
           cookingTime={cookingTime}
           hasCookingTimeInputError={hasCookingTimeInputError}
           cookingTimeErrorMsg={cookingTimeErrorMsg}
           cookingTimeBlurInputHandler={cookingTimeBlurInputHandler}
           cookingTimeChangeHandler={cookingTimeChangeHandler}
+
+          // Cooking Time Type
+          cookingTimeType={cookingTimeType}
+          hasCookingTimeTypeInputError={hasCookingTimeTypeInputError}
+          cookingTimeTypeErrorMsg={cookingTimeTypeErrorMsg}
+          cookingTimeTypeChangeHandler={cookingTimeTypeChangeHandler}
+          cookingTimeTypeBlurInputHandler={cookingTimeTypeBlurInputHandler}
         />
         <Divider />
         <RecipeNotesFormSection
-          recipeNotes={recipeNotes}
-          addRecipeNote={addRecipeNote}
-          removeRecipeNote={removeRecipeNote}
-          handleRecipeNoteChange={handleRecipeNoteChange}
+          // Title
+          recipeNoteTitles={recipeNoteTitles}
+          addRecipeNoteTitles={addRecipeNoteTitles}
+          removeRecipeNoteTitles={removeRecipeNoteTitles}
+          handleRecipeNoteTitlesChange={handleRecipeNoteTitlesChange}
+          handleRecipeNoteTitlesBlur={handleRecipeNoteTitlesBlur}
+
+          // Note
+          recipeNoteMessages={recipeNoteMessages}
+          addRecipeNoteMessages={addRecipeNoteMessages}
+          removeRecipeNoteMessages={removeRecipeNoteMessages}
+          handleRecipeNoteMessagesChange={handleRecipeNoteMessagesChange}
+          handleRecipeNoteMessagesBlur={handleRecipeNoteMessagesBlur}
         />
         <Divider />
         <RecipePublicPrivateFormSection
-          recipeInfo={recipeInfo}
-          handleRecipeInfoChange={handleRecipeInfoChange}
+          recipePrivacyStatus={recipePrivacyStatus}
+          hasRecipePrivacyStatusInputError={hasRecipePrivacyStatusInputError}
+          recipePrivacyStatusErrorMsg={recipePrivacyStatusErrorMsg}
+          recipePrivacyStatusChangeHandler={recipePrivacyStatusChangeHandler}
+          recipePrivacyStatusBlurInputHandler={recipePrivacyStatusBlurInputHandler}
         />
         <Button variant="outlined" type="submit" sx={{mt: '1.5rem'}}>Submit</Button>
       </form>

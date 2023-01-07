@@ -10,7 +10,13 @@
 
 .ingredients-form-group {
   display: grid;
-  grid-template-columns: minmax(300px, 4fr) 1fr;
-  grid-column-gap: 1rem;
+  grid-template-columns: minmax(300px, 1fr);
+  position: relative;
   margin-bottom: 1rem;
+}
+
+.close-btn {
+  position: absolute !important;
+  right: -17.5%;
+  top: 10%;
 }

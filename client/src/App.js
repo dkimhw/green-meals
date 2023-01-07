@@ -1,21 +1,15 @@
-import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { ThemeProvider } from "@mui/material/styles";
 import React from "react";
 import { CssBaseline } from "@mui/material";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Layout from './components/Layout/Layout';
 import Home from './pages/HomePage/HomePage';
 import CreateRecipesPage from './pages/CreateRecipesPage/CreateRecipesPage';
-
-const theme = createTheme({
-  palette: {
-    mode: "dark",
-  },
-});
-
+import { appTheme } from "./theme/muiThemeOptions";
 
 function App() {
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={appTheme}>
       <CssBaseline />
       <BrowserRouter>
         <Routes>

@@ -1,0 +1,9 @@
+.top-banner {
+  position: absolute;
+  width: 100vw;
+  top: 0;
+  left: 0;
+  height: 10rem;
+  z-index: -10;
+  content: ''
+}

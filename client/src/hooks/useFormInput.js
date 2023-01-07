@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-const useFormInput = (validateInputValue) => {
+const useFormInput = (validateInputValue, initialValues = '') => {
   const [enteredValue, setEnteredValue] = useState('');
   const [isTouched, setIsTouched] = useState(false);
 
@@ -8,9 +8,7 @@ const useFormInput = (validateInputValue) => {
   const validation = validateInputValue(enteredValue);
   const valueIsValid = validation['isValid'];
   const errMsg = validation['errorMsg'];
-  console.log(validation);
   const hasError = !valueIsValid && isTouched;
-
 
   // Handler fo blur event
   const blurInputHandler = () => {

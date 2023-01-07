@@ -27,7 +27,13 @@ const AddIngredientsFormSection = (props) => {
                 label="Ingredient Name"
               />
 
-              <IconButton id={`remove-recipe-name-${input.id}`}  color="primary" onClick={() => props.removeIngredient(input.id)} aria-label="remove ingredient" component="label">
+              <IconButton
+                id={`remove-recipe-name-${input.id}`}
+                color="primary" onClick={() => props.removeIngredient(input.id)}
+                aria-label="remove ingredient"
+                component="label"
+                className={classes['close-btn']}
+              >
                 <CloseIcon sx={{fontSize: '1.75rem'}}/>
               </IconButton>
             </div>

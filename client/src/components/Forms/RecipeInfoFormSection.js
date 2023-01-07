@@ -17,7 +17,6 @@ const RecipeInfoFormSection = (props) => {
         error={props.hasRecipeNameInputError}
         helperText={props.hasRecipeNameInputError ? props.recipeNameErrorMsg : ''}
         className={`${classes['form-input']}`}
-        InputLabelProps={{ shrink: true, sx: {'fontSize': '1.25rem'} }}
         value={props.recipeName || ''}
         onChange={props.recipeNameChangeHandler}
         onBlur={props.recipeNameBlurInputHandler}
@@ -33,7 +32,6 @@ const RecipeInfoFormSection = (props) => {
         error={props.hasRecipeDescriptionInputError}
         helperText={props.hasRecipeDescriptionInputError ? props.recipeDescriptionErrorMsg : ''}
         className={classes['form-input']}
-        InputLabelProps={{ shrink: true, sx: {'fontSize': '1.25rem'} }}
         value={props.recipeDescription || ''}
         onChange={props.recipeDescriptionChangeHandler}
         onBlur={props.recipeDescriptionBlurInputHandler}

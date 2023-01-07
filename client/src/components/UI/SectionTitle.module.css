@@ -1,0 +1,17 @@
+
+
+.section-title-wrapper {
+  margin-top: 1.5rem;
+}
+
+.section-title {
+  font-size: 2rem !important;
+}
+
+/* .section-title-wrapper::before {
+  background: linear-gradient(to bottom, transparent 35%, #3f51b5 35%, #3f51b5 65%, transparent 65%),linear-gradient(to right, transparent 35%, #3f51b5 35%, #3f51b5 65%, transparent 65%);
+  content: "";
+  position: absolute;
+  width: 25px;
+  height: 25px;
+} */
