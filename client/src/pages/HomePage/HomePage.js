@@ -1,12 +1,13 @@
 
 
 import React from "react";
+import { Container } from '@mui/material';
 
 const Home = (props) => {
   return (
-    <div>
+    <Container>
       <h1>Home</h1>
-    </div>
+    </Container>
   );
 }
 

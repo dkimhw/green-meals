@@ -46,7 +46,6 @@ const useMultipleInputs = (intialValues, defaultValue, validate) => {
   };
 
   const onBlur = (event) => {
-    event.preventDefault();
     let splitIdLen = event.target.id.split('-').length
     const id = event.target.id.split('-')[splitIdLen - 1];
     let findIdx = inputArray.findIndex(input => input.id === parseInt(id));
@@ -61,12 +60,21 @@ const useMultipleInputs = (intialValues, defaultValue, validate) => {
     setInputArray(values);
   }
 
+  const onSubmit = (event) => {
+    const values = [...inputArray];
+    for (const input of values) {
+      input.touched = true;
+    }
+    setInputArray(values);
+  }
+
   return {
     inputArray
     , addInput
     , removeInput
     , handleChange
     , onBlur
+    , onSubmit
   }
 }
 

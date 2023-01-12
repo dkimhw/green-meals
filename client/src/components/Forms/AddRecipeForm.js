@@ -146,6 +146,7 @@ const AddRecipeForm = () => {
     , removeInput: removeRecipeNoteTitles
     , handleChange: handleRecipeNoteTitlesChange
     , onBlur: handleRecipeNoteTitlesBlur
+    , onSubmit: recipeNoteTitlesOnSubmit
   } = useMultipleInputs(recipeNoteTitlesInitialValue, { id: 0, noteTitle: ''}, validateString);
 
   const {
@@ -154,6 +155,7 @@ const AddRecipeForm = () => {
     , removeInput: removeRecipeNoteMessages
     , handleChange: handleRecipeNoteMessagesChange
     , onBlur: handleRecipeNoteMessagesBlur
+    , onSubmit: recipeNoteMessageOnSubmit
   } = useMultipleInputs(recipeNoteMessagesInitialValue, { id: 0, note: '' }, validateString);
 
   const {
@@ -178,6 +180,14 @@ const AddRecipeForm = () => {
     cookingTimeBlurInputHandler();
     cookingTimeTypeBlurInputHandler();
     recipePrivacyStatusBlurInputHandler();
+    recipeNoteTitlesOnSubmit();
+    recipeNoteMessageOnSubmit();
+    // handleIngredientBlur();
+    // handleRecipeInstructionBlur();
+    // handleRecipeNoteTitlesBlur();
+    // handleRecipeNoteMessagesBlur();
+
+
 
     if (isRecipeDescriptionValid && isRecipenameInputValid && isServingSizeValid
         && isPrepTimeValid && isCookingTimeValid && isPrepTimeTypeValid
@@ -217,6 +227,7 @@ const AddRecipeForm = () => {
       cookingTimeReset();
       cookingTimeTypeReset();
       recipePrivacyStatusReset();
+
     }
   };
   return (

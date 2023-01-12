@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 const useFormInput = (validateInputValue, initialValues = '') => {
-  const [enteredValue, setEnteredValue] = useState('');
+  const [enteredValue, setEnteredValue] = useState(initialValues);
   const [isTouched, setIsTouched] = useState(false);
 
   // Validate and check for errors if input has been touched

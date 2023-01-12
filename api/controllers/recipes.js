@@ -3,7 +3,18 @@ import uploadFiles from '../utils/imageUpload.js';
 
 export const index = async (req, res, next) => {
   const recipesModel = models.Recipe;
-  const allRecipes = await recipesModel.findAll();
+  const allRecipes = await recipesModel.findAll({limit: 25});
+  console.log(allRecipes);
+  res.send(allRecipes)
+};
+
+// https://blog.bitsrc.io/pagination-with-sequelize-explained-83054df6e041
+export const getRecipes = async (req, res, next) => {
+  const recipesModel = models.Recipe;
+  let page = req.query.page;
+  let limit = req.query.limit;
+
+  const allRecipes = await recipesModel.findAll({limit: 25}).paginate({page: page, limit: limit}).exec();
   console.log(allRecipes);
   res.send(allRecipes)
 };
@@ -22,7 +33,8 @@ export const createRecipe = async (req, res) => {
     , recipePrivacyStatus
     , recipeIngredients
     , recipeInstructions
-    , recipeNotes
+    , recipeNoteTitles
+    , recipeNoteMessages
   } = req.body;
 
   // Parse directions, ingredients, and notes for bulk create
@@ -41,13 +53,20 @@ export const createRecipe = async (req, res) => {
     }
   });
 
-  let notes = JSON.parse(recipeNotes);
-  notes = notes.map(note => {
-    return {
-      title: note.noteTitle,
-      text: note.note
-    }
-  });
+  let noteTitles = JSON.parse(recipeNoteTitles);
+  let noteMessages = JSON.parse(recipeNoteMessages);
+
+  let notes = [];
+  for (let idx = 0; idx < noteTitles.length; idx += 1) {
+    console.log(noteTitles[idx]);
+    console.log("Check: ", noteMessages[idx]);
+    notes.push({
+      title: noteTitles[idx]['noteTitle'],
+      text: noteMessages[idx]['note']
+    })
+  };
+
+  // recipeNoteMessages
 
   const newRecipe = await models.Recipe.create(
     {
@@ -65,10 +84,9 @@ export const createRecipe = async (req, res) => {
     }
   );
 
-  console.log("newRecipe: ", newRecipe);
-  console.log("newRecipe id: ", newRecipe.dataValues.id);
-  console.log("newRecipe id2: ", newRecipe.id);
-
+  // console.log("newRecipe: ", newRecipe);
+  // console.log("newRecipe id: ", newRecipe.dataValues.id);
+  // console.log("newRecipe id2: ", newRecipe.id);
 
   await models.Instruction.bulkCreate(
     instructions.map(instruction => {
