@@ -60,10 +60,14 @@ const useMultipleInputs = (intialValues, defaultValue, validate) => {
     setInputArray(values);
   }
 
-  const onSubmit = (event) => {
+  const onSubmitValidate = (inputType) => {
     const values = [...inputArray];
     for (const input of values) {
       input.touched = true;
+      console.log(input);
+      let validated = validateInput(input[inputType], true, validate);
+      input['hasError'] = validated['hasError'];
+      input['errorMsg'] = validated['errorMsg'];
     }
     setInputArray(values);
   }
@@ -74,7 +78,7 @@ const useMultipleInputs = (intialValues, defaultValue, validate) => {
     , removeInput
     , handleChange
     , onBlur
-    , onSubmit
+    , onSubmitValidate
   }
 }
 

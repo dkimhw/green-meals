@@ -14,7 +14,7 @@ import useFormImagesUpload from '../../hooks/useFormImagesUpload';
 import useMultipleInputs from '../../hooks/useMultipleInputs';
 import useFormInput from '../../hooks/useFormInput';
 import SectionTitle from '../UI/SectionTitle';
-import { isValidImagesUploaded, validateString, validateNumber, validateTimeType, validatePrivacyStatus } from '../../utils/validateInputs';
+import { isValidImagesUploaded, validateTextInput, validateNumber, validateTimeType, validatePrivacyStatus } from '../../utils/validateInputs';
 
 const ingredientsInputs = [
   { id: 0, ingredientName: '', placeholder: 'e.g. Flour', hasError: false, errorMsg: '', touched: false },
@@ -51,7 +51,7 @@ const AddRecipeForm = () => {
     , blurInputHandler: recipeNameBlurInputHandler
     , valueChangeHandler: recipeNameChangeHandler
     , resetInput: recipeNameReset
-  } = useFormInput(validateString);
+  } = useFormInput(validateTextInput);
 
   const {
     value: recipeDescription
@@ -61,7 +61,7 @@ const AddRecipeForm = () => {
     , blurInputHandler: recipeDescriptionBlurInputHandler
     , valueChangeHandler: recipeDescriptionChangeHandler
     , resetInput: recipeDescriptionReset
-  } = useFormInput(validateString);
+  } = useFormInput(validateTextInput);
 
   const {
     value: servingSize
@@ -130,7 +130,8 @@ const AddRecipeForm = () => {
     , removeInput: removeIngredient
     , handleChange: handleIngredientNameChange
     , onBlur: handleIngredientBlur
-  } = useMultipleInputs(ingredientsInputs, { id: 0, ingredient_name: '', placeholder: 'Add a new ingredient', hasError: false, error: '', touched: false }, validateString);
+    , onSubmitValidate: recipeIngredientsOnSubmit
+  } = useMultipleInputs(ingredientsInputs, { id: 0, ingredientName: '', placeholder: 'Add a new ingredient', hasError: false, error: '' }, validateTextInput);
 
   const {
     inputArray: recipeInstructions
@@ -138,7 +139,8 @@ const AddRecipeForm = () => {
     , removeInput: removeRecipeInstruction
     , handleChange: handleRecipeInstructionChange
     , onBlur: handleRecipeInstructionBlur
-  } = useMultipleInputs(recipeInstructionsIntitalValue, { id: 0, instruction: '', placeholder: 'Add another instruction' }, validateString);
+    , onSubmitValidate: recipeInstructionsOnSubmit
+  } = useMultipleInputs(recipeInstructionsIntitalValue, { id: 0, instruction: '', placeholder: 'Add another instruction' }, validateTextInput);
 
   const {
     inputArray: recipeNoteTitles
@@ -146,8 +148,8 @@ const AddRecipeForm = () => {
     , removeInput: removeRecipeNoteTitles
     , handleChange: handleRecipeNoteTitlesChange
     , onBlur: handleRecipeNoteTitlesBlur
-    , onSubmit: recipeNoteTitlesOnSubmit
-  } = useMultipleInputs(recipeNoteTitlesInitialValue, { id: 0, noteTitle: ''}, validateString);
+    , onSubmitValidate: recipeNoteTitlesOnSubmit
+  } = useMultipleInputs(recipeNoteTitlesInitialValue, { id: 0, noteTitle: ''}, validateTextInput);
 
   const {
     inputArray: recipeNoteMessages
@@ -155,8 +157,8 @@ const AddRecipeForm = () => {
     , removeInput: removeRecipeNoteMessages
     , handleChange: handleRecipeNoteMessagesChange
     , onBlur: handleRecipeNoteMessagesBlur
-    , onSubmit: recipeNoteMessageOnSubmit
-  } = useMultipleInputs(recipeNoteMessagesInitialValue, { id: 0, note: '' }, validateString);
+    , onSubmitValidate: recipeNoteMessagesOnSubmit
+  } = useMultipleInputs(recipeNoteMessagesInitialValue, { id: 0, note: '' }, validateTextInput);
 
   const {
     handleFileInput,
@@ -180,14 +182,10 @@ const AddRecipeForm = () => {
     cookingTimeBlurInputHandler();
     cookingTimeTypeBlurInputHandler();
     recipePrivacyStatusBlurInputHandler();
-    recipeNoteTitlesOnSubmit();
-    recipeNoteMessageOnSubmit();
-    // handleIngredientBlur();
-    // handleRecipeInstructionBlur();
-    // handleRecipeNoteTitlesBlur();
-    // handleRecipeNoteMessagesBlur();
-
-
+    recipeNoteTitlesOnSubmit('noteTitle');
+    recipeNoteMessagesOnSubmit('note');
+    recipeIngredientsOnSubmit('ingredientName');
+    recipeInstructionsOnSubmit('instruction');
 
     if (isRecipeDescriptionValid && isRecipenameInputValid && isServingSizeValid
         && isPrepTimeValid && isCookingTimeValid && isPrepTimeTypeValid

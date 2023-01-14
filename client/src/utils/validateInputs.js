@@ -33,18 +33,19 @@ export const isValidImagesUploaded = (imagesArr, numOfFiles, fileSizeLimit, even
   return errors;
 }
 
-export const validateString = (str) => {
+export const validateTextInput = (str) => {
   if (str.trim() === '') {
     return {
       isValid: false,
       errorMsg: 'Please fill out this field.'
     };
-  } else if (typeof str !== "string" || /[0-9]+/g.test(str)) {
-    return {
-      isValid: false,
-      errorMsg: 'Please enter a valid string.'
-    };
   }
+  // } else if (typeof str !== "string" || /[0-9]+/g.test(str)) {
+  //   return {
+  //     isValid: false,
+  //     errorMsg: 'Please enter a valid string.'
+  //   };
+  // }
 
   return {
     isValid: true,
