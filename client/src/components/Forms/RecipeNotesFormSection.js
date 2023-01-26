@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { TextField, InputLabel, IconButton, Button } from '@mui/material'
+import { TextField, InputLabel, IconButton, Button, Alert } from '@mui/material'
 import classes from './RecipeNotesFormSection.module.css'
 import CloseIcon from '@mui/icons-material/Close';
 
@@ -19,6 +19,7 @@ const RecipeNotesFormSection = (props) => {
 
   return (
     <div className={classes['notes-form-section']}>
+      {props.hasRecipeNoteTitlesError ? <Alert severity="error" sx={{'mb': '.75rem'}}>{props.hasRecipeNoteTitlesError}</Alert> : ''}
       {recipeNotes ? recipeNotes.map((note) => {
        return(
         <div key={note[0].id}>

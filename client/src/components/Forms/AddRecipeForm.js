@@ -14,7 +14,7 @@ import useFormImagesUpload from '../../hooks/useFormImagesUpload';
 import useMultipleInputs from '../../hooks/useMultipleInputs';
 import useFormInput from '../../hooks/useFormInput';
 import SectionTitle from '../UI/SectionTitle';
-import { isValidImagesUploaded, validateTextInput, validateNumber, validateTimeType, validatePrivacyStatus } from '../../utils/validateInputs';
+import { isValidImagesUploaded, validateTextInput, validateNumber, validateTimeType, validatePrivacyStatus, validateGroupInputs } from '../../utils/validateInputs';
 
 const ingredientsInputs = [
   { id: 0, ingredientName: '', placeholder: 'e.g. Flour', hasError: false, errorMsg: '', touched: false },
@@ -131,7 +131,15 @@ const AddRecipeForm = () => {
     , handleChange: handleIngredientNameChange
     , onBlur: handleIngredientBlur
     , onSubmitValidate: recipeIngredientsOnSubmit
-  } = useMultipleInputs(ingredientsInputs, { id: 0, ingredientName: '', placeholder: 'Add a new ingredient', hasError: false, error: '' }, validateTextInput);
+    , groupInputsErrorMsg: recipeIngredientsErrorMsg
+    , hasGroupInputsError: hasRecipeIngredientsError
+  } = useMultipleInputs(
+    ingredientsInputs,
+    { id: 0, ingredientName: '', placeholder: 'Add a new ingredient', hasError: false, error: '' },
+    validateTextInput,
+    validateGroupInputs,
+    `At least one ingredient is required.`
+  );
 
   const {
     inputArray: recipeInstructions
@@ -140,7 +148,15 @@ const AddRecipeForm = () => {
     , handleChange: handleRecipeInstructionChange
     , onBlur: handleRecipeInstructionBlur
     , onSubmitValidate: recipeInstructionsOnSubmit
-  } = useMultipleInputs(recipeInstructionsIntitalValue, { id: 0, instruction: '', placeholder: 'Add another instruction' }, validateTextInput);
+    , groupInputsErrorMsg: recipeInstructionsErrorMsg
+    , hasGroupInputsError: hasRecipeInstructionsError
+  } = useMultipleInputs(
+    recipeInstructionsIntitalValue,
+    { id: 0, instruction: '', placeholder: 'Add another instruction' },
+    validateTextInput,
+    validateGroupInputs,
+    `At least one cooking direction is required.`
+  );
 
   const {
     inputArray: recipeNoteTitles
@@ -149,7 +165,11 @@ const AddRecipeForm = () => {
     , handleChange: handleRecipeNoteTitlesChange
     , onBlur: handleRecipeNoteTitlesBlur
     , onSubmitValidate: recipeNoteTitlesOnSubmit
-  } = useMultipleInputs(recipeNoteTitlesInitialValue, { id: 0, noteTitle: ''}, validateTextInput);
+  } = useMultipleInputs(
+    recipeNoteTitlesInitialValue,
+    { id: 0, noteTitle: ''},
+    validateTextInput
+  );
 
   const {
     inputArray: recipeNoteMessages
@@ -158,7 +178,11 @@ const AddRecipeForm = () => {
     , handleChange: handleRecipeNoteMessagesChange
     , onBlur: handleRecipeNoteMessagesBlur
     , onSubmitValidate: recipeNoteMessagesOnSubmit
-  } = useMultipleInputs(recipeNoteMessagesInitialValue, { id: 0, note: '' }, validateTextInput);
+  } = useMultipleInputs(
+    recipeNoteMessagesInitialValue,
+    { id: 0, note: '' },
+    validateTextInput
+  );
 
   const {
     handleFileInput,
@@ -269,6 +293,8 @@ const AddRecipeForm = () => {
           removeIngredient={removeIngredient}
           handleIngredientNameChange={handleIngredientNameChange}
           handleIngredientBlur={handleIngredientBlur}
+          recipeIngredientsErrorMsg={recipeIngredientsErrorMsg}
+          hasRecipeIngredientsError={hasRecipeIngredientsError}
         />
         <Divider />
         <Typography variant="h5" sx={{mb: '1rem'}}>Directions</Typography>
@@ -278,6 +304,8 @@ const AddRecipeForm = () => {
           removeRecipeInstruction={removeRecipeInstruction}
           handleRecipeInstructionChange={handleRecipeInstructionChange}
           handleRecipeInstructionBlur={handleRecipeInstructionBlur}
+          recipeInstructionsErrorMsg={recipeInstructionsErrorMsg}
+          hasRecipeInstructionsError={hasRecipeInstructionsError}
         />
         <Divider />
         <Typography variant="h5" sx={{mb: '1rem'}}>Cooking Time</Typography>

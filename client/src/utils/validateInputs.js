@@ -51,7 +51,7 @@ export const validateTextInput = (str) => {
     isValid: true,
     errorMsg: null
   };
-}
+};
 
 export const validateNumber = (num) => {
   if (num.trim() === '') {
@@ -70,7 +70,7 @@ export const validateNumber = (num) => {
     isValid: true,
     errorMsg: null
   };
-}
+};
 
 export const validateEmail = (email) => {
   return String(email)
@@ -92,7 +92,7 @@ export const validateTimeType = (timeType) => {
       errorMsg: `Please select a value from the dropdown.`
     }
   }
-}
+};
 
 export const validatePrivacyStatus = (privacyStatus) => {
   if (['public', 'private'].includes(privacyStatus)) {
@@ -106,4 +106,19 @@ export const validatePrivacyStatus = (privacyStatus) => {
       errorMsg: `Please select a value from the dropdown.`
     }
   }
-}
+};
+
+// must have at least one input
+export const validateGroupInputs = (inputs, errorMsg='At least one input required.') => {
+  if (inputs?.length > 0) {
+    return {
+      isValid: true,
+      errorMsg: null
+    }
+  } else {
+    return {
+      isValid: false,
+      errorMsg: errorMsg
+    }
+  }
+};

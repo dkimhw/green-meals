@@ -1,12 +1,13 @@
 
 import React from 'react';
-import { TextField, Button, IconButton } from '@mui/material';
+import { TextField, Button, IconButton, Alert } from '@mui/material';
 import classes from './RecipeInstructionsFormSection.module.css';
 import CloseIcon from '@mui/icons-material/Close';
 
 const RecipeInstructionsFormSection = (props) => {
   return (
     <div className={classes['ingredients-form-section']}>
+      {props.hasRecipeInstructionsError ? <Alert severity="error" sx={{'mb': '.75rem'}}>{props.recipeInstructionsErrorMsg}</Alert> : ''}
       {props.instructions.map((input, idx) => {
         return (
           <div className={classes['ingredients-form-group']} key={input.id}>
