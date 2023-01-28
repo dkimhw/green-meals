@@ -13,8 +13,9 @@ export const getRecipes = async (req, res, next) => {
   const recipesModel = models.Recipe;
   let page = req.query.page;
   let limit = req.query.limit;
+  let offset = req.query.offset;
 
-  const allRecipes = await recipesModel.findAll({limit: 25}).paginate({page: page, limit: limit}).exec();
+  const allRecipes = await recipesModel.findAll({page: page, limit: limit, offset: offset});
   console.log(allRecipes);
   res.send(allRecipes)
 };
@@ -130,6 +131,6 @@ export const createRecipe = async (req, res) => {
 
 
 export default {
-  index,
+  getRecipes,
   createRecipe
 }
