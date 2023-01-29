@@ -3,12 +3,10 @@ import { useState, useEffect } from 'react'
 import RecipeListCard from './RecipeListCard';
 import axios from 'axios';
 
-const fetchRecipeData = async () => {
+const fetchRecipeData = async (page, limit, offset) => {
   const response = await axios({
     method: "get",
-    url: "http://localhost:5051/api/recipes/create",
-    data: recipeFormInfo,
-    headers: { "Content-Type": "multipart/form-data" },
+    url: `http://localhost:5051/api/recipes/get?page=${page}&limit=${limit}&offset=${offset}`,
   });
   console.log(response);
 }
@@ -23,7 +21,9 @@ const RecipeList = (props) => {
   });
 
   useEffect(() => {
-
+    const response = fetchRecipeData(1, 1, 0);
+    console.log(response);
+    setRecipes(response);
   }, [recipes])
 
   return (

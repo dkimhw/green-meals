@@ -11,9 +11,9 @@ export const index = async (req, res, next) => {
 // https://blog.bitsrc.io/pagination-with-sequelize-explained-83054df6e041
 export const getRecipes = async (req, res, next) => {
   const recipesModel = models.Recipe;
-  let page = req.query.page;
-  let limit = req.query.limit;
-  let offset = req.query.offset;
+  let page = req.query.page ? req.query.page : 1;
+  let limit = req.query.limit ? req.query.limit : 15;
+  let offset = req.query.offset ? req.query.offset : 0;
 
   const allRecipes = await recipesModel.findAll({page: page, limit: limit, offset: offset});
   console.log(allRecipes);
