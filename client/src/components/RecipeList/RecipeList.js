@@ -38,10 +38,16 @@ const RecipeList = (props) => {
   return (
 
     <React.Fragment>
-      {recipes ? recipes.map(recipe => {return (<p key={recipe.id}>{recipe.recipe_name}</p>)}) : '' }
-      <RecipeListCard>
+      {recipes ? recipes.map(recipe => {
+        return (
+          <RecipeListCard
+            key={recipe.id}
+            recipeTitle={recipe.recipe_name}
+          >
+          </RecipeListCard>
+        )
+      }) : '' }
 
-      </RecipeListCard>
     </React.Fragment>
 
   )
