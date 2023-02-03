@@ -33,24 +33,25 @@ export const isValidImagesUploaded = (imagesArr, numOfFiles, fileSizeLimit, even
   return errors;
 }
 
-export const validateString = (str) => {
+export const validateTextInput = (str) => {
   if (str.trim() === '') {
     return {
       isValid: false,
       errorMsg: 'Please fill out this field.'
     };
-  } else if (typeof str !== "string" || /[0-9]+/g.test(str)) {
-    return {
-      isValid: false,
-      errorMsg: 'Please enter a valid string.'
-    };
   }
+  // } else if (typeof str !== "string" || /[0-9]+/g.test(str)) {
+  //   return {
+  //     isValid: false,
+  //     errorMsg: 'Please enter a valid string.'
+  //   };
+  // }
 
   return {
     isValid: true,
     errorMsg: null
   };
-}
+};
 
 export const validateNumber = (num) => {
   if (num.trim() === '') {
@@ -69,7 +70,7 @@ export const validateNumber = (num) => {
     isValid: true,
     errorMsg: null
   };
-}
+};
 
 export const validateEmail = (email) => {
   return String(email)
@@ -91,7 +92,7 @@ export const validateTimeType = (timeType) => {
       errorMsg: `Please select a value from the dropdown.`
     }
   }
-}
+};
 
 export const validatePrivacyStatus = (privacyStatus) => {
   if (['public', 'private'].includes(privacyStatus)) {
@@ -105,4 +106,19 @@ export const validatePrivacyStatus = (privacyStatus) => {
       errorMsg: `Please select a value from the dropdown.`
     }
   }
-}
+};
+
+// must have at least one input
+export const validateGroupInputs = (inputs, errorMsg='At least one input required.') => {
+  if (inputs?.length > 0) {
+    return {
+      isValid: true,
+      errorMsg: null
+    }
+  } else {
+    return {
+      isValid: false,
+      errorMsg: errorMsg
+    }
+  }
+};

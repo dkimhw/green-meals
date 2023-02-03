@@ -1,9 +1,15 @@
 .top-banner {
   position: absolute;
   width: 100vw;
-  top: 0;
+  top: 9%;
   left: 0;
   height: 10rem;
   z-index: -10;
   content: ''
+}
+
+@media screen and (max-width: 600px) {
+  .top-banner {
+    top: 6%;
+  }
 }

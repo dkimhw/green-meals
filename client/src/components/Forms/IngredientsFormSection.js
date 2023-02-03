@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { TextField, Button, IconButton } from '@mui/material';
+import { TextField, Button, IconButton, Alert } from '@mui/material';
 import classes from './IngredientsFormSection.module.css';
 import CloseIcon from '@mui/icons-material/Close';
 import FormInputAlert from '../UI/FormInputAlert';
@@ -9,6 +9,7 @@ import FormInputAlert from '../UI/FormInputAlert';
 const AddIngredientsFormSection = (props) => {
   return (
     <React.Fragment>
+      {props.hasRecipeIngredientsError ? <Alert severity="error" sx={{'mb': '.75rem'}}>{props.recipeIngredientsErrorMsg}</Alert> : ''}
       {props.ingredients ? props.ingredients.map((input) => {
         return (
           <React.Fragment key={input.id}>

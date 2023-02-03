@@ -14,7 +14,7 @@ import useFormImagesUpload from '../../hooks/useFormImagesUpload';
 import useMultipleInputs from '../../hooks/useMultipleInputs';
 import useFormInput from '../../hooks/useFormInput';
 import SectionTitle from '../UI/SectionTitle';
-import { isValidImagesUploaded, validateString, validateNumber, validateTimeType, validatePrivacyStatus } from '../../utils/validateInputs';
+import { isValidImagesUploaded, validateTextInput, validateNumber, validateTimeType, validatePrivacyStatus, validateGroupInputs } from '../../utils/validateInputs';
 
 const ingredientsInputs = [
   { id: 0, ingredientName: '', placeholder: 'e.g. Flour', hasError: false, errorMsg: '', touched: false },
@@ -51,7 +51,7 @@ const AddRecipeForm = () => {
     , blurInputHandler: recipeNameBlurInputHandler
     , valueChangeHandler: recipeNameChangeHandler
     , resetInput: recipeNameReset
-  } = useFormInput(validateString);
+  } = useFormInput(validateTextInput);
 
   const {
     value: recipeDescription
@@ -61,7 +61,7 @@ const AddRecipeForm = () => {
     , blurInputHandler: recipeDescriptionBlurInputHandler
     , valueChangeHandler: recipeDescriptionChangeHandler
     , resetInput: recipeDescriptionReset
-  } = useFormInput(validateString);
+  } = useFormInput(validateTextInput);
 
   const {
     value: servingSize
@@ -130,7 +130,16 @@ const AddRecipeForm = () => {
     , removeInput: removeIngredient
     , handleChange: handleIngredientNameChange
     , onBlur: handleIngredientBlur
-  } = useMultipleInputs(ingredientsInputs, { id: 0, ingredient_name: '', placeholder: 'Add a new ingredient', hasError: false, error: '', touched: false }, validateString);
+    , onSubmitValidate: recipeIngredientsOnSubmit
+    , groupInputsErrorMsg: recipeIngredientsErrorMsg
+    , hasGroupInputsError: hasRecipeIngredientsError
+  } = useMultipleInputs(
+    ingredientsInputs,
+    { id: 0, ingredientName: '', placeholder: 'Add a new ingredient', hasError: false, error: '' },
+    validateTextInput,
+    validateGroupInputs,
+    `At least one ingredient is required.`
+  );
 
   const {
     inputArray: recipeInstructions
@@ -138,7 +147,16 @@ const AddRecipeForm = () => {
     , removeInput: removeRecipeInstruction
     , handleChange: handleRecipeInstructionChange
     , onBlur: handleRecipeInstructionBlur
-  } = useMultipleInputs(recipeInstructionsIntitalValue, { id: 0, instruction: '', placeholder: 'Add another instruction' }, validateString);
+    , onSubmitValidate: recipeInstructionsOnSubmit
+    , groupInputsErrorMsg: recipeInstructionsErrorMsg
+    , hasGroupInputsError: hasRecipeInstructionsError
+  } = useMultipleInputs(
+    recipeInstructionsIntitalValue,
+    { id: 0, instruction: '', placeholder: 'Add another instruction' },
+    validateTextInput,
+    validateGroupInputs,
+    `At least one cooking direction is required.`
+  );
 
   const {
     inputArray: recipeNoteTitles
@@ -146,7 +164,12 @@ const AddRecipeForm = () => {
     , removeInput: removeRecipeNoteTitles
     , handleChange: handleRecipeNoteTitlesChange
     , onBlur: handleRecipeNoteTitlesBlur
-  } = useMultipleInputs(recipeNoteTitlesInitialValue, { id: 0, noteTitle: ''}, validateString);
+    , onSubmitValidate: recipeNoteTitlesOnSubmit
+  } = useMultipleInputs(
+    recipeNoteTitlesInitialValue,
+    { id: 0, noteTitle: ''},
+    validateTextInput
+  );
 
   const {
     inputArray: recipeNoteMessages
@@ -154,7 +177,12 @@ const AddRecipeForm = () => {
     , removeInput: removeRecipeNoteMessages
     , handleChange: handleRecipeNoteMessagesChange
     , onBlur: handleRecipeNoteMessagesBlur
-  } = useMultipleInputs(recipeNoteMessagesInitialValue, { id: 0, note: '' }, validateString);
+    , onSubmitValidate: recipeNoteMessagesOnSubmit
+  } = useMultipleInputs(
+    recipeNoteMessagesInitialValue,
+    { id: 0, note: '' },
+    validateTextInput
+  );
 
   const {
     handleFileInput,
@@ -178,6 +206,10 @@ const AddRecipeForm = () => {
     cookingTimeBlurInputHandler();
     cookingTimeTypeBlurInputHandler();
     recipePrivacyStatusBlurInputHandler();
+    recipeNoteTitlesOnSubmit('noteTitle');
+    recipeNoteMessagesOnSubmit('note');
+    recipeIngredientsOnSubmit('ingredientName');
+    recipeInstructionsOnSubmit('instruction');
 
     if (isRecipeDescriptionValid && isRecipenameInputValid && isServingSizeValid
         && isPrepTimeValid && isCookingTimeValid && isPrepTimeTypeValid
@@ -217,6 +249,7 @@ const AddRecipeForm = () => {
       cookingTimeReset();
       cookingTimeTypeReset();
       recipePrivacyStatusReset();
+
     }
   };
   return (
@@ -260,6 +293,8 @@ const AddRecipeForm = () => {
           removeIngredient={removeIngredient}
           handleIngredientNameChange={handleIngredientNameChange}
           handleIngredientBlur={handleIngredientBlur}
+          recipeIngredientsErrorMsg={recipeIngredientsErrorMsg}
+          hasRecipeIngredientsError={hasRecipeIngredientsError}
         />
         <Divider />
         <Typography variant="h5" sx={{mb: '1rem'}}>Directions</Typography>
@@ -269,6 +304,8 @@ const AddRecipeForm = () => {
           removeRecipeInstruction={removeRecipeInstruction}
           handleRecipeInstructionChange={handleRecipeInstructionChange}
           handleRecipeInstructionBlur={handleRecipeInstructionBlur}
+          recipeInstructionsErrorMsg={recipeInstructionsErrorMsg}
+          hasRecipeInstructionsError={hasRecipeInstructionsError}
         />
         <Divider />
         <Typography variant="h5" sx={{mb: '1rem'}}>Cooking Time</Typography>

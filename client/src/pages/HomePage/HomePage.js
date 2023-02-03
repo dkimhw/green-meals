@@ -1,12 +1,15 @@
 
 
 import React from "react";
+import { Container } from '@mui/material';
+import RecipeList from "../../components/RecipeList/RecipeList";
 
 const Home = (props) => {
   return (
-    <div>
+    <Container>
       <h1>Home</h1>
-    </div>
+      <RecipeList/>
+    </Container>
   );
 }
 

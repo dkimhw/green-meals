@@ -45,9 +45,9 @@ app.use((error, req, res, next) => {
   return res.status(500).send(message)
 });
 
-// force: true
+// sequelize.sync({ force: true }).
 const PORT = process.env.PORT;
-sequelize.sync({ force: true }).then(() => {
+sequelize.sync().then(() => {
   app.listen(5051, () => {
     console.log(`Listening on port ${PORT}!`);
   });

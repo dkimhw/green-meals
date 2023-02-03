@@ -2,9 +2,23 @@
 import { useState } from 'react';
 
 // Expects default value to have: id, touched, hasError, isvalid
-// Is there a way to make this code a bit more efficient and resilient?
-const useMultipleInputs = (intialValues, defaultValue, validate) => {
+const useMultipleInputs = (intialValues, defaultValue, validate, groupValidate=null, groupValidateErrorMsg=null) => {
   const [inputArray, setInputArray] = useState(intialValues);
+
+  // Group validation
+  const [groupInputsTouched, setGroupInputsTouched] = useState(false);
+
+  const validation = groupValidate ? groupValidate(inputArray, groupValidateErrorMsg) : null;
+  let valueIsValid;
+  let groupInputsErrorMsg;
+  let hasGroupInputsError
+
+  if (validation) {
+    valueIsValid = validation['isValid'];
+    groupInputsErrorMsg = validation['errorMsg'];
+    hasGroupInputsError = !valueIsValid && groupInputsTouched;
+  }
+
 
   const validateInput = (val, isTouched, validateFunc) => {
     // Validate
@@ -38,15 +52,14 @@ const useMultipleInputs = (intialValues, defaultValue, validate) => {
     values[findIdx][event.target.name] = event.target.value;
 
     let validated = validateInput(event.target.value, true, validate);
-    console.log(validated)
     values[findIdx]['hasError'] = validated['hasError'];
     values[findIdx]['errorMsg'] = validated['errorMsg'];
 
     setInputArray(values);
+    setGroupInputsTouched(true);
   };
 
   const onBlur = (event) => {
-    event.preventDefault();
     let splitIdLen = event.target.id.split('-').length
     const id = event.target.id.split('-')[splitIdLen - 1];
     let findIdx = inputArray.findIndex(input => input.id === parseInt(id));
@@ -59,6 +72,20 @@ const useMultipleInputs = (intialValues, defaultValue, validate) => {
     values[findIdx]['errorMsg'] = validated['errorMsg'];
 
     setInputArray(values);
+    setGroupInputsTouched(true);
+  }
+
+  const onSubmitValidate = (inputType) => {
+    const values = [...inputArray];
+    for (const input of values) {
+      input.touched = true;
+      console.log(input);
+      let validated = validateInput(input[inputType], true, validate);
+      input['hasError'] = validated['hasError'];
+      input['errorMsg'] = validated['errorMsg'];
+    }
+    setInputArray(values);
+    setGroupInputsTouched(true);
   }
 
   return {
@@ -67,6 +94,9 @@ const useMultipleInputs = (intialValues, defaultValue, validate) => {
     , removeInput
     , handleChange
     , onBlur
+    , onSubmitValidate
+    , groupInputsErrorMsg
+    , hasGroupInputsError
   }
 }
 

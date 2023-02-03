@@ -3,8 +3,6 @@ import { Box } from '@mui/material'
 
 const Divider = (props) => {
   let borderCss = props.borderCSS ? props.borderCSS : '#d3d3d3 1px solid';
-
-  console.log(borderCss);
   return (
     <Box className={classes.divider} sx={{
       borderTop: borderCss
