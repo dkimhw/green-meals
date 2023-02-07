@@ -1,5 +1,6 @@
 import models from '../models/index.js';
 import uploadFiles from '../utils/imageUpload.js';
+import getImage from '../utils/getImage.js';
 
 export const index = async (req, res, next) => {
   const recipesModel = models.Recipe;
@@ -16,9 +17,25 @@ export const getRecipes = async (req, res, next) => {
   let offset = req.query.offset ? req.query.offset : 0;
 
   const allRecipes = await recipesModel.findAll({page: page, limit: limit, offset: offset});
-  console.log(allRecipes);
   res.send(allRecipes)
 };
+
+export const getRecipeImages = async (req, res, next) => {
+  const recipeId = req.query.recipeId
+  const recipesModel = models.RecipeImage;
+  const images = await recipesModel.findAll({
+    where: {
+      recipeId: recipeId
+    }
+  });
+
+  for (let image of images) {
+    image['s3ImageUrl'] = await getImage(image?.image_key);
+  }
+
+  console.log(images);
+  res.send(images);
+}
 
 // This needs to be improved - should be able to use just one create method to insert everything
 export const createRecipe = async (req, res) => {
@@ -132,5 +149,6 @@ export const createRecipe = async (req, res) => {
 
 export default {
   getRecipes,
-  createRecipe
+  createRecipe,
+  getRecipeImages
 }

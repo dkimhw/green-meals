@@ -1,7 +1,7 @@
 const getIngredientModel = (sequelize, { DataTypes }) => {
   const Ingredient = sequelize.define('ingredient', {
     ingredient_name: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(1000),
       allowNull: false,
       validate: {
         notEmpty: true,

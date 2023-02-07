@@ -1,14 +1,14 @@
 const getRecipeNoteModel = (sequelize, { DataTypes }) => {
   const RecipeNote = sequelize.define('recipe_note', {
       title: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(1000),
         allowNull: false,
         validate: {
           notEmpty: true,
         },
       }
       , text: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT,
         allowNull: false,
         validate: {
           notEmpty: true,

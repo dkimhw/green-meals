@@ -1,7 +1,7 @@
 const getImageModel = (sequelize, { DataTypes }) => {
   const RecipeImage = sequelize.define('recipe_image', {
       image_key: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(1500),
         allowNull: false,
         validate: {
           notEmpty: true,

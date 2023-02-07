@@ -8,7 +8,7 @@ const getInstructionModel = (sequelize, { DataTypes }) => {
       },
     },
     instruction_text: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
       allowNull: false,
       validate: {
         notEmpty: true,
