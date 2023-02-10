@@ -30,7 +30,7 @@ export const getRecipeImages = async (req, res, next) => {
   });
 
   for (let image of images) {
-    image['s3ImageUrl'] = await getImage(image?.image_key);
+    image.dataValues['s3ImageUrl'] = await getImage(image?.image_key);
   }
 
   console.log(images);

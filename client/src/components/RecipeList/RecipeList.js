@@ -8,6 +8,7 @@ import axios from 'axios';
 const RecipeList = (props) => {
   // Need to create an api call to grab
   const [recipes, setRecipes] = useState([]);
+
   const fetchRecipeData = async (page, limit, offset) => {
     axios({
       method: "get",
@@ -16,7 +17,6 @@ const RecipeList = (props) => {
       .then((response) => {
         const data = response.data;
         setRecipes(data);
-        console.log(data);
       })
       .catch(error => console.error(`Error: ${error}`));
 
@@ -42,6 +42,7 @@ const RecipeList = (props) => {
         return (
           <RecipeListCard
             key={recipe.id}
+            recipeId={recipe.id}
             recipeTitle={recipe.recipe_name}
           >
           </RecipeListCard>

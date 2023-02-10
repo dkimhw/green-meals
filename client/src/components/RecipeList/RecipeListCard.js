@@ -1,7 +1,7 @@
-import * as React from 'react';
+import React, { useState, useEffect } from 'react'
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
-// import CardMedia from '@mui/material/CardMedia';
+import CardMedia from '@mui/material/CardMedia';
 import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
 import Avatar from '@mui/material/Avatar';
@@ -10,11 +10,37 @@ import Typography from '@mui/material/Typography';
 import { red } from '@mui/material/colors';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ShareIcon from '@mui/icons-material/Share';
+import Rating from '@mui/material/Rating';
+import axios from 'axios';
+
 
 // 1. Add picture
 // 2. Add star ratings
 const RecipeListCard = (props) => {
-  console.log("props", props);
+  const [recipeImages, setRecipeImages] = useState([]);
+  const fetchRecipeImages = (recipeId) => {
+    axios({
+      method: "get",
+      url: `http://localhost:5051/api/recipes/images?recipeId=${recipeId}`,
+    })
+      .then((response) => {
+        const data = response.data;
+        console.log("data", data)
+        setRecipeImages(data);
+      })
+      .catch(error => console.error(`Error: ${error}`));
+
+  }
+
+  useEffect(() => {
+    console.log(props);
+    if (props.recipeId) {
+      fetchRecipeImages(props.recipeId);
+    }
+  }, [props])
+
+
+
 
   return (
     <Card sx={{ maxWidth: 345 }}>
@@ -27,19 +53,14 @@ const RecipeListCard = (props) => {
         title={props.recipeTitle}
         subheader="September 14, 2016"
       />
-      {/* <CardMedia
+      {recipeImages[0] ? <CardMedia
         component="img"
         height="194"
-        image="/static/images/cards/paella.jpg"
-        alt="Paella dish"
-      /> */}
+        src={recipeImages[0].s3ImageUrl}
+      /> : '' }
       <CardContent>
-        {/* Later need to add reviews */}
-        <Typography variant="body2" color="text.secondary">
-          This impressive paella is a perfect party dish and a fun meal to cook
-          together with your guests. Add 1 cup of frozen peas along with the mussels,
-          if you like.
-        </Typography>
+        <Typography component="legend" sx={{mt: '1rem'}}>No reviews</Typography>
+        <Rating name="no-value" value={null} />
       </CardContent>
       <CardActions disableSpacing>
         <IconButton aria-label="add to favorites">
