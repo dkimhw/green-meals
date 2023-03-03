@@ -12,10 +12,13 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import ShareIcon from '@mui/icons-material/Share';
 import Rating from '@mui/material/Rating';
 import axios from 'axios';
+import Box from '@mui/material/Box';
+import StarIcon from '@mui/icons-material/Star';
 
+function getLabelText(label) {
+  return label
+}
 
-// 1. Add picture
-// 2. Add star ratings
 const RecipeListCard = (props) => {
   const [recipeImages, setRecipeImages] = useState([]);
   const fetchRecipeImages = (recipeId) => {
@@ -43,24 +46,32 @@ const RecipeListCard = (props) => {
 
 
   return (
-    <Card sx={{ maxWidth: 345 }}>
-      <CardHeader
-        avatar={
-          <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-            R
-          </Avatar>
-        }
-        title={props.recipeTitle}
-        subheader="September 14, 2016"
-      />
+    <Card
+      sx={{border: '1px solid rgba(0, 0, 0, 0.15)', boxShadow: 'none', maxWidth: 300}}
+    >
       {recipeImages[0] ? <CardMedia
         component="img"
         height="194"
         src={recipeImages[0].s3ImageUrl}
       /> : '' }
       <CardContent>
-        <Typography component="legend" sx={{mt: '1rem'}}>No reviews</Typography>
-        <Rating name="no-value" value={null} />
+        <Typography component="h4" sx={{fontSize: '1rem', fontWeight: 'bold', letterSpacing: '1px'}}>{props.recipeTitle}</Typography>
+        <Box
+          sx={{
+            width: 200,
+            display: 'flex',
+            alignItems: 'center',
+          }}
+        >
+          <Rating
+            name="text-feedback"
+            value={0}
+            readOnly
+            precision={0.5}
+            emptyIcon={<StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />}
+          />
+          <Box sx={{ ml: 1, fontSize: '.8rem', fontWeight: 'normal' }}>{0} Ratings</Box>
+        </Box>
       </CardContent>
       <CardActions disableSpacing>
         <IconButton aria-label="add to favorites">
