@@ -2,10 +2,8 @@
 import React, { useState, useEffect } from 'react'
 import RecipeListCard from './RecipeListCard';
 import axios from 'axios';
-// import { styled } from '@mui/material/styles';
-// import Box from '@mui/material/Box';
-// import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
+import Pagination from '@mui/material/Pagination';
 
 
 const RecipeList = (props) => {
@@ -26,7 +24,7 @@ const RecipeList = (props) => {
   }
 
   useEffect(() => {
-    fetchRecipeData(1, 10, 0);
+    fetchRecipeData(1, 2, 0);
   }, [])
 
   // const data = fetchRecipeData(1, 1, 0);
@@ -39,7 +37,7 @@ const RecipeList = (props) => {
   // }, [recipes])
 
   return (
-
+    <React.Fragment>
     <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
       {recipes ? recipes.map(recipe => {
         return (
@@ -55,7 +53,17 @@ const RecipeList = (props) => {
       }) : '' }
 
     </Grid>
-
+    <Pagination
+      count={4}
+      sx={{
+        mt:'2rem',
+        mb: '2rem',
+        display: 'flex',
+        justifyContent: 'center'
+      }}
+      disabled
+    />
+    </React.Fragment>
   )
 }
 
