@@ -16,7 +16,7 @@ export const getRecipes = async (req, res, next) => {
   let limit = req.query.limit ? req.query.limit : 15;
   let offset = req.query.offset ? req.query.offset : 0;
 
-  const allRecipes = await recipesModel.findAll({page: page, limit: limit, offset: offset});
+  const allRecipes = await recipesModel.findAll({page: page, offset: offset, limit: limit});
   res.send(allRecipes)
 };
 
