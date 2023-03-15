@@ -25,10 +25,11 @@ const imageFilter = (req, file, cb) => {
 // Defines the upload variable for the configuration of photo being uploaded
 const upload = multer({ storage: storage, fileFilter: imageFilter });
 
-router.route('/get').get(recipesController.getRecipes)
+router.route('/get').get(recipesController.getRecipes);
+router.route('/images').get(recipesController.getRecipeImages);
 router.route('/create').post(
   upload.array("images"),
   recipesController.createRecipe
-)
+);
 
 export default router;

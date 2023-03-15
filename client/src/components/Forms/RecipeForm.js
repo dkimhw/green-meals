@@ -252,6 +252,7 @@ const AddRecipeForm = () => {
 
     }
   };
+
   return (
     <FormCard>
       <SectionTitle>Add a Recipe</SectionTitle>
