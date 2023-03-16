@@ -35,9 +35,6 @@ const RecipeListCard = (props) => {
     }
   }, [props])
 
-
-
-
   return (
     <Card
       sx={{border: '1px solid rgba(0, 0, 0, 0.15)', boxShadow: 'none', maxWidth: 300}}

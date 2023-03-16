@@ -33,15 +33,6 @@ const RecipeList = (props) => {
     setCurrPage(value);
   }
 
-  // const data = fetchRecipeData(1, 1, 0);
-  // console.log(data);
-  //setRecipes(data);
-  // useEffect(() => {
-  //   const response = fetchRecipeData(1, 1, 0);
-  //   console.log(response);
-  //   setRecipes(response);
-  // }, [recipes])
-
   return (
     <React.Fragment>
     <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>

@@ -41,7 +41,13 @@ const recipeNoteMessagesInitialValue = [
 
 // Multiple Files: https://www.techgeeknext.com/react/multiple-files-upload-example
 // https://www.positronx.io/react-multiple-files-upload-with-node-express-tutorial/
-const AddRecipeForm = () => {
+const RecipeForm = (props) => {
+
+  const id = props.id;
+  const isAddMode = !!id;
+  console.log(id);
+  console.log(isAddMode);
+
   // Input custom hooks
   const {
     value: recipeName
@@ -370,4 +376,4 @@ const AddRecipeForm = () => {
 
 };
 
-export default AddRecipeForm;
+export default RecipeForm;
