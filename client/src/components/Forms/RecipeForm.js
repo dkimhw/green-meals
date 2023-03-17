@@ -14,6 +14,7 @@ import useFormImagesUpload from '../../hooks/useFormImagesUpload';
 import useMultipleInputs from '../../hooks/useMultipleInputs';
 import useFormInput from '../../hooks/useFormInput';
 import SectionTitle from '../UI/SectionTitle';
+import { useState, useEffect } from 'react';
 import { isValidImagesUploaded, validateTextInput, validateNumber, validateTimeType, validatePrivacyStatus, validateGroupInputs } from '../../utils/validateInputs';
 
 const ingredientsInputs = [
@@ -45,8 +46,28 @@ const RecipeForm = (props) => {
 
   const id = props.id;
   const isAddMode = !!id;
-  console.log(id);
-  console.log(isAddMode);
+  // console.log(id);
+  // console.log(isAddMode);
+  const [recipeData, setRecipeData] = useState({});
+
+  const fetchRecipeData = async (recipeID) => {
+    axios({
+      method: "get",
+      url: `http://localhost:5051/api/recipes/${recipeID}`,
+    })
+      .then((response) => {
+        const data = response.data;
+        console.log(data);
+
+        setRecipeData(data);
+      })
+      .catch(error => console.error(`Error: ${error}`));
+  }
+
+  useEffect(() => {
+    console.log("props.id ", props.id);
+    if (props.id) fetchRecipeData(props.id);
+  }, [props.id]);
 
   // Input custom hooks
   const {

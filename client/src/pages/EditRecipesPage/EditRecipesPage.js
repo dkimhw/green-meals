@@ -7,7 +7,7 @@ import { useParams } from "react-router-dom";
 
 
 const EditRecipes = (props) => {
-  const params= useParams()
+  const params= useParams();
 
   return (
    <Container>

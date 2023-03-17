@@ -10,6 +10,7 @@ const pageSize = 2;
 const RecipeList = (props) => {
   // Need to create an api call to grab
   const [recipes, setRecipes] = useState([]);
+  const [totalRecipes, setTotalRecipes] = useState([]);
   const [currPage, setCurrPage] = useState(1);
   const offset = pageSize * (currPage - 1);
 
@@ -19,8 +20,9 @@ const RecipeList = (props) => {
       url: `http://localhost:5051/api/recipes/get?page=${page}&offset=${offset}&limit=${limit}`,
     })
       .then((response) => {
-        const data = response.data;
+        const { count, data } = response.data;
         setRecipes(data);
+        setTotalRecipes(count);
       })
       .catch(error => console.error(`Error: ${error}`));
   }
@@ -51,7 +53,7 @@ const RecipeList = (props) => {
 
     </Grid>
     <Pagination
-      count={2}
+      count={totalRecipes}
       sx={{
         mt:'2rem',
         mb: '2rem',

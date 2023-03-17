@@ -16,9 +16,32 @@ export const getRecipes = async (req, res, next) => {
   let limit = req.query.limit ? req.query.limit : 15;
   let offset = req.query.offset ? req.query.offset : 0;
 
-  const allRecipes = await recipesModel.findAll({page: page, offset: offset, limit: limit});
+  const allRecipes = await recipesModel.findAndCountAll({page: page, offset: offset, limit: limit});
   res.send(allRecipes)
 };
+
+export const getRecipe = async (req, res, next) => {
+  let { recipeID } = req.params;
+  console.log(recipeID);
+  const recipesModel = models.Recipe;
+  const recipe = await recipesModel.findAll({
+    include: [{
+      model: models.Ingredient,
+      required: true
+     }, {
+      model: models.Instruction,
+      required: true
+     }, {
+      model: models.RecipeNote,
+      required: true
+     }],
+    where: {
+      id: recipeID
+    }
+  });
+
+  res.send(recipe);
+}
 
 export const getRecipeImages = async (req, res, next) => {
   const recipeId = req.query.recipeId
@@ -150,5 +173,6 @@ export const createRecipe = async (req, res) => {
 export default {
   getRecipes,
   createRecipe,
-  getRecipeImages
+  getRecipeImages,
+  getRecipe
 }
