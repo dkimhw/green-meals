@@ -5,7 +5,6 @@ import getImage from '../utils/getImage.js';
 export const index = async (req, res, next) => {
   const recipesModel = models.Recipe;
   const allRecipes = await recipesModel.findAll({limit: 25});
-  console.log(allRecipes);
   res.send(allRecipes)
 };
 
@@ -22,7 +21,6 @@ export const getRecipes = async (req, res, next) => {
 
 export const getRecipe = async (req, res, next) => {
   let { recipeID } = req.params;
-  console.log(recipeID);
   const recipesModel = models.Recipe;
   const recipe = await recipesModel.findAll({
     include: [{

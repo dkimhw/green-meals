@@ -6,7 +6,7 @@ import TopBanner from '../../components/UI/TopBanner';
 import { useParams } from "react-router-dom";
 
 
-const EditRecipes = (props) => {
+const EditRecipes = () => {
   const params= useParams();
 
   return (

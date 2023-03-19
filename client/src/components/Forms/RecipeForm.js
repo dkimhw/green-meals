@@ -43,35 +43,29 @@ const recipeNoteMessagesInitialValue = [
 // Multiple Files: https://www.techgeeknext.com/react/multiple-files-upload-example
 // https://www.positronx.io/react-multiple-files-upload-with-node-express-tutorial/
 const RecipeForm = (props) => {
+  const [recipeData, setRecipeData] = useState();
 
-  const id = props.id;
-  const isAddMode = !!id;
-  // console.log(id);
-  // console.log(isAddMode);
-  const [recipeData, setRecipeData] = useState({});
-
-  const fetchRecipeData = async (recipeID) => {
+  const fetchAllRecipeData = async (recipeID) => {
     axios({
       method: "get",
-      url: `http://localhost:5051/api/recipes/${recipeID}`,
+      url: `http://localhost:5051/api/recipes/get/${recipeID}`,
     })
       .then((response) => {
         const data = response.data;
         console.log(data);
-
-        setRecipeData(data);
+        setRecipeData(data[0]);
       })
       .catch(error => console.error(`Error: ${error}`));
   }
 
   useEffect(() => {
-    console.log("props.id ", props.id);
-    if (props.id) fetchRecipeData(props.id);
+    if (props.id) fetchAllRecipeData(props.id);
   }, [props.id]);
 
   // Input custom hooks
   const {
     value: recipeName
+    , setEnteredValue: setRecipeName
     , isValid: isRecipenameInputValid
     , hasError: hasRecipeNameInputError
     , errMsg: recipeNameErrorMsg
@@ -218,6 +212,15 @@ const RecipeForm = (props) => {
     uploadedFiles,
     fileErrors
   } = useFormImagesUpload(isValidImagesUploaded);
+
+  // If there is a reciped id and subsequent data fill out form
+  useEffect(() => {
+    if (recipeData) {
+      console.log(recipeData);
+      console.log(recipeData['recipe_name']);
+      setRecipeName(recipeData['recipe_name'])
+    }
+  }, [recipeData, setRecipeName])
 
   // Submit Recipe Info //
   const submitHandler = async (event) => {
