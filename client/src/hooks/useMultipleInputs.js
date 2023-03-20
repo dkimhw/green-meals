@@ -45,11 +45,14 @@ const useMultipleInputs = (intialValues, defaultValue, validate, groupValidate=n
 
   const handleChange = (event) => {
     event.preventDefault();
-    let splitIdLen = event.target.id.split('-').length
+    console.log("event: ", event.target);
+    let splitIdLen = event.target.id.split('-').length;
     const id = event.target.id.split('-')[splitIdLen - 1];
     let findIdx = inputArray.findIndex(input => input.id === parseInt(id));
     const values = [...inputArray];
     values[findIdx][event.target.name] = event.target.value;
+
+    console.log("values: ", values);
 
     let validated = validateInput(event.target.value, true, validate);
     values[findIdx]['hasError'] = validated['hasError'];
@@ -90,6 +93,7 @@ const useMultipleInputs = (intialValues, defaultValue, validate, groupValidate=n
 
   return {
     inputArray
+    , setInputArray
     , addInput
     , removeInput
     , handleChange

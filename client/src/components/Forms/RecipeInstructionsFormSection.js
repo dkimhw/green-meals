@@ -9,18 +9,19 @@ const RecipeInstructionsFormSection = (props) => {
     <div className={classes['ingredients-form-section']}>
       {props.hasRecipeInstructionsError ? <Alert severity="error" sx={{'mb': '.75rem'}}>{props.recipeInstructionsErrorMsg}</Alert> : ''}
       {props.instructions.map((input, idx) => {
+        console.log(input);
         return (
           <div className={classes['ingredients-form-group']} key={input.id}>
             <TextField
               id={`instruction-${input.id}`}
-              name='instruction'
+              name='instruction_text'
               placeholder={input.placeholder}
               label={`Step ${idx + 1}`}
               error={input.hasError}
               helperText={input.hasError ? input.errorMsg : '' }
               multiline
               maxRows={4}
-              value={input.instruction}
+              value={input.instruction_text || ''}
               onChange={props.handleRecipeInstructionChange}
               onBlur={props.handleRecipeInstructionBlur}
             />

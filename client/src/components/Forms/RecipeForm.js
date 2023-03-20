@@ -44,6 +44,7 @@ const recipeNoteMessagesInitialValue = [
 // https://www.positronx.io/react-multiple-files-upload-with-node-express-tutorial/
 const RecipeForm = (props) => {
   const [recipeData, setRecipeData] = useState();
+  const isEditForm = props.id ? true : false;
 
   const fetchAllRecipeData = async (recipeID) => {
     axios({
@@ -76,6 +77,7 @@ const RecipeForm = (props) => {
 
   const {
     value: recipeDescription
+    , setEnteredValue: setRecipeDescription
     , isValid: isRecipeDescriptionValid
     , hasError: hasRecipeDescriptionInputError
     , errMsg: recipeDescriptionErrorMsg
@@ -86,6 +88,7 @@ const RecipeForm = (props) => {
 
   const {
     value: servingSize
+    , setEnteredValue: setServingSize
     , isValid: isServingSizeValid
     , hasError: hasServingSizeInputError
     , errMsg: servingSizeErrorMsg
@@ -96,6 +99,7 @@ const RecipeForm = (props) => {
 
   const {
     value: prepTime
+    , setEnteredValue: setPrepTime
     , isValid: isPrepTimeValid
     , hasError: hasPrepTimeInputError
     , errMsg: prepTimeErrorMsg
@@ -106,6 +110,7 @@ const RecipeForm = (props) => {
 
   const {
     value: prepTimeType
+    , setEnteredValue: setPrepTimeType
     , isValid: isPrepTimeTypeValid
     , hasError: hasPrepTimeTypeInputError
     , errMsg: prepTimeTypeErrorMsg
@@ -116,6 +121,7 @@ const RecipeForm = (props) => {
 
   const {
     value: cookingTime
+    , setEnteredValue: setCookingTime
     , isValid: isCookingTimeValid
     , hasError: hasCookingTimeInputError
     , errMsg: cookingTimeErrorMsg
@@ -126,6 +132,7 @@ const RecipeForm = (props) => {
 
   const {
     value: cookingTimeType
+    , setEnteredValue: setCookingTimeType
     , isValid: isCookingTimeTypeValid
     , hasError: hasCookingTimeTypeInputError
     , errMsg: cookingTimeTypeErrorMsg
@@ -136,6 +143,7 @@ const RecipeForm = (props) => {
 
   const {
     value: recipePrivacyStatus
+    , setEnteredValue: setRecipePrivacyStatus
     , isValid: isRecipePrivacyStatusValid
     , hasError: hasRecipePrivacyStatusInputError
     , errMsg: recipePrivacyStatusErrorMsg
@@ -164,6 +172,7 @@ const RecipeForm = (props) => {
 
   const {
     inputArray: recipeInstructions
+    , setInputArray: setRecipeInstructions
     , addInput: addRecipeInstruction
     , removeInput: removeRecipeInstruction
     , handleChange: handleRecipeInstructionChange
@@ -173,7 +182,7 @@ const RecipeForm = (props) => {
     , hasGroupInputsError: hasRecipeInstructionsError
   } = useMultipleInputs(
     recipeInstructionsIntitalValue,
-    { id: 0, instruction: '', placeholder: 'Add another instruction' },
+    { id: 0, instruction_text: '', placeholder: 'Add another instruction' },
     validateTextInput,
     validateGroupInputs,
     `At least one cooking direction is required.`
@@ -217,10 +226,16 @@ const RecipeForm = (props) => {
   useEffect(() => {
     if (recipeData) {
       console.log(recipeData);
-      console.log(recipeData['recipe_name']);
-      setRecipeName(recipeData['recipe_name'])
+      setRecipeName(recipeData['recipe_name']);
+      setRecipeDescription(recipeData['recipe_description']);
+      // setServingSize(recipeData['servings']);
+      setPrepTime(recipeData['prep_time']);
+      setPrepTimeType(recipeData['prep_time_qty']);
+      setCookingTime(recipeData['cooking_time']);
+      setCookingTimeType(recipeData['cooking_time_qty']);
+      setRecipeInstructions(recipeData['instructions']);
     }
-  }, [recipeData, setRecipeName])
+  }, [recipeData, setRecipeInstructions, setRecipeName, setRecipeDescription, setServingSize, setPrepTime, setPrepTimeType, setCookingTime, setCookingTimeType])
 
   // Submit Recipe Info //
   const submitHandler = async (event) => {
@@ -285,7 +300,7 @@ const RecipeForm = (props) => {
 
   return (
     <FormCard>
-      <SectionTitle>Add a Recipe</SectionTitle>
+      <SectionTitle>{isEditForm ? 'Edit Recipe' : 'Add a Recipe'}</SectionTitle>
       <form className={classes.form} onSubmit={submitHandler} method="post">
         <RecipeInfoFormSection
           // Recipe Name

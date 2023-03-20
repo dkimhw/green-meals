@@ -54,7 +54,6 @@ export const getRecipeImages = async (req, res, next) => {
     image.dataValues['s3ImageUrl'] = await getImage(image?.image_key);
   }
 
-  console.log(images);
   res.send(images);
 }
 
@@ -115,7 +114,7 @@ export const createRecipe = async (req, res) => {
       , cooking_time_qty: cookingTimeQty
       , prep_time: prepTime
       , prep_time_qty: prepTimeQty
-      , serving_size: servingSize
+      , servings: servingSize
       , recipe_privacy_status: recipePrivacyStatus
       , ingredients: ingredients
     }, {

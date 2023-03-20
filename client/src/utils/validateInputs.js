@@ -54,7 +54,7 @@ export const validateTextInput = (str) => {
 };
 
 export const validateNumber = (num) => {
-  if (num.trim() === '') {
+  if (String(num).trim() === '') {
     return {
       isValid: false,
       errorMsg: 'Please fill out this field.'
