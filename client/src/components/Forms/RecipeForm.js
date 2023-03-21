@@ -155,6 +155,7 @@ const RecipeForm = (props) => {
   // Grouped multipe inputs
   const {
     inputArray: recipeIngredients
+    , setInputArray: setRecipeIngredients
     , addInput: addIngredient
     , removeInput: removeIngredient
     , handleChange: handleIngredientNameChange
@@ -190,6 +191,7 @@ const RecipeForm = (props) => {
 
   const {
     inputArray: recipeNoteTitles
+    , setInputArray: setRecipeNoteTitles
     , addInput: addRecipeNoteTitles
     , removeInput: removeRecipeNoteTitles
     , handleChange: handleRecipeNoteTitlesChange
@@ -203,6 +205,7 @@ const RecipeForm = (props) => {
 
   const {
     inputArray: recipeNoteMessages
+    , setInputArray: setRecipeNoteMessages
     , addInput: addRecipeNoteMessages
     , removeInput: removeRecipeNoteMessages
     , handleChange: handleRecipeNoteMessagesChange
@@ -234,8 +237,9 @@ const RecipeForm = (props) => {
       setCookingTime(recipeData['cooking_time']);
       setCookingTimeType(recipeData['cooking_time_qty']);
       setRecipeInstructions(recipeData['instructions']);
+      setRecipeIngredients(recipeData['ingredients']);
     }
-  }, [recipeData, setRecipeInstructions, setRecipeName, setRecipeDescription, setServingSize, setPrepTime, setPrepTimeType, setCookingTime, setCookingTimeType])
+  }, [recipeData, setRecipeIngredients, setRecipeInstructions, setRecipeName, setRecipeDescription, setServingSize, setPrepTime, setPrepTimeType, setCookingTime, setCookingTimeType])
 
   // Submit Recipe Info //
   const submitHandler = async (event) => {

@@ -9,7 +9,6 @@ const RecipeInstructionsFormSection = (props) => {
     <div className={classes['ingredients-form-section']}>
       {props.hasRecipeInstructionsError ? <Alert severity="error" sx={{'mb': '.75rem'}}>{props.recipeInstructionsErrorMsg}</Alert> : ''}
       {props.instructions.map((input, idx) => {
-        console.log(input);
         return (
           <div className={classes['ingredients-form-group']} key={input.id}>
             <TextField

@@ -11,6 +11,7 @@ const AddIngredientsFormSection = (props) => {
     <React.Fragment>
       {props.hasRecipeIngredientsError ? <Alert severity="error" sx={{'mb': '.75rem'}}>{props.recipeIngredientsErrorMsg}</Alert> : ''}
       {props.ingredients ? props.ingredients.map((input) => {
+        console.log(input.ingredient_name);
         return (
           <React.Fragment key={input.id}>
             <div className={classes['ingredients-form-group']} >
@@ -18,13 +19,12 @@ const AddIngredientsFormSection = (props) => {
                 id={`recipe-name-${input.id}`}
                 name='ingredientName'
                 placeholder={input.placeholder}
-                defaultValue=""
                 error={input.hasError}
                 helperText={input.hasError ? input.errorMsg : '' }
                 onChange={props.handleIngredientNameChange}
                 onBlur={props.handleIngredientBlur}
                 variant="outlined"
-                values={input.ingredient_name}
+                value={input.ingredient_name || ''}
                 label="Ingredient Name"
               />
 
