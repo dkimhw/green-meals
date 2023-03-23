@@ -231,15 +231,32 @@ const RecipeForm = (props) => {
       console.log(recipeData);
       setRecipeName(recipeData['recipe_name']);
       setRecipeDescription(recipeData['recipe_description']);
-      // setServingSize(recipeData['servings']);
+      setServingSize(recipeData['servings']);
       setPrepTime(recipeData['prep_time']);
       setPrepTimeType(recipeData['prep_time_qty']);
       setCookingTime(recipeData['cooking_time']);
       setCookingTimeType(recipeData['cooking_time_qty']);
+      setRecipePrivacyStatus(recipeData['recipe_privacy_status']);
       setRecipeInstructions(recipeData['instructions']);
       setRecipeIngredients(recipeData['ingredients']);
+      setRecipeNoteTitles(recipeData['recipe_notes'].map(note_title => {
+        return {
+          id: note_title.id,
+          noteTitle: note_title.title
+        }
+      }));
+
+      setRecipeNoteMessages(recipeData['recipe_notes'].map(note => {
+        return {
+          id: note.id,
+          note: note.text
+        }
+      }));
     }
-  }, [recipeData, setRecipeIngredients, setRecipeInstructions, setRecipeName, setRecipeDescription, setServingSize, setPrepTime, setPrepTimeType, setCookingTime, setCookingTimeType])
+  }, [recipeData, setRecipeNoteMessages, setRecipeNoteTitles, setRecipeIngredients
+    , setRecipeInstructions, setRecipeName, setRecipeDescription, setServingSize
+    , setPrepTime, setPrepTimeType, setCookingTime, setCookingTimeType
+    , setRecipePrivacyStatus]);
 
   // Submit Recipe Info //
   const submitHandler = async (event) => {

@@ -11,6 +11,7 @@ import Rating from '@mui/material/Rating';
 import axios from 'axios';
 import Box from '@mui/material/Box';
 import StarIcon from '@mui/icons-material/Star';
+import Button from '@mui/material/Button';
 
 const RecipeListCard = (props) => {
   const [recipeImages, setRecipeImages] = useState([]);
@@ -37,20 +38,28 @@ const RecipeListCard = (props) => {
 
   return (
     <Card
-      sx={{border: '1px solid rgba(0, 0, 0, 0.15)', boxShadow: 'none', maxWidth: 300}}
+      sx={{border: '1px solid rgba(0, 0, 0, 0.15)', boxShadow: 'none', height: '100%', display: 'flex'
+      , flexDirection: 'column', justifyContent: "space-between" }}
     >
-      {recipeImages[0] ? <CardMedia
-        component="img"
-        height="194"
-        src={recipeImages[0].s3ImageUrl}
-      /> : '' }
-      <CardContent>
-        <Typography component="h4" sx={{fontSize: '1rem', fontWeight: 'bold', letterSpacing: '1px'}}>{props.recipeTitle}</Typography>
+      <Box sx={{flexBasis: '40%', height: '100%'}}>
+        {recipeImages[0] ? <CardMedia
+          component="img"
+          src={recipeImages[0].s3ImageUrl}
+          sx={{maxHeight: '100%'}}
+        /> : '' }
+      </Box>
+
+      <CardContent
+        // sx={{flexBasis: '30%'}}
+      >
+        <Box>
+         <Typography component="h4" sx={{fontSize: '1rem', fontWeight: 'bold', letterSpacing: '1px'}}>{props.recipeTitle}</Typography>
+        </Box>
         <Box
           sx={{
-            width: 200,
             display: 'flex',
             alignItems: 'center',
+            justifyContent: 'flex-start'
           }}
         >
           <Rating
@@ -63,7 +72,9 @@ const RecipeListCard = (props) => {
           <Box sx={{ ml: 1, fontSize: '.8rem', fontWeight: 'normal' }}>{0} Ratings</Box>
         </Box>
       </CardContent>
-      <CardActions disableSpacing>
+      <CardActions
+        // sx={{flexBasis: '20%'}}
+      >
         <IconButton aria-label="add to favorites">
           <FavoriteIcon />
         </IconButton>
@@ -71,6 +82,18 @@ const RecipeListCard = (props) => {
           <ShareIcon />
         </IconButton>
       </CardActions>
+      <Box>
+        <Button
+          variant="contained"
+          href={`/edit-recipe/${props.recipeId}`}
+          sx={{
+            margin: '0rem 0rem 1rem 1rem',
+            // flexBasis: '20%',
+          }}
+        >
+          Edit
+        </Button>
+      </Box>
     </Card>
   );
 }
