@@ -18,23 +18,24 @@ const useFormInput = (validateInputValue, initialValues = '') => {
   // Handler for input value change
   const valueChangeHandler = (event) => {
     setEnteredValue(event.target.value);
-  }
+  };
 
   // Reset form after submissions
   const resetInput = () => {
     setEnteredValue('');
     setIsTouched(false);
-  }
+  };
 
   return {
     value: enteredValue,
+    setEnteredValue,
     isValid: valueIsValid,
     hasError,
     errMsg,
     blurInputHandler,
     valueChangeHandler,
     resetInput
-  }
+  };
 }
 
 export default useFormInput

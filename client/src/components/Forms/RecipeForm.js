@@ -14,6 +14,7 @@ import useFormImagesUpload from '../../hooks/useFormImagesUpload';
 import useMultipleInputs from '../../hooks/useMultipleInputs';
 import useFormInput from '../../hooks/useFormInput';
 import SectionTitle from '../UI/SectionTitle';
+import { useState, useEffect } from 'react';
 import { isValidImagesUploaded, validateTextInput, validateNumber, validateTimeType, validatePrivacyStatus, validateGroupInputs } from '../../utils/validateInputs';
 
 const ingredientsInputs = [
@@ -41,10 +42,31 @@ const recipeNoteMessagesInitialValue = [
 
 // Multiple Files: https://www.techgeeknext.com/react/multiple-files-upload-example
 // https://www.positronx.io/react-multiple-files-upload-with-node-express-tutorial/
-const AddRecipeForm = () => {
+const RecipeForm = (props) => {
+  const [recipeData, setRecipeData] = useState();
+  const isEditForm = props.id ? true : false;
+
+  const fetchAllRecipeData = async (recipeID) => {
+    axios({
+      method: "get",
+      url: `http://localhost:5051/api/recipes/get/${recipeID}`,
+    })
+      .then((response) => {
+        const data = response.data;
+        console.log(data);
+        setRecipeData(data[0]);
+      })
+      .catch(error => console.error(`Error: ${error}`));
+  }
+
+  useEffect(() => {
+    if (props.id) fetchAllRecipeData(props.id);
+  }, [props.id]);
+
   // Input custom hooks
   const {
     value: recipeName
+    , setEnteredValue: setRecipeName
     , isValid: isRecipenameInputValid
     , hasError: hasRecipeNameInputError
     , errMsg: recipeNameErrorMsg
@@ -55,6 +77,7 @@ const AddRecipeForm = () => {
 
   const {
     value: recipeDescription
+    , setEnteredValue: setRecipeDescription
     , isValid: isRecipeDescriptionValid
     , hasError: hasRecipeDescriptionInputError
     , errMsg: recipeDescriptionErrorMsg
@@ -65,6 +88,7 @@ const AddRecipeForm = () => {
 
   const {
     value: servingSize
+    , setEnteredValue: setServingSize
     , isValid: isServingSizeValid
     , hasError: hasServingSizeInputError
     , errMsg: servingSizeErrorMsg
@@ -75,6 +99,7 @@ const AddRecipeForm = () => {
 
   const {
     value: prepTime
+    , setEnteredValue: setPrepTime
     , isValid: isPrepTimeValid
     , hasError: hasPrepTimeInputError
     , errMsg: prepTimeErrorMsg
@@ -85,6 +110,7 @@ const AddRecipeForm = () => {
 
   const {
     value: prepTimeType
+    , setEnteredValue: setPrepTimeType
     , isValid: isPrepTimeTypeValid
     , hasError: hasPrepTimeTypeInputError
     , errMsg: prepTimeTypeErrorMsg
@@ -95,6 +121,7 @@ const AddRecipeForm = () => {
 
   const {
     value: cookingTime
+    , setEnteredValue: setCookingTime
     , isValid: isCookingTimeValid
     , hasError: hasCookingTimeInputError
     , errMsg: cookingTimeErrorMsg
@@ -105,6 +132,7 @@ const AddRecipeForm = () => {
 
   const {
     value: cookingTimeType
+    , setEnteredValue: setCookingTimeType
     , isValid: isCookingTimeTypeValid
     , hasError: hasCookingTimeTypeInputError
     , errMsg: cookingTimeTypeErrorMsg
@@ -115,6 +143,7 @@ const AddRecipeForm = () => {
 
   const {
     value: recipePrivacyStatus
+    , setEnteredValue: setRecipePrivacyStatus
     , isValid: isRecipePrivacyStatusValid
     , hasError: hasRecipePrivacyStatusInputError
     , errMsg: recipePrivacyStatusErrorMsg
@@ -126,6 +155,7 @@ const AddRecipeForm = () => {
   // Grouped multipe inputs
   const {
     inputArray: recipeIngredients
+    , setInputArray: setRecipeIngredients
     , addInput: addIngredient
     , removeInput: removeIngredient
     , handleChange: handleIngredientNameChange
@@ -143,6 +173,7 @@ const AddRecipeForm = () => {
 
   const {
     inputArray: recipeInstructions
+    , setInputArray: setRecipeInstructions
     , addInput: addRecipeInstruction
     , removeInput: removeRecipeInstruction
     , handleChange: handleRecipeInstructionChange
@@ -152,7 +183,7 @@ const AddRecipeForm = () => {
     , hasGroupInputsError: hasRecipeInstructionsError
   } = useMultipleInputs(
     recipeInstructionsIntitalValue,
-    { id: 0, instruction: '', placeholder: 'Add another instruction' },
+    { id: 0, instruction_text: '', placeholder: 'Add another instruction' },
     validateTextInput,
     validateGroupInputs,
     `At least one cooking direction is required.`
@@ -160,6 +191,7 @@ const AddRecipeForm = () => {
 
   const {
     inputArray: recipeNoteTitles
+    , setInputArray: setRecipeNoteTitles
     , addInput: addRecipeNoteTitles
     , removeInput: removeRecipeNoteTitles
     , handleChange: handleRecipeNoteTitlesChange
@@ -173,6 +205,7 @@ const AddRecipeForm = () => {
 
   const {
     inputArray: recipeNoteMessages
+    , setInputArray: setRecipeNoteMessages
     , addInput: addRecipeNoteMessages
     , removeInput: removeRecipeNoteMessages
     , handleChange: handleRecipeNoteMessagesChange
@@ -191,6 +224,39 @@ const AddRecipeForm = () => {
     uploadedFiles,
     fileErrors
   } = useFormImagesUpload(isValidImagesUploaded);
+
+  // If there is a reciped id and subsequent data fill out form
+  useEffect(() => {
+    if (recipeData) {
+      console.log(recipeData);
+      setRecipeName(recipeData['recipe_name']);
+      setRecipeDescription(recipeData['recipe_description']);
+      setServingSize(recipeData['servings']);
+      setPrepTime(recipeData['prep_time']);
+      setPrepTimeType(recipeData['prep_time_qty']);
+      setCookingTime(recipeData['cooking_time']);
+      setCookingTimeType(recipeData['cooking_time_qty']);
+      setRecipePrivacyStatus(recipeData['recipe_privacy_status']);
+      setRecipeInstructions(recipeData['instructions']);
+      setRecipeIngredients(recipeData['ingredients']);
+      setRecipeNoteTitles(recipeData['recipe_notes'].map(note_title => {
+        return {
+          id: note_title.id,
+          noteTitle: note_title.title
+        }
+      }));
+
+      setRecipeNoteMessages(recipeData['recipe_notes'].map(note => {
+        return {
+          id: note.id,
+          note: note.text
+        }
+      }));
+    }
+  }, [recipeData, setRecipeNoteMessages, setRecipeNoteTitles, setRecipeIngredients
+    , setRecipeInstructions, setRecipeName, setRecipeDescription, setServingSize
+    , setPrepTime, setPrepTimeType, setCookingTime, setCookingTimeType
+    , setRecipePrivacyStatus]);
 
   // Submit Recipe Info //
   const submitHandler = async (event) => {
@@ -255,7 +321,7 @@ const AddRecipeForm = () => {
 
   return (
     <FormCard>
-      <SectionTitle>Add a Recipe</SectionTitle>
+      <SectionTitle>{isEditForm ? 'Edit Recipe' : 'Add a Recipe'}</SectionTitle>
       <form className={classes.form} onSubmit={submitHandler} method="post">
         <RecipeInfoFormSection
           // Recipe Name
@@ -370,4 +436,4 @@ const AddRecipeForm = () => {
 
 };
 
-export default AddRecipeForm;
+export default RecipeForm;

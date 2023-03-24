@@ -6,6 +6,7 @@ import Layout from './components/Layout/Layout';
 import Home from './pages/HomePage/HomePage';
 import CreateRecipesPage from './pages/CreateRecipesPage/CreateRecipesPage';
 import { appTheme } from "./theme/muiThemeOptions";
+import EditRecipesPage from "./pages/EditRecipesPage/EditRecipesPage";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <Route path="/" element={<Layout />}>
             <Route index element={<Home />} />
             <Route path="/create-recipes" element={<CreateRecipesPage />} />
+            <Route path="/edit-recipe/:id" element={<EditRecipesPage />} />
           </Route>
         </Routes>
       </BrowserRouter>

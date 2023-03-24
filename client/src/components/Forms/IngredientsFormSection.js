@@ -18,13 +18,12 @@ const AddIngredientsFormSection = (props) => {
                 id={`recipe-name-${input.id}`}
                 name='ingredientName'
                 placeholder={input.placeholder}
-                defaultValue=""
                 error={input.hasError}
                 helperText={input.hasError ? input.errorMsg : '' }
                 onChange={props.handleIngredientNameChange}
                 onBlur={props.handleIngredientBlur}
                 variant="outlined"
-                values={input.ingredient_name}
+                value={input.ingredient_name || ''}
                 label="Ingredient Name"
               />
 

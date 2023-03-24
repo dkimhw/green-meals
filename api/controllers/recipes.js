@@ -5,7 +5,6 @@ import getImage from '../utils/getImage.js';
 export const index = async (req, res, next) => {
   const recipesModel = models.Recipe;
   const allRecipes = await recipesModel.findAll({limit: 25});
-  console.log(allRecipes);
   res.send(allRecipes)
 };
 
@@ -16,9 +15,31 @@ export const getRecipes = async (req, res, next) => {
   let limit = req.query.limit ? req.query.limit : 15;
   let offset = req.query.offset ? req.query.offset : 0;
 
-  const allRecipes = await recipesModel.findAll({page: page, offset: offset, limit: limit});
+  const allRecipes = await recipesModel.findAndCountAll({page: page, offset: offset, limit: limit});
   res.send(allRecipes)
 };
+
+export const getRecipe = async (req, res, next) => {
+  let { recipeID } = req.params;
+  const recipesModel = models.Recipe;
+  const recipe = await recipesModel.findAll({
+    include: [{
+      model: models.Ingredient,
+      required: true
+     }, {
+      model: models.Instruction,
+      required: true
+     }, {
+      model: models.RecipeNote,
+      required: true
+     }],
+    where: {
+      id: recipeID
+    }
+  });
+
+  res.send(recipe);
+}
 
 export const getRecipeImages = async (req, res, next) => {
   const recipeId = req.query.recipeId
@@ -33,7 +54,6 @@ export const getRecipeImages = async (req, res, next) => {
     image.dataValues['s3ImageUrl'] = await getImage(image?.image_key);
   }
 
-  console.log(images);
   res.send(images);
 }
 
@@ -94,7 +114,7 @@ export const createRecipe = async (req, res) => {
       , cooking_time_qty: cookingTimeQty
       , prep_time: prepTime
       , prep_time_qty: prepTimeQty
-      , serving_size: servingSize
+      , servings: servingSize
       , recipe_privacy_status: recipePrivacyStatus
       , ingredients: ingredients
     }, {
@@ -150,5 +170,6 @@ export const createRecipe = async (req, res) => {
 export default {
   getRecipes,
   createRecipe,
-  getRecipeImages
+  getRecipeImages,
+  getRecipe
 }
