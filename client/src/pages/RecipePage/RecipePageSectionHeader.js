@@ -1,15 +1,31 @@
 
 import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
+import classes from './RecipePageSectionHeader.module.css'
 
 const RecipePageSectionHeader = (props) => {
+  console.log("props", props)
   return (
-
+    <Box
+      sx={{
+        mt: '2rem'
+      }}
+      className={classes.title}
+    >
       <Typography
-        component="h2"
-        sx={{fontSize: '1rem', fontWeight: 'bold', letterSpacing: '1px'}}
+        component="h1"
+        sx={{fontSize: '2rem', fontWeight: 'bold', letterSpacing: '1px'}}
       >
         {props.recipeTitle}
       </Typography>
+      <Typography
+        component="p"
+        sx={{mt: '1rem'}}
+      >
+        {props.recipeDescription}
+      </Typography>
+    </Box>
+
   )
 };
 
