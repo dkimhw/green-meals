@@ -5,6 +5,7 @@ import { Container } from '@mui/material';
 import { useParams } from "react-router-dom";
 import RecipePageSectionHeader from './RecipePageSectionHeader';
 import ActionBar from '../../components/UI/ActionBar';
+import InfoBox from '../../components/UI/InfoBox';
 
 const RecipePage = (props) => {
   const params= useParams();
@@ -39,6 +40,13 @@ const RecipePage = (props) => {
         recipeDescription = {recipeData ? recipeData['recipe_description'] : ''}
       />
       <ActionBar />
+      <InfoBox
+        prepTime={recipeData ? recipeData['prep_time'] : ''}
+        prepTimeQty={recipeData? recipeData['prep_time_qty'] : ''}
+        cookTime={recipeData ? recipeData['cooking_time'] : ''}
+        cookTimeQty={recipeData? recipeData['cooking_time_qty'] : ''}
+        servings={recipeData? recipeData['servings'] : ''}
+      />
     </Container>
   );
 }
