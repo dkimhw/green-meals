@@ -5,6 +5,11 @@ import { styled } from '@mui/system';
 
 
 const ActionBarButton = (props) => {
+  props.customStyles['@media (max-width: 780px)'] = {
+    padding: '.65rem .9rem',
+    fontSize: '.3rem'
+  }
+
   const ActionButtonBox = styled(Box) (
     props.customStyles ? props.customStyles : {}
   );
@@ -15,6 +20,7 @@ const ActionBarButton = (props) => {
         backgroundColor: props.color,
         padding: '.75rem 1rem',
         display: 'flex',
+        alignItems: 'center'
       }}
     >
       <Typography

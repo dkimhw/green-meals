@@ -10,10 +10,41 @@ import { styled } from '@mui/system';
 
 const ActionBar = () => {
   const theme = useTheme();
+
+  // Custom styling for action bar
   const ActionBarBox = styled(Box) ({
-    "&>*:nth-child(1)": { borderTopLeftRadius: '4.5px', borderBottomLeftRadius: '4.5px' },
-    "&>*:last-child": { borderTopRightRadius: '4.5px', borderBottomRightRadius: '4.5px' }
+    "&>*:nth-of-type(1)": { borderTopLeftRadius: '4.5px', borderBottomLeftRadius: '4.5px' },
+    "&>*:last-child": { borderTopRightRadius: '4.5px', borderBottomRightRadius: '4.5px' },
+    '@media (max-width: 780px)': {
+      fontSize: '.75rem'
+    },
+    color: '#fff'
   });
+
+  const ActionFavoriteBorderIcon = styled(FavoriteBorderIcon) ({
+    '@media (max-width: 780px)': {
+      fontSize: '1rem'
+    }
+  });
+
+  const ActionStarBorderIcon = styled(StarBorderIcon) ({
+    '@media (max-width: 780px)': {
+      fontSize: '1rem'
+    }
+  });
+
+  const ActionLocalPrintshopIcon = styled(LocalPrintshopIcon) ({
+    '@media (max-width: 780px)': {
+      fontSize: '1rem'
+    }
+  });
+
+  const ActionShareIcon = styled(ShareIcon) ({
+    '@media (max-width: 780px)': {
+      fontSize: '1rem'
+    }
+  });
+
 
   return (
     <ActionBarBox
@@ -25,7 +56,7 @@ const ActionBar = () => {
     >
       <ActionBarButton
         icon = {
-          <FavoriteBorderIcon
+          <ActionFavoriteBorderIcon
             sx={{
               ml: '.3rem'
             }}
@@ -39,7 +70,7 @@ const ActionBar = () => {
       />
       <ActionBarButton
         icon = {
-          <StarBorderIcon
+          <ActionStarBorderIcon
             sx={{ml: '.3rem'}}
           />
         }
@@ -51,7 +82,7 @@ const ActionBar = () => {
       />
       <ActionBarButton
         icon = {
-          <LocalPrintshopIcon
+          <ActionLocalPrintshopIcon
             sx={{ml: '.3rem'}}
           />
         }
@@ -63,7 +94,7 @@ const ActionBar = () => {
       />
       <ActionBarButton
         icon = {
-          <ShareIcon
+          <ActionShareIcon
             sx={{ml: '.3rem'}}
           />
         }

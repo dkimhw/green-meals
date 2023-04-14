@@ -8,7 +8,7 @@ import { styled } from '@mui/system';
 const InfoBox = (props) => {
   const InfoBoxStyled = styled(Box) ({
     padding: '1.5rem',
-    backgroundColor: 'rgb(35, 36, 16)',
+    backgroundColor: 'rgb(245, 246, 234)',
     marginTop: '2rem',
     textAlign: 'center',
     display: 'grid',

@@ -6,6 +6,7 @@ import { useParams } from "react-router-dom";
 import RecipePageSectionHeader from './RecipePageSectionHeader';
 import ActionBar from '../../components/UI/ActionBar';
 import InfoBox from '../../components/UI/InfoBox';
+import { IngredientsList } from '../../components/UI/IngredientsList';
 
 const RecipePage = (props) => {
   const params= useParams();
@@ -47,6 +48,10 @@ const RecipePage = (props) => {
         cookTimeQty={recipeData? recipeData['cooking_time_qty'] : ''}
         servings={recipeData? recipeData['servings'] : ''}
       />
+      <IngredientsList
+        ingredients={recipeData? recipeData['ingredients'] : ''}
+      />
+
     </Container>
   );
 }
