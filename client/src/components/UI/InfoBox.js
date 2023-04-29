@@ -10,7 +10,6 @@ const InfoBox = (props) => {
     padding: '1.5rem',
     backgroundColor: 'rgb(245, 246, 234)',
     marginTop: '2rem',
-    textAlign: 'center',
     display: 'grid',
     gridGap: '1rem',
     '@media (max-width: 780px)': {
@@ -27,7 +26,7 @@ const InfoBox = (props) => {
     <InfoBoxStyled
       sx={{
         gridTemplateColumns: '1fr 1fr 1fr',
-        alignItems: 'center'
+        alignItems: 'center',
       }}
     >
       <Info>

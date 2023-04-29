@@ -7,6 +7,7 @@ import RecipePageSectionHeader from './RecipePageSectionHeader';
 import ActionBar from '../../components/UI/ActionBar';
 import InfoBox from '../../components/UI/InfoBox';
 import { IngredientsList } from '../../components/UI/IngredientsList';
+import DirectionList from '../../components/UI/DirectionList';
 
 const RecipePage = (props) => {
   const params= useParams();
@@ -51,7 +52,9 @@ const RecipePage = (props) => {
       <IngredientsList
         ingredients={recipeData? recipeData['ingredients'] : ''}
       />
-
+      <DirectionList
+        directions={recipeData? recipeData['instructions'] : '' }
+      />
     </Container>
   );
 }
