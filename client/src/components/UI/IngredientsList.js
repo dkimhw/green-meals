@@ -17,7 +17,7 @@ export const IngredientsList = (props) => {
             return (
               <ListItem key={ingredient.id}>
                 <ListItemIcon>
-                  <CheckIcon />
+                  <CheckIcon sx={{color: 'teal'}}/>
                 </ListItemIcon>
                 <ListItemText primary={ingredient.ingredient_name} />
               </ListItem>

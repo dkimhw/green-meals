@@ -8,6 +8,7 @@ import ActionBar from '../../components/UI/ActionBar';
 import InfoBox from '../../components/UI/InfoBox';
 import { IngredientsList } from '../../components/UI/IngredientsList';
 import DirectionList from '../../components/UI/DirectionList';
+import { RecipeCarousel } from '../../components/RecipeCarousel/RecipeCarousel';
 
 const RecipePage = (props) => {
   const params= useParams();
@@ -42,6 +43,9 @@ const RecipePage = (props) => {
         recipeDescription = {recipeData ? recipeData['recipe_description'] : ''}
       />
       <ActionBar />
+      <RecipeCarousel
+        recipeID = { params.id }
+      />
       <InfoBox
         prepTime={recipeData ? recipeData['prep_time'] : ''}
         prepTimeQty={recipeData? recipeData['prep_time_qty'] : ''}

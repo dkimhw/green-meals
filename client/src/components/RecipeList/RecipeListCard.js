@@ -32,7 +32,7 @@ const RecipeListCard = (props) => {
     if (props.recipeId) {
       fetchRecipeImages(props.recipeId);
     }
-  }, [props])
+  }, [props]);
 
   return (
     <Card

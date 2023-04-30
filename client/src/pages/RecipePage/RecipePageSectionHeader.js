@@ -4,7 +4,6 @@ import Box from '@mui/material/Box';
 import classes from './RecipePageSectionHeader.module.css'
 
 const RecipePageSectionHeader = (props) => {
-  console.log("props", props)
   return (
     <Box
       sx={{

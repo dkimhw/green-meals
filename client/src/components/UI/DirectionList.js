@@ -17,7 +17,7 @@ const DirectionList = (props) => {
         <List>
           {props.directions ? props.directions.map(direction => {
             return (
-              <Fragment>
+              <Fragment key={direction.instruction_order_number}>
                 <Typography component="h3" sx={{fontWeight: 'bold', fontSize: '1rem', mt: '1.5rem'}}>
                   Step {direction.instruction_order_number}
                 </Typography>
