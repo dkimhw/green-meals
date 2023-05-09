@@ -2,16 +2,15 @@ import React, { useState, useEffect } from 'react'
 import Card from '@mui/material/Card';
 import CardMedia from '@mui/material/CardMedia';
 import CardContent from '@mui/material/CardContent';
-import CardActions from '@mui/material/CardActions';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import ShareIcon from '@mui/icons-material/Share';
 import Rating from '@mui/material/Rating';
 import axios from 'axios';
 import Box from '@mui/material/Box';
 import StarIcon from '@mui/icons-material/Star';
 import Button from '@mui/material/Button';
+import Link from '@mui/material/Link';
 
 const RecipeListCard = (props) => {
   const [recipeImages, setRecipeImages] = useState([]);
@@ -26,7 +25,6 @@ const RecipeListCard = (props) => {
         setRecipeImages(data);
       })
       .catch(error => console.error(`Error: ${error}`));
-
   }
 
   useEffect(() => {
@@ -34,7 +32,7 @@ const RecipeListCard = (props) => {
     if (props.recipeId) {
       fetchRecipeImages(props.recipeId);
     }
-  }, [props])
+  }, [props]);
 
   return (
     <Card
@@ -65,10 +63,20 @@ const RecipeListCard = (props) => {
       </Box>
 
       <CardContent>
-        <Box         sx={{
+        <Box sx={{
           flexBasis: '20%'
         }}>
-         <Typography component="h4" sx={{fontSize: '1rem', fontWeight: 'bold', letterSpacing: '1px'}}>{props.recipeTitle}</Typography>
+          <Typography
+            component="h4"
+            sx={{fontSize: '1rem', fontWeight: 'bold', letterSpacing: '1px'}}
+          >
+            <Link
+              href={`/recipe/${props.recipeId}`}
+              underline="none"
+            >
+              {props.recipeTitle}
+            </Link>
+          </Typography>
         </Box>
         <Box
           sx={{

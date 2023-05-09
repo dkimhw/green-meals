@@ -50,9 +50,9 @@ const RecipeList = (props) => {
             display: "flex", flexDirection: "column"
           }}>
             <RecipeListCard
-                key={recipe.id}
-                recipeId={recipe.id}
-                recipeTitle={recipe.recipe_name}
+              key={recipe.id}
+              recipeId={recipe.id}
+              recipeTitle={recipe.recipe_name}
             >
             </RecipeListCard>
           </Grid>
