@@ -15,7 +15,7 @@ export const useFetchData = (url) => {
         const response = await axios.get(url);
         console.log("response.data: ", response);
 
-        if (!response.ok) throw new Error(response.statusText);
+        // if (!response.ok) throw new Error(response.statusText);
 
         // const json = await response.json();
         setIsPending(false);
