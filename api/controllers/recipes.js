@@ -57,6 +57,28 @@ export const getRecipeImages = async (req, res, next) => {
   res.send(images);
 }
 
+export const updateRecipe = async (req, res) => {
+  // Parse request body
+  let {
+    recipeName
+    , recipeDescription
+    , cookingTime
+    , cookingTimeQty
+    , prepTime
+    , prepTimeQty
+    , servingSize
+    , recipePrivacyStatus
+    , recipeIngredients
+    , recipeInstructions
+    , recipeNoteTitles
+    , recipeNoteMessages
+  } = req.body;
+  let { recipeID } = req.params;
+
+  console.log(recipeID);
+  // Take recipe id
+}
+
 // This needs to be improved - should be able to use just one create method to insert everything
 export const createRecipe = async (req, res) => {
   // Parse request body
@@ -104,8 +126,6 @@ export const createRecipe = async (req, res) => {
     })
   };
 
-  // recipeNoteMessages
-
   const newRecipe = await models.Recipe.create(
     {
       recipe_name: recipeName
@@ -121,10 +141,6 @@ export const createRecipe = async (req, res) => {
       include: [models.Ingredient]
     }
   );
-
-  // console.log("newRecipe: ", newRecipe);
-  // console.log("newRecipe id: ", newRecipe.dataValues.id);
-  // console.log("newRecipe id2: ", newRecipe.id);
 
   await models.Instruction.bulkCreate(
     instructions.map(instruction => {
@@ -171,5 +187,6 @@ export default {
   getRecipes,
   createRecipe,
   getRecipeImages,
+  updateRecipe,
   getRecipe
 }

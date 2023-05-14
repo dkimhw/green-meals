@@ -259,7 +259,58 @@ const RecipeForm = (props) => {
     , setRecipePrivacyStatus]);
 
   // Submit Recipe Info //
-  const submitHandler = async (event) => {
+  const submitHandler = () => {
+    console.log(isEditForm);
+    return !isEditForm ? createHandler : editHandler;
+  };
+
+  const editHandler = async (event) => {
+    try {
+      event.preventDefault();
+      console.log('updated');
+
+      let recipeID = props.id ? props.id : null;
+      if (!recipeID) return;
+
+      if (
+        isRecipeDescriptionValid && isRecipenameInputValid && isServingSizeValid
+        && isPrepTimeValid && isCookingTimeValid && isPrepTimeTypeValid
+        && isCookingTimeTypeValid && isRecipePrivacyStatusValid
+      ) {
+        const recipeFormInfo = new FormData();
+        recipeFormInfo.append('recipeName', recipeName);
+        recipeFormInfo.append('recipeDescription', recipeDescription);
+        recipeFormInfo.append('cookingTime', cookingTime);
+        recipeFormInfo.append('cookingTimeQty', cookingTimeType);
+        recipeFormInfo.append('prepTime', prepTime);
+        recipeFormInfo.append('prepTimeQty', prepTimeType);
+        recipeFormInfo.append('servingSize', servingSize);
+        recipeFormInfo.append('recipePrivacyStatus', recipePrivacyStatus);
+        recipeFormInfo.append('recipeIngredients', JSON.stringify(recipeIngredients));
+        recipeFormInfo.append('recipeInstructions',  JSON.stringify(recipeInstructions));
+        recipeFormInfo.append('recipeNoteMessages',  JSON.stringify(recipeNoteMessages));
+        recipeFormInfo.append('recipeNoteTitles',  JSON.stringify(recipeNoteTitles));
+
+        uploadedFiles.forEach(image => {
+          recipeFormInfo.append('images', image);
+        });
+
+        console.log("edit submit, ", recipeID);
+
+        const response = await axios({
+          method: "post",
+          url: `http://localhost:5051/api/recipes/edit/${recipeID}`,
+          data: recipeFormInfo,
+          headers: { "Content-Type": "multipart/form-data" },
+        });
+        console.log(response);
+      }
+    } catch (err) {
+      throw err
+    }
+  };
+
+  const createHandler = async (event) => {
     event.preventDefault();
     console.log('submitted');
 
@@ -306,7 +357,7 @@ const RecipeForm = (props) => {
       });
       console.log(response);
 
-      // Clear form inputs
+      // Clear form inputs (necessary?)
       recipeNameReset();
       recipeDescriptionReset();
       servingSizeReset();
