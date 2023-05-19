@@ -16,7 +16,7 @@ const AddIngredientsFormSection = (props) => {
             <div className={classes['ingredients-form-group']} >
               <TextField
                 id={`recipe-name-${input.id}`}
-                name='ingredientName'
+                name='ingredient_name'
                 placeholder={input.placeholder}
                 error={input.hasError}
                 helperText={input.hasError ? input.errorMsg : '' }

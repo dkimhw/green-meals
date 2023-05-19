@@ -23,6 +23,7 @@ const useMultipleInputs = (intialValues, defaultValue, validate, groupValidate=n
   const validateInput = (val, isTouched, validateFunc) => {
     // Validate
     let validVal = validateFunc(val);
+    console.log('validVal', validVal, val);
     let hasError = !validVal['isValid'] && isTouched;
 
     return { hasError: hasError, errorMsg: validVal['errorMsg'] };
@@ -82,7 +83,6 @@ const useMultipleInputs = (intialValues, defaultValue, validate, groupValidate=n
     const values = [...inputArray];
     for (const input of values) {
       input.touched = true;
-      console.log(input);
       let validated = validateInput(input[inputType], true, validate);
       input['hasError'] = validated['hasError'];
       input['errorMsg'] = validated['errorMsg'];

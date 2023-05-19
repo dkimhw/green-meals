@@ -10,9 +10,10 @@ const EditRecipes = () => {
   const params= useParams();
 
   return (
-   <Container>
+   <Container sx={{ position: "absolute" }}>
       <TopBanner classStyles={{
         left: '0',
+        top: '0',
         background: "url(/add-recipe-background-header-img.png) top repeat-x"
       }}/>
       <RecipeForm

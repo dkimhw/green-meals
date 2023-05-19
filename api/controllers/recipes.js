@@ -75,7 +75,7 @@ export const updateRecipe = async (req, res) => {
   } = req.body;
   let { recipeID } = req.params;
 
-  console.log(recipeID);
+  console.log("BLAH BLAH");
   // Take recipe id
 }
 
@@ -99,9 +99,10 @@ export const createRecipe = async (req, res) => {
 
   // Parse directions, ingredients, and notes for bulk create
   let ingredients = JSON.parse(recipeIngredients);
+  console.log(ingredients);
   ingredients = ingredients.map(ingredient => {
     return {
-      ingredient_name: ingredient.ingredientName,
+      ingredient_name: ingredient.ingredient_name,
     }
   });
 
@@ -121,7 +122,7 @@ export const createRecipe = async (req, res) => {
     console.log(noteTitles[idx]);
     console.log("Check: ", noteMessages[idx]);
     notes.push({
-      title: noteTitles[idx]['noteTitle'],
+      title: noteTitles[idx]['note_title'],
       text: noteMessages[idx]['note']
     })
   };
