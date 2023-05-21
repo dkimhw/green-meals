@@ -25,13 +25,13 @@ export const getRecipe = async (req, res, next) => {
   const recipe = await recipesModel.findAll({
     include: [{
       model: models.Ingredient,
-      required: true
+      required: false
      }, {
       model: models.Instruction,
-      required: true
+      required: false
      }, {
       model: models.RecipeNote,
-      required: true
+      required: false
      }],
     where: {
       id: recipeID
@@ -59,23 +59,24 @@ export const getRecipeImages = async (req, res, next) => {
 
 export const updateRecipe = async (req, res) => {
   // Parse request body
-  let {
-    recipeName
-    , recipeDescription
-    , cookingTime
-    , cookingTimeQty
-    , prepTime
-    , prepTimeQty
-    , servingSize
-    , recipePrivacyStatus
-    , recipeIngredients
-    , recipeInstructions
-    , recipeNoteTitles
-    , recipeNoteMessages
-  } = req.body;
+  // let {
+  //   recipeName
+  //   , recipeDescription
+  //   , cookingTime
+  //   , cookingTimeQty
+  //   , prepTime
+  //   , prepTimeQty
+  //   , servingSize
+  //   , recipePrivacyStatus
+  //   , recipeIngredients
+  //   , recipeInstructions
+  //   , recipeNoteTitles
+  //   , recipeNoteMessages
+  // } = req.body;
+  console.log("body", req.body);
   let { recipeID } = req.params;
 
-  console.log("BLAH BLAH");
+  console.log("express reciped id", recipeID);
   // Take recipe id
 }
 

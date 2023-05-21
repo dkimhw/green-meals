@@ -23,7 +23,7 @@ const RecipeList = (props) => {
       .then((response) => {
         const { count, rows } = response.data;
         setRecipes(rows);
-        setTotalRecipes(count / pageSize);
+        setTotalRecipes(Math.ceil(count / pageSize));
       })
       .catch(error => console.error(`Error: ${error}`));
   }

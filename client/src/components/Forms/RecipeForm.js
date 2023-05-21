@@ -53,7 +53,6 @@ const RecipeForm = (props) => {
     })
       .then((response) => {
         const data = response.data;
-        console.log(data);
         setRecipeData(data[0]);
       })
       .catch(error => console.error(`Error: ${error}`));
@@ -228,7 +227,6 @@ const RecipeForm = (props) => {
   // If there is a reciped id and subsequent data fill out form
   useEffect(() => {
     if (recipeData) {
-      console.log(recipeData);
       setRecipeName(recipeData['recipe_name']);
       setRecipeDescription(recipeData['recipe_description']);
       setServingSize(recipeData['servings']);
@@ -291,7 +289,6 @@ const RecipeForm = (props) => {
         && isPrepTimeValid && isCookingTimeValid && isPrepTimeTypeValid
         && isCookingTimeTypeValid && isRecipePrivacyStatusValid
       ) {
-        console.log("hello")
         const recipeFormInfo = new FormData();
         recipeFormInfo.append('recipeName', recipeName);
         recipeFormInfo.append('recipeDescription', recipeDescription);
@@ -310,7 +307,7 @@ const RecipeForm = (props) => {
         //   recipeFormInfo.append('images', image);
         // });
 
-        console.log("edit submit, ", recipeID);
+        console.log("edit submit recipeID: ", recipeID);
 
         const response = await axios({
           method: "post",

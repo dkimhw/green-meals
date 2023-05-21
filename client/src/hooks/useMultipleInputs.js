@@ -23,7 +23,6 @@ const useMultipleInputs = (intialValues, defaultValue, validate, groupValidate=n
   const validateInput = (val, isTouched, validateFunc) => {
     // Validate
     let validVal = validateFunc(val);
-    console.log('validVal', validVal, val);
     let hasError = !validVal['isValid'] && isTouched;
 
     return { hasError: hasError, errorMsg: validVal['errorMsg'] };
@@ -38,7 +37,6 @@ const useMultipleInputs = (intialValues, defaultValue, validate, groupValidate=n
 
   // For this not sure how "order" part will be set for recipe directions
   const removeInput = (id) => {
-    console.log("id", id);
     const values = [...inputArray];
     values.splice(values.findIndex(value => value.id === id), 1);
     setInputArray(values);
@@ -46,14 +44,11 @@ const useMultipleInputs = (intialValues, defaultValue, validate, groupValidate=n
 
   const handleChange = (event) => {
     event.preventDefault();
-    console.log("event: ", event.target);
     let splitIdLen = event.target.id.split('-').length;
     const id = event.target.id.split('-')[splitIdLen - 1];
     let findIdx = inputArray.findIndex(input => input.id === parseInt(id));
     const values = [...inputArray];
     values[findIdx][event.target.name] = event.target.value;
-
-    console.log("values: ", values);
 
     let validated = validateInput(event.target.value, true, validate);
     values[findIdx]['hasError'] = validated['hasError'];
