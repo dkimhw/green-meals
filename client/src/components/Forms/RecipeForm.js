@@ -310,7 +310,7 @@ const RecipeForm = (props) => {
         console.log("edit submit recipeID: ", recipeID);
 
         const response = await axios({
-          method: "post",
+          method: "put",
           url: `http://localhost:5051/api/recipes/edit/${recipeID}`,
           data: recipeFormInfo,
           headers: { "Content-Type": "multipart/form-data" },

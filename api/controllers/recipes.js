@@ -78,6 +78,7 @@ export const updateRecipe = async (req, res) => {
 
   console.log("express reciped id", recipeID);
   // Take recipe id
+  res.json({ message: "Recipe updated!" });
 }
 
 // This needs to be improved - should be able to use just one create method to insert everything

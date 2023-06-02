@@ -27,7 +27,7 @@ const upload = multer({ storage: storage, fileFilter: imageFilter });
 
 router.route('/get').get(recipesController.getRecipes);
 router.route('/get/:recipeID').get(recipesController.getRecipe);
-router.route('/edit/dude/:recipeID').get(recipesController.updateRecipe);
+router.route('/edit/:recipeID').put(recipesController.updateRecipe);
 router.route('/images').get(recipesController.getRecipeImages);
 router.route('/create').post(
   upload.array("images"),
