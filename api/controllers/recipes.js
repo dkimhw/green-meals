@@ -59,24 +59,38 @@ export const getRecipeImages = async (req, res, next) => {
 
 export const updateRecipe = async (req, res) => {
   // Parse request body
-  // let {
-  //   recipeName
-  //   , recipeDescription
-  //   , cookingTime
-  //   , cookingTimeQty
-  //   , prepTime
-  //   , prepTimeQty
-  //   , servingSize
-  //   , recipePrivacyStatus
-  //   , recipeIngredients
-  //   , recipeInstructions
-  //   , recipeNoteTitles
-  //   , recipeNoteMessages
-  // } = req.body;
-  console.log("body", req.body);
-  let { recipeID } = req.params;
+  let {
+    recipeName
+    // , recipeDescription
+    // , cookingTime
+    // , cookingTimeQty
+    // , prepTime
+    // , prepTimeQty
+    // , servingSize
+    // , recipePrivacyStatus
+    // , recipeIngredients
+    // , recipeInstructions
+    // , recipeNoteTitles
+    // , recipeNoteMessages
+  } = req.body;
+  console.log("recipeName", req.body?.recipeName);
 
-  console.log("express reciped id", recipeID);
+  console.log("body", req.body);
+
+  // Look for recipe
+  const { recipeID } = req.params;
+  const recipe = await models.Recipe.findByPk(recipeID)
+
+  if (!recipe) throw new Error('Cannot find recipe');
+
+  // Update recipe
+  // recipe.set({
+  //   recipe_name: recipeName
+  // });
+
+  // Save recipe
+  // await recipe.save();
+
   // Take recipe id
   res.json({ message: "Recipe updated!" });
 }
