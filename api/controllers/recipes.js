@@ -1,6 +1,13 @@
 import models from '../models/index.js';
 import uploadFiles from '../utils/imageUpload.js';
 import getImage from '../utils/getImage.js';
+import {
+  removeDeletedItems,
+  updateItems,
+  getAllItems,
+  cleanIngredientsData,
+  cleanInstructionsData
+} from '../utils/recipeControllerHelpers.js'
 
 export const index = async (req, res, next) => {
   const recipesModel = models.Recipe;
@@ -61,38 +68,58 @@ export const updateRecipe = async (req, res) => {
   // Parse request body
   let {
     recipeName
-    // , recipeDescription
-    // , cookingTime
-    // , cookingTimeQty
-    // , prepTime
-    // , prepTimeQty
-    // , servingSize
-    // , recipePrivacyStatus
-    // , recipeIngredients
-    // , recipeInstructions
-    // , recipeNoteTitles
-    // , recipeNoteMessages
+    , recipeDescription
+    , cookingTime
+    , cookingTimeQty
+    , prepTime
+    , prepTimeQty
+    , servingSize
+    , recipePrivacyStatus
+    , recipeIngredients
+    , recipeInstructions
+    , recipeNoteTitles
+    , recipeNoteMessages
   } = req.body;
-  console.log("recipeName", req.body?.recipeName);
-
-  console.log("body", req.body);
 
   // Look for recipe
   const { recipeID } = req.params;
-  const recipe = await models.Recipe.findByPk(recipeID)
+  const recipe = await models.Recipe.findOne({
+    where: {
+      id: recipeID
+    },
+  });
 
   if (!recipe) throw new Error('Cannot find recipe');
 
   // Update recipe
-  // recipe.set({
-  //   recipe_name: recipeName
-  // });
+  recipe.set({
+    recipe_name: recipeName
+    , recipe_description: recipeDescription
+    , cooking_time: cookingTime
+    , cooking_time_qty: cookingTimeQty
+    , prep_time: prepTime
+    , prep_time_qty: prepTimeQty
+    , servings: servingSize
+    , recipe_privacy_status: recipePrivacyStatus
+  });
+
+  // Update ingredients
+  const ingredients = cleanIngredientsData(recipeIngredients);
+  const currIngredients = await getAllItems(models.Ingredient, recipeID);
+  await removeDeletedItems(ingredients, currIngredients, models.Ingredient);
+  await updateItems(models.Ingredient, ingredients, ["ingredient_name", "recipeId"]);
+
+  // Update instructions
+  const instructions = cleanInstructionsData(recipeInstructions);
+  const currInstructions = await getAllItems(models.Instruction, recipeID);
+  await removeDeletedItems(instructions, currInstructions, models.Instruction);
+  await updateItems(models.Instruction, instructions, ['instruction_order_number', 'instruction_text', 'recipeId']);
 
   // Save recipe
-  // await recipe.save();
+  await recipe.save();
 
   // Take recipe id
-  res.json({ message: "Recipe updated!" });
+  res.json({ data: recipe });
 }
 
 // This needs to be improved - should be able to use just one create method to insert everything

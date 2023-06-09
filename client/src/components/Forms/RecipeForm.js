@@ -290,25 +290,21 @@ const RecipeForm = (props) => {
       ) {
         const recipeFormInfo = new FormData();
         recipeFormInfo.append('recipeName', recipeName);
-        // recipeFormInfo.append('recipeDescription', recipeDescription);
-        // recipeFormInfo.append('cookingTime', cookingTime);
-        // recipeFormInfo.append('cookingTimeQty', cookingTimeType);
-        // recipeFormInfo.append('prepTime', prepTime);
-        // recipeFormInfo.append('prepTimeQty', prepTimeType);
-        // recipeFormInfo.append('servingSize', servingSize);
-        // recipeFormInfo.append('recipePrivacyStatus', recipePrivacyStatus);
-        // recipeFormInfo.append('recipeIngredients', JSON.stringify(recipeIngredients));
-        // recipeFormInfo.append('recipeInstructions',  JSON.stringify(recipeInstructions));
-        // recipeFormInfo.append('recipeNoteMessages',  JSON.stringify(recipeNoteMessages));
-        // recipeFormInfo.append('recipeNoteTitles',  JSON.stringify(recipeNoteTitles));
+        recipeFormInfo.append('recipeDescription', recipeDescription);
+        recipeFormInfo.append('cookingTime', cookingTime);
+        recipeFormInfo.append('cookingTimeQty', cookingTimeType);
+        recipeFormInfo.append('prepTime', prepTime);
+        recipeFormInfo.append('prepTimeQty', prepTimeType);
+        recipeFormInfo.append('servingSize', servingSize);
+        recipeFormInfo.append('recipePrivacyStatus', recipePrivacyStatus);
+        recipeFormInfo.append('recipeIngredients', JSON.stringify(recipeIngredients));
+        recipeFormInfo.append('recipeInstructions',  JSON.stringify(recipeInstructions));
+        recipeFormInfo.append('recipeNoteMessages',  JSON.stringify(recipeNoteMessages));
+        recipeFormInfo.append('recipeNoteTitles',  JSON.stringify(recipeNoteTitles));
 
         // uploadedFiles.forEach(image => {
         //   recipeFormInfo.append('images', image);
         // });
-        console.log("recipeName: ", recipeName);
-        console.log("recipeFormInfo ", recipeFormInfo.get("recipeName"))
-
-        console.log("edit submit recipeID: ", recipeID);
 
         const response = await axios({
           method: "put",
