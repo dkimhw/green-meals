@@ -1,18 +1,40 @@
 
+export const cleanRecipeNotesData = async(recipeNoteMessages, recipeNoteTitles, recipeID) => {
+  let noteTitles = await JSON.parse(recipeNoteTitles);
+  let noteMessages = await JSON.parse(recipeNoteMessages);
 
-export const cleanInstructionsData = async (instructions) => {
-  return JSON.parse(instructions).map((instruction, idx) => {
+  let notes = [];
+  for (let idx = 0; idx < noteTitles.length; idx += 1) {
+    console.log(noteTitles[idx]);
+    console.log("Check: ", noteMessages[idx]);
+    notes.push({
+      title: noteTitles[idx]['note_title'],
+      text: noteMessages[idx]['note']
+    })
+  };
+
+  return notes.map(note => {
+    return {
+      title: note.title,
+      text: note.text,
+      recipeId: recipeID,
+    }
+  })
+}
+
+export const cleanInstructionsData = async (instructions, recipeID) => {
+  return await JSON.parse(instructions).map((instruction, idx) => {
     return {
       id: instruction.id,
       instruction_order_number: idx + 1,
-      instruction_text: instruction.instruction,
+      instruction_text: instruction.instruction_text,
       recipeId: instruction.recipeId ? instruction.recipeId : recipeID,
     }
   });
 };
 
-export const cleanIngredientsData = async (ingredients) => {
-  return JSON.parse(ingredients).map(ingredient => {
+export const cleanIngredientsData = async (ingredients, recipeID) => {
+  return await JSON.parse(ingredients).map(ingredient => {
     return {
       id: ingredient.id,
       ingredient_name: ingredient.ingredient_name,
@@ -55,3 +77,14 @@ export const updateItems = async (models, data, keys) => {
     }
   );
 };
+
+export const saveImages = async (imageData, recipeID) => {
+  await models.RecipeImage.bulkCreate(
+    imageData.map(image => {
+      return {
+        image_key: image.Key,
+        recipeId: recipeID,
+      }
+    })
+  );
+}

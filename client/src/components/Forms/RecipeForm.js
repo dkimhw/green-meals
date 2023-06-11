@@ -30,7 +30,7 @@ const recipeInstructionsIntitalValue = [
 ]
 
 const recipeNoteTitlesInitialValue = [
-  { id: 0, note_title: '' },
+  { id: 0, title: '' },
 ];
 
 const recipeNoteMessagesInitialValue = [
@@ -198,7 +198,7 @@ const RecipeForm = (props) => {
     , onSubmitValidate: recipeNoteTitlesOnSubmit
   } = useMultipleInputs(
     recipeNoteTitlesInitialValue,
-    { id: 0, note_title: ''},
+    { id: 0, title: ''},
     validateTextInput
   );
 
@@ -240,7 +240,7 @@ const RecipeForm = (props) => {
       setRecipeNoteTitles(recipeData['recipe_notes'].map(note_title => {
         return {
           id: note_title.id,
-          noteTitle: note_title.title
+          title: note_title.title
         }
       }));
 
@@ -278,7 +278,7 @@ const RecipeForm = (props) => {
       cookingTimeBlurInputHandler();
       cookingTimeTypeBlurInputHandler();
       recipePrivacyStatusBlurInputHandler();
-      recipeNoteTitlesOnSubmit('note_title');
+      recipeNoteTitlesOnSubmit('title');
       recipeNoteMessagesOnSubmit('note');
       recipeIngredientsOnSubmit('ingredient_name');
       recipeInstructionsOnSubmit('instruction_text');

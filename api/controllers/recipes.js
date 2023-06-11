@@ -6,7 +6,9 @@ import {
   updateItems,
   getAllItems,
   cleanIngredientsData,
-  cleanInstructionsData
+  cleanInstructionsData,
+  cleanRecipeNotesData,
+  saveImages,
 } from '../utils/recipeControllerHelpers.js'
 
 export const index = async (req, res, next) => {
@@ -104,16 +106,36 @@ export const updateRecipe = async (req, res) => {
   });
 
   // Update ingredients
-  const ingredients = cleanIngredientsData(recipeIngredients);
+  const ingredients = await cleanIngredientsData(recipeIngredients, recipeID);
   const currIngredients = await getAllItems(models.Ingredient, recipeID);
   await removeDeletedItems(ingredients, currIngredients, models.Ingredient);
   await updateItems(models.Ingredient, ingredients, ["ingredient_name", "recipeId"]);
 
   // Update instructions
-  const instructions = cleanInstructionsData(recipeInstructions);
+  const instructions = await cleanInstructionsData(recipeInstructions, recipeID);
   const currInstructions = await getAllItems(models.Instruction, recipeID);
   await removeDeletedItems(instructions, currInstructions, models.Instruction);
   await updateItems(models.Instruction, instructions, ['instruction_order_number', 'instruction_text', 'recipeId']);
+
+  // Update notes
+  const notes = await cleanRecipeNotesData(recipeNoteMessages, recipeNoteTitles, recipeID);
+  const currNotes = await getAllItems(models.RecipeNote, recipeID);
+  await removeDeletedItems(notes, currNotes, models.RecipeNote);
+  await updateItems(models.RecipeNote, notes, ['title', 'text', 'recipeId']);
+
+  // Update images
+  // 1. User can delete one of the images
+  // 2. User can choose to upload one or more new images
+  // 3. User can choose to remove all images
+  // The easiest option would be to remove all images we have and upload the new image
+  console.log("check", req.files);
+  // let s3ImageData = await uploadFiles(req, res, recipeID);
+  // if (!s3ImageData) throw new Error('Could not save the images');
+  // console.log("here", s3ImageData);
+  // Remove current images
+  // saveImages(s3ImageData, recipeID);
+
+
 
   // Save recipe
   await recipe.save();
