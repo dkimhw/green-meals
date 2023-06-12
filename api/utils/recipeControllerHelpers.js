@@ -2,13 +2,11 @@
 export const cleanRecipeNotesData = async(recipeNoteMessages, recipeNoteTitles, recipeID) => {
   let noteTitles = await JSON.parse(recipeNoteTitles);
   let noteMessages = await JSON.parse(recipeNoteMessages);
-
   let notes = [];
+
   for (let idx = 0; idx < noteTitles.length; idx += 1) {
-    console.log(noteTitles[idx]);
-    console.log("Check: ", noteMessages[idx]);
     notes.push({
-      title: noteTitles[idx]['note_title'],
+      title: noteTitles[idx]['title'],
       text: noteMessages[idx]['note']
     })
   };
@@ -59,11 +57,9 @@ export const removeDeletedItems = async (inputArr, compArr, model) => {
   // 2. find the items that have been removed from userInputArr (or if any)
   // 3. destory the records that the user has removed
   let userInputIds = inputArr.map(el => el['id']);
-  console.log("compArr: ", compArr);
   for (let item of compArr) {
-    console.log("item", item)
     if (!userInputIds.includes(item['id'])) {
-      // destory item
+      // destroy item
       await model.destroy({ where: { id: item['id'] } });
     }
   }

@@ -302,9 +302,9 @@ const RecipeForm = (props) => {
         recipeFormInfo.append('recipeNoteMessages',  JSON.stringify(recipeNoteMessages));
         recipeFormInfo.append('recipeNoteTitles',  JSON.stringify(recipeNoteTitles));
 
-        // uploadedFiles.forEach(image => {
-        //   recipeFormInfo.append('images', image);
-        // });
+        uploadedFiles.forEach(image => {
+          recipeFormInfo.append('images', image);
+        });
 
         const response = await axios({
           method: "put",

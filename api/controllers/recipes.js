@@ -128,14 +128,13 @@ export const updateRecipe = async (req, res) => {
   // 2. User can choose to upload one or more new images
   // 3. User can choose to remove all images
   // The easiest option would be to remove all images we have and upload the new image
-  console.log("check", req.files);
-  // let s3ImageData = await uploadFiles(req, res, recipeID);
-  // if (!s3ImageData) throw new Error('Could not save the images');
-  // console.log("here", s3ImageData);
-  // Remove current images
-  // saveImages(s3ImageData, recipeID);
-
-
+  // 1. Add new images to db
+  // 2. Remove from s3 unnecessary images; Remove from db
+  console.log("check files in req: ", req.files);
+  let s3ImageData = await uploadFiles(req, res, recipeID);
+  console.log("check s3ImageDate: ", s3ImageData);
+  if (!s3ImageData) throw new Error('Could not save the images');
+  saveImages(s3ImageData, recipeID);
 
   // Save recipe
   await recipe.save();
