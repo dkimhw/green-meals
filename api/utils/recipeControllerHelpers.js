@@ -74,8 +74,8 @@ export const updateItems = async (models, data, keys) => {
   );
 };
 
-export const saveImages = async (imageData, recipeID) => {
-  await models.RecipeImage.bulkCreate(
+export const saveImages = async (models, imageData, recipeID) => {
+  await models.bulkCreate(
     imageData.map(image => {
       return {
         image_key: image.Key,

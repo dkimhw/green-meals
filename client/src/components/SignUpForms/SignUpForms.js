@@ -1,6 +1,5 @@
 
-import FormCard from '../UI/FormCard';
-import { Typography, TextField } from '@mui/material';
+import { Typography, Container, TextField, Box } from '@mui/material';
 
 const SignUpForm = () => {
   const submitHandler = (evt) => {
@@ -8,25 +7,42 @@ const SignUpForm = () => {
   }
 
   return (
-    <FormCard>
-      <Typography>
-        Sign Up
-      </Typography>
-      <form onSubmit={submitHandler} method="post">
-        <TextField
-          id="email"
-          label="email"
-          variant="outlined"
-          required
-        />
-        <TextField
-          id="outlined-password-input"
-          label="password"
-          type="password"
-          autoComplete="current-password"
-        />
-      </form>
-    </FormCard>
+    <Container sx={{
+      marginTop: '2rem'
+    }}>
+      <Box sx={{
+        maxWidth: '300px',
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        padding: '2rem 0'
+      }}>
+        <Typography>
+          Sign Up
+        </Typography>
+        <form onSubmit={submitHandler} method="post">
+          <Box sx={{
+            display: 'grid',
+            justifyContent: 'center',
+            gridTemplateRows: '1fr 1fr',
+            gridTemplateColumns: '1fr'
+          }}>
+            <TextField
+              id="email"
+              label="Email"
+              variant="standard"
+              required
+            />
+            <TextField
+              id="password"
+              label="Password"
+              type="password"
+              variant="standard"
+              autoComplete="current-password"
+            />
+          </Box>
+        </form>
+      </Box>
+    </Container>
   )
 };
 

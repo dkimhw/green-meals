@@ -134,7 +134,7 @@ export const updateRecipe = async (req, res) => {
   let s3ImageData = await uploadFiles(req, res, recipeID);
   console.log("check s3ImageDate: ", s3ImageData);
   if (!s3ImageData) throw new Error('Could not save the images');
-  saveImages(s3ImageData, recipeID);
+  saveImages(models.RecipeImage, s3ImageData, recipeID);
 
   // Save recipe
   await recipe.save();
