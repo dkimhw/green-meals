@@ -27,11 +27,11 @@ const RecipeNotesFormSection = (props) => {
             <InputLabel id={`note-title-${note[0].id}`} className={classes['note-label']}>Title</InputLabel>
             <TextField
               id={`note-title-${note[0].id}`}
-              name='noteTitle'
+              name='title'
               placeholder="e.g. Cook's Tips"
               variant="outlined"
               className={`${classes['form-notes-input']} ${classes['note-input']}`}
-              value={note[0].noteTitle || ""}
+              value={note[0].title || ""}
               error={note[0].hasError}
               helperText={note[0].hasError ? note[0].errorMsg : '' }
               onChange={props.handleRecipeNoteTitlesChange}

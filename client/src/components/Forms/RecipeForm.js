@@ -18,9 +18,9 @@ import { useState, useEffect } from 'react';
 import { isValidImagesUploaded, validateTextInput, validateNumber, validateTimeType, validatePrivacyStatus, validateGroupInputs } from '../../utils/validateInputs';
 
 const ingredientsInputs = [
-  { id: 0, ingredientName: '', placeholder: 'e.g. Flour', hasError: false, errorMsg: '', touched: false },
-  { id: 1, ingredientName: '', placeholder: 'e.g. Sugar', hasError: false, errorMsg: '', touched: false },
-  { id: 2, ingredientName: '', placeholder: 'e.g. Olive oil', hasError: false, errorMsg: '', touched: false },
+  { id: 0, ingredient_name: '', placeholder: 'e.g. Flour', hasError: false, errorMsg: '', touched: false },
+  { id: 1, ingredient_name: '', placeholder: 'e.g. Sugar', hasError: false, errorMsg: '', touched: false },
+  { id: 2, ingredient_name: '', placeholder: 'e.g. Olive oil', hasError: false, errorMsg: '', touched: false },
 ]
 
 const recipeInstructionsIntitalValue = [
@@ -30,7 +30,7 @@ const recipeInstructionsIntitalValue = [
 ]
 
 const recipeNoteTitlesInitialValue = [
-  { id: 0, noteTitle: '' },
+  { id: 0, title: '' },
 ];
 
 const recipeNoteMessagesInitialValue = [
@@ -53,7 +53,6 @@ const RecipeForm = (props) => {
     })
       .then((response) => {
         const data = response.data;
-        console.log(data);
         setRecipeData(data[0]);
       })
       .catch(error => console.error(`Error: ${error}`));
@@ -165,7 +164,7 @@ const RecipeForm = (props) => {
     , hasGroupInputsError: hasRecipeIngredientsError
   } = useMultipleInputs(
     ingredientsInputs,
-    { id: 0, ingredientName: '', placeholder: 'Add a new ingredient', hasError: false, error: '' },
+    { id: 0, ingredient_name: '', placeholder: 'Add a new ingredient', hasError: false, error: '' },
     validateTextInput,
     validateGroupInputs,
     `At least one ingredient is required.`
@@ -199,7 +198,7 @@ const RecipeForm = (props) => {
     , onSubmitValidate: recipeNoteTitlesOnSubmit
   } = useMultipleInputs(
     recipeNoteTitlesInitialValue,
-    { id: 0, noteTitle: ''},
+    { id: 0, title: ''},
     validateTextInput
   );
 
@@ -228,7 +227,6 @@ const RecipeForm = (props) => {
   // If there is a reciped id and subsequent data fill out form
   useEffect(() => {
     if (recipeData) {
-      console.log(recipeData);
       setRecipeName(recipeData['recipe_name']);
       setRecipeDescription(recipeData['recipe_description']);
       setServingSize(recipeData['servings']);
@@ -242,7 +240,7 @@ const RecipeForm = (props) => {
       setRecipeNoteTitles(recipeData['recipe_notes'].map(note_title => {
         return {
           id: note_title.id,
-          noteTitle: note_title.title
+          title: note_title.title
         }
       }));
 
@@ -259,7 +257,69 @@ const RecipeForm = (props) => {
     , setRecipePrivacyStatus]);
 
   // Submit Recipe Info //
-  const submitHandler = async (event) => {
+  const submitHandler = (event) => {
+    console.log(isEditForm);
+    return !isEditForm ? createHandler(event) : editHandler(event);
+  };
+
+  const editHandler = async (event) => {
+    try {
+      event.preventDefault();
+      console.log('updated');
+      let recipeID = props.id ? props.id : null;
+      if (!recipeID) return;
+
+      // Once the submit button has been clicked we need to make sure the input fields have been marked as touched
+      recipeNameBlurInputHandler();
+      recipeDescriptionBlurInputHandler();
+      servingSizeBlurInputHandler();
+      prepTimeBlurInputHandler();
+      prepTimeTypeBlurInputHandler();
+      cookingTimeBlurInputHandler();
+      cookingTimeTypeBlurInputHandler();
+      recipePrivacyStatusBlurInputHandler();
+      recipeNoteTitlesOnSubmit('title');
+      recipeNoteMessagesOnSubmit('note');
+      recipeIngredientsOnSubmit('ingredient_name');
+      recipeInstructionsOnSubmit('instruction_text');
+
+      if (
+        isRecipeDescriptionValid && isRecipenameInputValid && isServingSizeValid
+        && isPrepTimeValid && isCookingTimeValid && isPrepTimeTypeValid
+        && isCookingTimeTypeValid && isRecipePrivacyStatusValid
+      ) {
+        const recipeFormInfo = new FormData();
+        recipeFormInfo.append('recipeName', recipeName);
+        recipeFormInfo.append('recipeDescription', recipeDescription);
+        recipeFormInfo.append('cookingTime', cookingTime);
+        recipeFormInfo.append('cookingTimeQty', cookingTimeType);
+        recipeFormInfo.append('prepTime', prepTime);
+        recipeFormInfo.append('prepTimeQty', prepTimeType);
+        recipeFormInfo.append('servingSize', servingSize);
+        recipeFormInfo.append('recipePrivacyStatus', recipePrivacyStatus);
+        recipeFormInfo.append('recipeIngredients', JSON.stringify(recipeIngredients));
+        recipeFormInfo.append('recipeInstructions',  JSON.stringify(recipeInstructions));
+        recipeFormInfo.append('recipeNoteMessages',  JSON.stringify(recipeNoteMessages));
+        recipeFormInfo.append('recipeNoteTitles',  JSON.stringify(recipeNoteTitles));
+
+        uploadedFiles.forEach(image => {
+          recipeFormInfo.append('images', image);
+        });
+
+        const response = await axios({
+          method: "put",
+          url: `http://localhost:5051/api/recipes/edit/${recipeID}`,
+          data: recipeFormInfo,
+          headers: { "Content-Type": "multipart/form-data" },
+        });
+        console.log(response);
+      }
+    } catch (err) {
+      throw err
+    }
+  };
+
+  const createHandler = async (event) => {
     event.preventDefault();
     console.log('submitted');
 
@@ -272,10 +332,10 @@ const RecipeForm = (props) => {
     cookingTimeBlurInputHandler();
     cookingTimeTypeBlurInputHandler();
     recipePrivacyStatusBlurInputHandler();
-    recipeNoteTitlesOnSubmit('noteTitle');
+    recipeNoteTitlesOnSubmit('note_title');
     recipeNoteMessagesOnSubmit('note');
-    recipeIngredientsOnSubmit('ingredientName');
-    recipeInstructionsOnSubmit('instruction');
+    recipeIngredientsOnSubmit('ingredient_name');
+    recipeInstructionsOnSubmit('instruction_text');
 
     if (isRecipeDescriptionValid && isRecipenameInputValid && isServingSizeValid
         && isPrepTimeValid && isCookingTimeValid && isPrepTimeTypeValid
@@ -298,6 +358,8 @@ const RecipeForm = (props) => {
         recipeFormInfo.append('images', image);
       });
 
+      console.log(recipeIngredients);
+
       const response = await axios({
         method: "post",
         url: "http://localhost:5051/api/recipes/create",
@@ -306,7 +368,7 @@ const RecipeForm = (props) => {
       });
       console.log(response);
 
-      // Clear form inputs
+      // Clear form inputs (necessary?)
       recipeNameReset();
       recipeDescriptionReset();
       servingSizeReset();
@@ -322,7 +384,7 @@ const RecipeForm = (props) => {
   return (
     <FormCard>
       <SectionTitle>{isEditForm ? 'Edit Recipe' : 'Add a Recipe'}</SectionTitle>
-      <form className={classes.form} onSubmit={submitHandler} method="post">
+      <form className={classes.form} onSubmit={submitHandler} method="post" encType="multipart/form-data">
         <RecipeInfoFormSection
           // Recipe Name
           recipeName={recipeName}

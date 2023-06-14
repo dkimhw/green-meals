@@ -8,6 +8,7 @@ import CreateRecipesPage from './pages/CreateRecipesPage/CreateRecipesPage';
 import { appTheme } from "./theme/muiThemeOptions";
 import EditRecipesPage from "./pages/EditRecipesPage/EditRecipesPage";
 import RecipePage from "./pages/RecipePage/RecipePage";
+import SignUpPage from "./pages/SignUpPage/SignUpPage";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
             <Route path="/create-recipes" element={<CreateRecipesPage />} />
             <Route path="/recipe/:id" element={<RecipePage />} />
             <Route path="/edit-recipe/:id" element={<EditRecipesPage />} />
+            <Route path="/sign-up" element={<SignUpPage />} />
           </Route>
         </Routes>
       </BrowserRouter>

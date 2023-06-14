@@ -34,7 +34,7 @@ export const isValidImagesUploaded = (imagesArr, numOfFiles, fileSizeLimit, even
 }
 
 export const validateTextInput = (str) => {
-  if (str.trim() === '') {
+  if (str === undefined || str.trim() === '') {
     return {
       isValid: false,
       errorMsg: 'Please fill out this field.'

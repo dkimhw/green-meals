@@ -17,6 +17,12 @@
 import { createTheme } from "@mui/material/styles";
 
 export const appTheme = createTheme({
+  typography: {
+    fontFamily: [
+      'Lexend Deca',
+      'Helvetica',
+    ].join(',')
+  },
   palette: {
     type: 'light',
     primary: {

@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Container } from '@mui/material';
+import { Box } from '@mui/material';
 import RecipeForm from '../../components/Forms/RecipeForm';
 import TopBanner from '../../components/UI/TopBanner';
 import { useParams } from "react-router-dom";
@@ -10,16 +10,21 @@ const EditRecipes = () => {
   const params= useParams();
 
   return (
-   <Container>
+   <Box sx={{ position: "relative" }}>
       <TopBanner classStyles={{
-        left: '0',
+        position: 'absolute',
+        top: '-50px',
         background: "url(/add-recipe-background-header-img.png) top repeat-x"
       }}/>
-      <RecipeForm
-        id={params.id}
-      />
-    </Container>
+      <Box sx={{position: 'relative'}}>
+        <RecipeForm
+          id={params.id}
+        />
+      </Box>
+    </Box>
   );
 }
+
+
 
 export default EditRecipes;

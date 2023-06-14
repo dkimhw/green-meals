@@ -1,6 +1,15 @@
 import models from '../models/index.js';
 import uploadFiles from '../utils/imageUpload.js';
 import getImage from '../utils/getImage.js';
+import {
+  removeDeletedItems,
+  updateItems,
+  getAllItems,
+  cleanIngredientsData,
+  cleanInstructionsData,
+  cleanRecipeNotesData,
+  saveImages,
+} from '../utils/recipeControllerHelpers.js'
 
 export const index = async (req, res, next) => {
   const recipesModel = models.Recipe;
@@ -25,13 +34,13 @@ export const getRecipe = async (req, res, next) => {
   const recipe = await recipesModel.findAll({
     include: [{
       model: models.Ingredient,
-      required: true
+      required: false
      }, {
       model: models.Instruction,
-      required: true
+      required: false
      }, {
       model: models.RecipeNote,
-      required: true
+      required: false
      }],
     where: {
       id: recipeID
@@ -57,6 +66,83 @@ export const getRecipeImages = async (req, res, next) => {
   res.send(images);
 }
 
+export const updateRecipe = async (req, res) => {
+  // Parse request body
+  let {
+    recipeName
+    , recipeDescription
+    , cookingTime
+    , cookingTimeQty
+    , prepTime
+    , prepTimeQty
+    , servingSize
+    , recipePrivacyStatus
+    , recipeIngredients
+    , recipeInstructions
+    , recipeNoteTitles
+    , recipeNoteMessages
+  } = req.body;
+
+  // Look for recipe
+  const { recipeID } = req.params;
+  const recipe = await models.Recipe.findOne({
+    where: {
+      id: recipeID
+    },
+  });
+
+  if (!recipe) throw new Error('Cannot find recipe');
+
+  // Update recipe
+  recipe.set({
+    recipe_name: recipeName
+    , recipe_description: recipeDescription
+    , cooking_time: cookingTime
+    , cooking_time_qty: cookingTimeQty
+    , prep_time: prepTime
+    , prep_time_qty: prepTimeQty
+    , servings: servingSize
+    , recipe_privacy_status: recipePrivacyStatus
+  });
+
+  // Update ingredients
+  const ingredients = await cleanIngredientsData(recipeIngredients, recipeID);
+  const currIngredients = await getAllItems(models.Ingredient, recipeID);
+  await removeDeletedItems(ingredients, currIngredients, models.Ingredient);
+  await updateItems(models.Ingredient, ingredients, ["ingredient_name", "recipeId"]);
+
+  // Update instructions
+  const instructions = await cleanInstructionsData(recipeInstructions, recipeID);
+  const currInstructions = await getAllItems(models.Instruction, recipeID);
+  await removeDeletedItems(instructions, currInstructions, models.Instruction);
+  await updateItems(models.Instruction, instructions, ['instruction_order_number', 'instruction_text', 'recipeId']);
+
+  // Update notes
+  const notes = await cleanRecipeNotesData(recipeNoteMessages, recipeNoteTitles, recipeID);
+  const currNotes = await getAllItems(models.RecipeNote, recipeID);
+  await removeDeletedItems(notes, currNotes, models.RecipeNote);
+  await updateItems(models.RecipeNote, notes, ['title', 'text', 'recipeId']);
+
+  // Update images
+  // 1. User can delete one of the images
+  // 2. User can choose to upload one or more new images
+  // 3. User can choose to remove all images
+  // The easiest option would be to remove all images we have and upload the new image
+  // 1. Add new images to db
+  // 2. Remove from s3 unnecessary images; Remove from db
+  console.log("check files in req: ", req.files);
+  let s3ImageData = await uploadFiles(req, res, recipeID);
+  console.log("check s3ImageDate: ", s3ImageData);
+  if (!s3ImageData) throw new Error('Could not save the images');
+  saveImages(models.RecipeImage, s3ImageData, recipeID);
+
+  // Save recipe
+  await recipe.save();
+
+  // Take recipe id
+  res.json({ data: recipe });
+}
+
 // This needs to be improved - should be able to use just one create method to insert everything
 export const createRecipe = async (req, res) => {
   // Parse request body
@@ -77,9 +163,10 @@ export const createRecipe = async (req, res) => {
 
   // Parse directions, ingredients, and notes for bulk create
   let ingredients = JSON.parse(recipeIngredients);
+  console.log(ingredients);
   ingredients = ingredients.map(ingredient => {
     return {
-      ingredient_name: ingredient.ingredientName,
+      ingredient_name: ingredient.ingredient_name,
     }
   });
 
@@ -99,12 +186,10 @@ export const createRecipe = async (req, res) => {
     console.log(noteTitles[idx]);
     console.log("Check: ", noteMessages[idx]);
     notes.push({
-      title: noteTitles[idx]['noteTitle'],
+      title: noteTitles[idx]['note_title'],
       text: noteMessages[idx]['note']
     })
   };
-
-  // recipeNoteMessages
 
   const newRecipe = await models.Recipe.create(
     {
@@ -121,10 +206,6 @@ export const createRecipe = async (req, res) => {
       include: [models.Ingredient]
     }
   );
-
-  // console.log("newRecipe: ", newRecipe);
-  // console.log("newRecipe id: ", newRecipe.dataValues.id);
-  // console.log("newRecipe id2: ", newRecipe.id);
 
   await models.Instruction.bulkCreate(
     instructions.map(instruction => {
@@ -171,5 +252,6 @@ export default {
   getRecipes,
   createRecipe,
   getRecipeImages,
+  updateRecipe,
   getRecipe
 }
