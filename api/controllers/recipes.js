@@ -66,6 +66,22 @@ export const getRecipeImages = async (req, res, next) => {
   res.send(images);
 }
 
+export const deleteRecipe = async (req, res) => {
+  // Look for recipe
+  const { recipeId } = req.params;
+
+  try {
+    const recipe = await models.Recipe.findByPk(recipeId);
+
+    if (recipe) {
+      await recipe.destroy();
+      res.send(recipe);
+    }
+  } catch (err) {
+    throw new Error(err);
+  }
+}
+
 export const updateRecipe = async (req, res) => {
   // Parse request body
   let {
@@ -88,7 +104,7 @@ export const updateRecipe = async (req, res) => {
   const recipe = await models.Recipe.findOne({
     where: {
       id: recipeID
-    },
+    }
   });
 
   if (!recipe) throw new Error('Cannot find recipe');
@@ -163,7 +179,6 @@ export const createRecipe = async (req, res) => {
 
   // Parse directions, ingredients, and notes for bulk create
   let ingredients = JSON.parse(recipeIngredients);
-  console.log(ingredients);
   ingredients = ingredients.map(ingredient => {
     return {
       ingredient_name: ingredient.ingredient_name,
@@ -174,9 +189,11 @@ export const createRecipe = async (req, res) => {
   instructions = instructions.map((instruction, idx) => {
     return {
       instruction_order_number: idx + 1,
-      instruction_text: instruction.instruction
+      instruction_text: instruction.instruction_text
     }
   });
+  console.log("Create: ", instructions);
+
 
   let noteTitles = JSON.parse(recipeNoteTitles);
   let noteMessages = JSON.parse(recipeNoteMessages);
@@ -186,7 +203,7 @@ export const createRecipe = async (req, res) => {
     console.log(noteTitles[idx]);
     console.log("Check: ", noteMessages[idx]);
     notes.push({
-      title: noteTitles[idx]['note_title'],
+      title: noteTitles[idx]['title'],
       text: noteMessages[idx]['note']
     })
   };
@@ -253,5 +270,6 @@ export default {
   createRecipe,
   getRecipeImages,
   updateRecipe,
-  getRecipe
+  getRecipe,
+  deleteRecipe,
 }

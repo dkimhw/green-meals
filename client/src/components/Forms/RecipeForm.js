@@ -332,7 +332,7 @@ const RecipeForm = (props) => {
     cookingTimeBlurInputHandler();
     cookingTimeTypeBlurInputHandler();
     recipePrivacyStatusBlurInputHandler();
-    recipeNoteTitlesOnSubmit('note_title');
+    recipeNoteTitlesOnSubmit('title');
     recipeNoteMessagesOnSubmit('note');
     recipeIngredientsOnSubmit('ingredient_name');
     recipeInstructionsOnSubmit('instruction_text');
@@ -380,6 +380,21 @@ const RecipeForm = (props) => {
 
     }
   };
+
+  const deleteHandler = async (event) =>{
+    event.preventDefault();
+    let recipeId = props.id ? props.id : null;
+    if (!recipeId) return;
+
+    const response = await axios({
+      method: "delete",
+      url: `http://localhost:5051/api/recipes/delete/${recipeId}`,
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+
+    console.log(response);
+    console.log("Deleted");
+  }
 
   return (
     <FormCard>
@@ -492,6 +507,8 @@ const RecipeForm = (props) => {
           recipePrivacyStatusBlurInputHandler={recipePrivacyStatusBlurInputHandler}
         />
         <Button variant="outlined" type="submit" sx={{mt: '1.5rem'}}>Submit</Button>
+
+        { isEditForm ? <form onSubmit={deleteHandler} method="post"><Button variant="outlined" type="submit" sx={{mt: '1.5rem'}}>Delete</Button></form> : ''}
       </form>
     </FormCard>
   )

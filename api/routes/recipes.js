@@ -31,6 +31,7 @@ router.route('/edit/:recipeID').put(
   upload.array("images"),
   recipesController.updateRecipe
 );
+router.route('/delete/:recipeId').delete(recipesController.deleteRecipe)
 router.route('/images').get(recipesController.getRecipeImages);
 router.route('/create').post(
   upload.array("images"),
