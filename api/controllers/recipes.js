@@ -9,6 +9,7 @@ import {
   cleanInstructionsData,
   cleanRecipeNotesData,
   saveImages,
+  deleteImagesInS3
 } from '../utils/recipeControllerHelpers.js'
 
 export const index = async (req, res, next) => {
@@ -74,7 +75,13 @@ export const deleteRecipe = async (req, res) => {
     const recipe = await models.Recipe.findByPk(recipeId);
 
     if (recipe) {
-      await recipe.destroy();
+      const response = await recipe.destroy();
+
+      // Only delete images if the recipe was deleted correctly
+      if (response) {
+        deleteImagesInS3(models.RecipeImage, recipeId);
+      }
+
       res.send(recipe);
     }
   } catch (err) {

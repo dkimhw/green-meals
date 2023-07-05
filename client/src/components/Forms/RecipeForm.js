@@ -508,8 +508,8 @@ const RecipeForm = (props) => {
         />
         <Button variant="outlined" type="submit" sx={{mt: '1.5rem'}}>Submit</Button>
 
-        { isEditForm ? <form onSubmit={deleteHandler} method="post"><Button variant="outlined" type="submit" sx={{mt: '1.5rem'}}>Delete</Button></form> : ''}
       </form>
+      { isEditForm ? <form onSubmit={deleteHandler} method="post"><Button variant="outlined" type="submit" sx={{mt: '1.5rem', color: 'red'}}>Delete</Button></form> : ''}
     </FormCard>
   )
 
