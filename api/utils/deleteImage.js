@@ -11,7 +11,7 @@ const s3 = new AWS.S3({
   secretAccessKey: secretAccessKey       // secretAccessKey is also store in .env file
 });
 
-const deleteImage = async (imageName) => {
+export const deleteImage = async (imageName) => {
   try {
     let params = {
       Bucket: bucketName,
@@ -32,4 +32,8 @@ const deleteImage = async (imageName) => {
 
 };
 
-export default deleteImage;
+export const deleteImages = async(images) => {
+  for (let image of images) {
+    deleteImage(image?.image_key);
+  }
+}

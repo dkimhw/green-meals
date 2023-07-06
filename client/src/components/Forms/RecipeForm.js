@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Typography } from '@mui/material';
+import { Button, Typography, Box } from '@mui/material';
 import FormCard from '../UI/FormCard';
 import classes from './AddRecipeForm.module.css';
 import IngredientsFormSection from './IngredientsFormSection';
@@ -16,6 +16,7 @@ import useFormInput from '../../hooks/useFormInput';
 import SectionTitle from '../UI/SectionTitle';
 import { useState, useEffect } from 'react';
 import { isValidImagesUploaded, validateTextInput, validateNumber, validateTimeType, validatePrivacyStatus, validateGroupInputs } from '../../utils/validateInputs';
+import { DeleteButton } from '../UI/DeleteButton';
 
 const ingredientsInputs = [
   { id: 0, ingredient_name: '', placeholder: 'e.g. Flour', hasError: false, errorMsg: '', touched: false },
@@ -506,10 +507,10 @@ const RecipeForm = (props) => {
           recipePrivacyStatusChangeHandler={recipePrivacyStatusChangeHandler}
           recipePrivacyStatusBlurInputHandler={recipePrivacyStatusBlurInputHandler}
         />
-        <Button variant="outlined" type="submit" sx={{mt: '1.5rem'}}>Submit</Button>
+        <Button variant="outlined" type="submit" sx={{mt: '1.5rem', width: '5.5rem'}}>Submit</Button>
 
       </form>
-      { isEditForm ? <form onSubmit={deleteHandler} method="post"><Button variant="outlined" type="submit" sx={{mt: '1.5rem', color: 'red'}}>Delete</Button></form> : ''}
+      { isEditForm ? <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center'}}><form onSubmit={deleteHandler} method="post"><DeleteButton/></form></Box> : ''}
     </FormCard>
   )
 

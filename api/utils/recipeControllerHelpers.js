@@ -1,17 +1,4 @@
 
-import deleteImage from "./deleteImage.js";
-
-export const deleteImagesInS3 = async(models, recipeId) => {
-  let images = await models.findAll({
-    where: {
-      recipeId: recipeId
-    }
-  });
-
-  for (let image of images) {
-    deleteImage(image?.image_key);
-  }
-}
 
 export const cleanRecipeNotesData = async(recipeNoteMessages, recipeNoteTitles, recipeID) => {
   let noteTitles = await JSON.parse(recipeNoteTitles);
