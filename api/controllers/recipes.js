@@ -75,7 +75,7 @@ export const deleteRecipe = async (req, res) => {
     const recipe = await models.Recipe.findByPk(recipeId);
 
     if (recipe) {
-      const images = await models.findAll({
+      const images = await models.RecipeImage.findAll({
         where: {
           recipeId: recipeId
         }
@@ -83,7 +83,7 @@ export const deleteRecipe = async (req, res) => {
 
       const response = await recipe.destroy();
 
-      // Only delete images if the recipe was deleted correctly
+      // Only delete images if the recipe was deleted
       if (response) {
         deleteImages(images);
       }
