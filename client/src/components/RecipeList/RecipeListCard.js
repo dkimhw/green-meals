@@ -21,7 +21,6 @@ const RecipeListCard = (props) => {
     })
       .then((response) => {
         const data = response.data;
-        console.log("data", data)
         setRecipeImages(data);
       })
       .catch(error => console.error(`Error: ${error}`));

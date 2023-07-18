@@ -26,7 +26,6 @@ const CarouselItem = (props) => {
 export const RecipeCarousel = (props) => {
   const url = `http://localhost:5051/api/recipes/images?recipeId=${props.recipeID}`;
   const { data } = useFetchData(url);
-  console.log("data", data)
   return (
     <Carousel
       NextIcon={<ArrowForwardIosIcon/>}

@@ -88,7 +88,9 @@ export const deleteRecipe = async (req, res) => {
         deleteImages(images);
       }
 
-      res.send(recipe);
+      res.send({
+        "recipeId": recipeId
+      });
     }
   } catch (err) {
     throw new Error(err);
@@ -169,7 +171,9 @@ export const updateRecipe = async (req, res) => {
   await recipe.save();
 
   // Take recipe id
-  res.json({ data: recipe });
+  res.send({
+    "recipeId": recipeID
+  });
 }
 
 // This needs to be improved - should be able to use just one create method to insert everything
@@ -213,8 +217,6 @@ export const createRecipe = async (req, res) => {
 
   let notes = [];
   for (let idx = 0; idx < noteTitles.length; idx += 1) {
-    console.log(noteTitles[idx]);
-    console.log("Check: ", noteMessages[idx]);
     notes.push({
       title: noteTitles[idx]['title'],
       text: noteMessages[idx]['note']
@@ -273,7 +275,9 @@ export const createRecipe = async (req, res) => {
   );
 
 
-  res.json({ message: "Recipe saved!" });
+  res.send({
+    "recipeId": newRecipe.dataValues.id
+  });
 }
 
 

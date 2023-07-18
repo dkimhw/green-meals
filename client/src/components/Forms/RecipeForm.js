@@ -1,4 +1,4 @@
-import React from 'react';
+import { useNavigate } from "react-router-dom";
 import { Button, Typography, Box } from '@mui/material';
 import FormCard from '../UI/FormCard';
 import classes from './AddRecipeForm.module.css';
@@ -44,6 +44,7 @@ const recipeNoteMessagesInitialValue = [
 // Multiple Files: https://www.techgeeknext.com/react/multiple-files-upload-example
 // https://www.positronx.io/react-multiple-files-upload-with-node-express-tutorial/
 const RecipeForm = (props) => {
+  const navigate = useNavigate();
   const [recipeData, setRecipeData] = useState();
   const isEditForm = props.id ? true : false;
 
@@ -314,6 +315,13 @@ const RecipeForm = (props) => {
           headers: { "Content-Type": "multipart/form-data" },
         });
         console.log(response);
+
+        if (response?.status === 200) {
+          console.log("yes");
+          console.log(response.data.recipeId)
+          navigate(`/recipe/${response.data.recipeId}`);
+        }
+
       }
     } catch (err) {
       throw err
@@ -367,7 +375,13 @@ const RecipeForm = (props) => {
         data: recipeFormInfo,
         headers: { "Content-Type": "multipart/form-data" },
       });
-      console.log(response);
+      console.log("Create response back: ", response);
+
+      if (response?.status === 200) {
+        console.log("yes");
+        console.log(response.data.recipeId)
+        navigate(`/recipe/${response.data.recipeId}`);
+      }
 
       // Clear form inputs (necessary?)
       recipeNameReset();
@@ -387,14 +401,21 @@ const RecipeForm = (props) => {
     let recipeId = props.id ? props.id : null;
     if (!recipeId) return;
 
-    const response = await axios({
-      method: "delete",
-      url: `http://localhost:5051/api/recipes/delete/${recipeId}`,
-      headers: { "Content-Type": "multipart/form-data" },
-    });
+    try {
+      const response = await axios({
+        method: "delete",
+        url: `http://localhost:5051/api/recipes/delete/${recipeId}`,
+        headers: { "Content-Type": "multipart/form-data" },
+      });
 
-    console.log(response);
-    console.log("Deleted");
+      if (response?.status === 200) {
+        console.log("yes");
+        console.log(response.data.recipeId)
+        navigate('/');
+      }
+    } catch (err) {
+      throw new Error(err);
+    }
   }
 
   return (
