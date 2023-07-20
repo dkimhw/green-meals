@@ -174,6 +174,20 @@ export const updateRecipe = async (req, res) => {
   res.send({
     "recipeId": recipeID
   });
+};
+
+export const createRecipeTest = async (req, res) => {
+  // Parse request body
+  let {
+    recipeName
+    , recipeDescription
+  } = req.body;
+
+  console.log(recipeName);
+  console.log(recipeDescription);
+  res.send({
+    "success": "success"
+  });
 }
 
 // This needs to be improved - should be able to use just one create method to insert everything
@@ -288,5 +302,6 @@ export default {
   getRecipeImages,
   updateRecipe,
   getRecipe,
+  createRecipeTest,
   deleteRecipe,
 }

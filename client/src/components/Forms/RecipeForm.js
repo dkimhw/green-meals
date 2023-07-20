@@ -47,6 +47,7 @@ const RecipeForm = (props) => {
   const navigate = useNavigate();
   const [recipeData, setRecipeData] = useState();
   const isEditForm = props.id ? true : false;
+  const [hasFormError, setHasFormError] = useState(false);
 
   const fetchAllRecipeData = async (recipeID) => {
     axios({
@@ -367,8 +368,6 @@ const RecipeForm = (props) => {
         recipeFormInfo.append('images', image);
       });
 
-      console.log(recipeIngredients);
-
       const response = await axios({
         method: "post",
         url: "http://localhost:5051/api/recipes/create",
@@ -381,6 +380,11 @@ const RecipeForm = (props) => {
         console.log("yes");
         console.log(response.data.recipeId)
         navigate(`/recipe/${response.data.recipeId}`);
+      }
+
+      // Error handling
+      if (response?.status === 500) {
+        setHasFormError(true);
       }
 
       // Clear form inputs (necessary?)
@@ -421,6 +425,7 @@ const RecipeForm = (props) => {
   return (
     <FormCard>
       <SectionTitle>{isEditForm ? 'Edit Recipe' : 'Add a Recipe'}</SectionTitle>
+      { hasFormError ? <div>There was a problem with the the form submission. Please check the inputs again </div> : '' }
       <form className={classes.form} onSubmit={submitHandler} method="post" encType="multipart/form-data">
         <RecipeInfoFormSection
           // Recipe Name

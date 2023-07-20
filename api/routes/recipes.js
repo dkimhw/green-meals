@@ -1,7 +1,8 @@
 import express from 'express';
 import recipesController from '../controllers/recipes.js';
 import multer from 'multer';
-
+import { recipeFormValidationRules, validate } from '../utils/validator.js';
+import { body, validationResult } from 'express-validator';
 
 const router = express.Router();
 
@@ -35,7 +36,19 @@ router.route('/delete/:recipeId').delete(recipesController.deleteRecipe)
 router.route('/images').get(recipesController.getRecipeImages);
 router.route('/create').post(
   upload.array("images"),
+  recipeFormValidationRules,
+  validate,
   recipesController.createRecipe
+);
+router.post(
+  '/create-test',
+  recipeFormValidationRules(),
+  // body('recipeName')
+  //   .exists().withMessage("hello")
+  //   .isString()
+  //   .notEmpty(),
+  validate,
+  recipesController.createRecipeTest
 );
 
 export default router;
