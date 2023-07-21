@@ -34,19 +34,16 @@ router.route('/edit/:recipeID').put(
 );
 router.route('/delete/:recipeId').delete(recipesController.deleteRecipe)
 router.route('/images').get(recipesController.getRecipeImages);
-router.route('/create').post(
+router.post(
+  '/create',
   upload.array("images"),
-  recipeFormValidationRules,
+  recipeFormValidationRules(),
   validate,
   recipesController.createRecipe
 );
 router.post(
   '/create-test',
   recipeFormValidationRules(),
-  // body('recipeName')
-  //   .exists().withMessage("hello")
-  //   .isString()
-  //   .notEmpty(),
   validate,
   recipesController.createRecipeTest
 );

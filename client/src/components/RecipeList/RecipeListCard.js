@@ -27,7 +27,6 @@ const RecipeListCard = (props) => {
   }
 
   useEffect(() => {
-    console.log(props);
     if (props.recipeId) {
       fetchRecipeImages(props.recipeId);
     }

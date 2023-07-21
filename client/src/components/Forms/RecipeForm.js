@@ -61,12 +61,19 @@ const RecipeForm = (props) => {
       .catch(error => console.error(`Error: ${error}`));
   }
 
+  const setErrorFromAPI = async (inputName, errMsgs) => {
+    if (inputName === 'recipeName') {
+      recipeNameServerSideErrorHandler(true);
+      recipeNameSetServerSideErrorMsgs(errMsgs);
+    }
+  }
+
   useEffect(() => {
     if (props.id) fetchAllRecipeData(props.id);
   }, [props.id]);
 
   // Input custom hooks
-  const {
+  let {
     value: recipeName
     , setEnteredValue: setRecipeName
     , isValid: isRecipenameInputValid
@@ -75,6 +82,10 @@ const RecipeForm = (props) => {
     , blurInputHandler: recipeNameBlurInputHandler
     , valueChangeHandler: recipeNameChangeHandler
     , resetInput: recipeNameReset
+    , serverSideError: recipeNameServerSideError
+    , serverSideErrorHandler: recipeNameServerSideErrorHandler
+    , serverSideErrorMsgs: recipeNameServerSideErrorMsgs
+    , setServerSideErrorMsgs: recipeNameSetServerSideErrorMsgs
   } = useFormInput(validateTextInput);
 
   const {
@@ -261,7 +272,6 @@ const RecipeForm = (props) => {
 
   // Submit Recipe Info //
   const submitHandler = (event) => {
-    console.log(isEditForm);
     return !isEditForm ? createHandler(event) : editHandler(event);
   };
 
@@ -318,8 +328,6 @@ const RecipeForm = (props) => {
         console.log(response);
 
         if (response?.status === 200) {
-          console.log("yes");
-          console.log(response.data.recipeId)
           navigate(`/recipe/${response.data.recipeId}`);
         }
 
@@ -331,72 +339,95 @@ const RecipeForm = (props) => {
 
   const createHandler = async (event) => {
     event.preventDefault();
-    console.log('submitted');
 
-    // Once the submit button has been clicked we need to make sure the input fields have been marked as touched
-    recipeNameBlurInputHandler();
-    recipeDescriptionBlurInputHandler();
-    servingSizeBlurInputHandler();
-    prepTimeBlurInputHandler();
-    prepTimeTypeBlurInputHandler();
-    cookingTimeBlurInputHandler();
-    cookingTimeTypeBlurInputHandler();
-    recipePrivacyStatusBlurInputHandler();
-    recipeNoteTitlesOnSubmit('title');
-    recipeNoteMessagesOnSubmit('note');
-    recipeIngredientsOnSubmit('ingredient_name');
-    recipeInstructionsOnSubmit('instruction_text');
+    try {
+      // Once the submit button has been clicked we need to make sure the input fields have been marked as touched
+      recipeNameBlurInputHandler();
+      recipeDescriptionBlurInputHandler();
+      servingSizeBlurInputHandler();
+      prepTimeBlurInputHandler();
+      prepTimeTypeBlurInputHandler();
+      cookingTimeBlurInputHandler();
+      cookingTimeTypeBlurInputHandler();
+      recipePrivacyStatusBlurInputHandler();
+      recipeNoteTitlesOnSubmit('title');
+      recipeNoteMessagesOnSubmit('note');
+      recipeIngredientsOnSubmit('ingredient_name');
+      recipeInstructionsOnSubmit('instruction_text');
 
-    if (isRecipeDescriptionValid && isRecipenameInputValid && isServingSizeValid
-        && isPrepTimeValid && isCookingTimeValid && isPrepTimeTypeValid
-        && isCookingTimeTypeValid && isRecipePrivacyStatusValid) {
-      const recipeFormInfo = new FormData();
-      recipeFormInfo.append('recipeName', recipeName);
-      recipeFormInfo.append('recipeDescription', recipeDescription);
-      recipeFormInfo.append('cookingTime', cookingTime);
-      recipeFormInfo.append('cookingTimeQty', cookingTimeType);
-      recipeFormInfo.append('prepTime', prepTime);
-      recipeFormInfo.append('prepTimeQty', prepTimeType);
-      recipeFormInfo.append('servingSize', servingSize);
-      recipeFormInfo.append('recipePrivacyStatus', recipePrivacyStatus);
-      recipeFormInfo.append('recipeIngredients', JSON.stringify(recipeIngredients));
-      recipeFormInfo.append('recipeInstructions',  JSON.stringify(recipeInstructions));
-      recipeFormInfo.append('recipeNoteMessages',  JSON.stringify(recipeNoteMessages));
-      recipeFormInfo.append('recipeNoteTitles',  JSON.stringify(recipeNoteTitles));
+      if (isRecipeDescriptionValid && isRecipenameInputValid && isServingSizeValid
+          && isPrepTimeValid && isCookingTimeValid && isPrepTimeTypeValid
+          && isCookingTimeTypeValid && isRecipePrivacyStatusValid) {
+        const recipeFormInfo = new FormData();
+        recipeFormInfo.append('recipeName', recipeName);
+        recipeFormInfo.append('recipeDescription', recipeDescription);
+        recipeFormInfo.append('cookingTime', cookingTime);
+        recipeFormInfo.append('cookingTimeQty', cookingTimeType);
+        recipeFormInfo.append('prepTime', prepTime);
+        recipeFormInfo.append('prepTimeQty', prepTimeType);
+        recipeFormInfo.append('servingSize', servingSize);
+        recipeFormInfo.append('recipePrivacyStatus', recipePrivacyStatus);
+        recipeFormInfo.append('recipeIngredients', JSON.stringify(recipeIngredients));
+        recipeFormInfo.append('recipeInstructions',  JSON.stringify(recipeInstructions));
+        recipeFormInfo.append('recipeNoteMessages',  JSON.stringify(recipeNoteMessages));
+        recipeFormInfo.append('recipeNoteTitles',  JSON.stringify(recipeNoteTitles));
 
-      uploadedFiles.forEach(image => {
-        recipeFormInfo.append('images', image);
-      });
+        uploadedFiles.forEach(image => {
+          recipeFormInfo.append('images', image);
+        });
 
-      const response = await axios({
-        method: "post",
-        url: "http://localhost:5051/api/recipes/create",
-        data: recipeFormInfo,
-        headers: { "Content-Type": "multipart/form-data" },
-      });
-      console.log("Create response back: ", response);
+        const response = await axios({
+          method: "post",
+          url: "http://localhost:5051/api/recipes/create",
+          data: recipeFormInfo,
+          headers: { "Content-Type": "multipart/form-data" },
+        });
 
-      if (response?.status === 200) {
-        console.log("yes");
-        console.log(response.data.recipeId)
-        navigate(`/recipe/${response.data.recipeId}`);
+        console.log("Create response back: ", response);
+
+        if (response?.status === 200) {
+          navigate(`/recipe/${response.data.recipeId}`);
+        }
+
+        // Clear form inputs (necessary?)
+        recipeNameReset();
+        recipeDescriptionReset();
+        servingSizeReset();
+        prepTimeReset();
+        prepTimeTypeReset();
+        cookingTimeReset();
+        cookingTimeTypeReset();
+        recipePrivacyStatusReset();
+
       }
-
+    } catch (err) {
       // Error handling
-      if (response?.status === 500) {
+      console.log("Create server side err", err);
+      const { response } = err;
+
+      if (response?.status === 422) {
+        // console.log("create error: ", response);
         setHasFormError(true);
+
+        const { errors } = response?.data;
+        console.log("errors", errors);
+        console.log(errors[0]['recipeName']);
+
+        const errMsgs = {};
+        for(let error of errors) {
+          console.log(error);
+          Object.entries(error).forEach(el => {
+            if (el[0] in errMsgs) {
+              errMsgs[el[0]].append(el[1]);
+            } else {
+              errMsgs[el[0]] = [el[1]];
+            }
+          })
+        }
+
+        setErrorFromAPI('recipeName', errMsgs['recipeName']);
+
       }
-
-      // Clear form inputs (necessary?)
-      recipeNameReset();
-      recipeDescriptionReset();
-      servingSizeReset();
-      prepTimeReset();
-      prepTimeTypeReset();
-      cookingTimeReset();
-      cookingTimeTypeReset();
-      recipePrivacyStatusReset();
-
     }
   };
 
@@ -413,8 +444,6 @@ const RecipeForm = (props) => {
       });
 
       if (response?.status === 200) {
-        console.log("yes");
-        console.log(response.data.recipeId)
         navigate('/');
       }
     } catch (err) {
@@ -432,6 +461,8 @@ const RecipeForm = (props) => {
           recipeName={recipeName}
           hasRecipeNameInputError={hasRecipeNameInputError}
           recipeNameErrorMsg={recipeNameErrorMsg}
+          recipeNameServerSideError={recipeNameServerSideError}
+          recipeNameServerSideErrorMsgs={recipeNameServerSideErrorMsgs}
           isRecipenameInputValid={isRecipenameInputValid}
           recipeNameBlurInputHandler={recipeNameBlurInputHandler}
           recipeNameChangeHandler={recipeNameChangeHandler}
