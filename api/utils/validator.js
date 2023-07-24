@@ -14,7 +14,8 @@ export const recipeFormValidationRules = () => {
     body('recipeDescription')
       .exists().withMessage('Recipe description is required.')
       .isString()
-      .notEmpty(),
+      .notEmpty()
+      .isLength({ min: 2 }).withMessage('Recipe description is not long enough - must be at least two characters long.'),
 
     // serving size
     body('servingSize')

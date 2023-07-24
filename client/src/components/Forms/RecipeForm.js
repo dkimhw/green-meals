@@ -17,6 +17,7 @@ import SectionTitle from '../UI/SectionTitle';
 import { useState, useEffect } from 'react';
 import { isValidImagesUploaded, validateTextInput, validateNumber, validateTimeType, validatePrivacyStatus, validateGroupInputs } from '../../utils/validateInputs';
 import { DeleteButton } from '../UI/DeleteButton';
+import { recipeServerSideError } from "../../utils/recipeFormErrorHelpers";
 
 const ingredientsInputs = [
   { id: 0, ingredient_name: '', placeholder: 'e.g. Flour', hasError: false, errorMsg: '', touched: false },
@@ -47,7 +48,6 @@ const RecipeForm = (props) => {
   const navigate = useNavigate();
   const [recipeData, setRecipeData] = useState();
   const isEditForm = props.id ? true : false;
-  const [hasFormError, setHasFormError] = useState(false);
 
   const fetchAllRecipeData = async (recipeID) => {
     axios({
@@ -65,6 +65,12 @@ const RecipeForm = (props) => {
     if (inputName === 'recipeName') {
       recipeNameServerSideErrorHandler(true);
       recipeNameSetServerSideErrorMsgs(errMsgs);
+    } else if (inputName === 'servingSize') {
+      servingSizeServerSideErrorHandler(true);
+      servingSizeSetServerSideErrorMsgs(errMsgs);
+    } else if (inputName === 'recipeDescription') {
+      recipeDescriptionServerSideErrorHandler(true);
+      recipeDescriptionSetServerSideErrorMsgs(errMsgs);
     }
   }
 
@@ -81,7 +87,6 @@ const RecipeForm = (props) => {
     , errMsg: recipeNameErrorMsg
     , blurInputHandler: recipeNameBlurInputHandler
     , valueChangeHandler: recipeNameChangeHandler
-    , resetInput: recipeNameReset
     , serverSideError: recipeNameServerSideError
     , serverSideErrorHandler: recipeNameServerSideErrorHandler
     , serverSideErrorMsgs: recipeNameServerSideErrorMsgs
@@ -96,7 +101,10 @@ const RecipeForm = (props) => {
     , errMsg: recipeDescriptionErrorMsg
     , blurInputHandler: recipeDescriptionBlurInputHandler
     , valueChangeHandler: recipeDescriptionChangeHandler
-    , resetInput: recipeDescriptionReset
+    , serverSideError: recipeDescriptionServerSideError
+    , serverSideErrorHandler: recipeDescriptionServerSideErrorHandler
+    , serverSideErrorMsgs: recipeDescriptionServerSideErrorMsgs
+    , setServerSideErrorMsgs: recipeDescriptionSetServerSideErrorMsgs
   } = useFormInput(validateTextInput);
 
   const {
@@ -107,7 +115,10 @@ const RecipeForm = (props) => {
     , errMsg: servingSizeErrorMsg
     , blurInputHandler: servingSizeBlurInputHandler
     , valueChangeHandler: servingSizeChangeHandler
-    , resetInput: servingSizeReset
+    , serverSideError: servingSizeServerSideError
+    , serverSideErrorHandler: servingSizeServerSideErrorHandler
+    , serverSideErrorMsgs: servingSizeServerSideErrorMsgs
+    , setServerSideErrorMsgs: servingSizeSetServerSideErrorMsgs
   } = useFormInput(validateNumber);
 
   const {
@@ -118,7 +129,6 @@ const RecipeForm = (props) => {
     , errMsg: prepTimeErrorMsg
     , blurInputHandler: prepTimeBlurInputHandler
     , valueChangeHandler: prepTimeChangeHandler
-    , resetInput: prepTimeReset
   } = useFormInput(validateNumber);
 
   const {
@@ -129,7 +139,6 @@ const RecipeForm = (props) => {
     , errMsg: prepTimeTypeErrorMsg
     , blurInputHandler: prepTimeTypeBlurInputHandler
     , valueChangeHandler: prepTimeTypeChangeHandler
-    , resetInput: prepTimeTypeReset
   } = useFormInput(validateTimeType, 'minutes');
 
   const {
@@ -140,7 +149,6 @@ const RecipeForm = (props) => {
     , errMsg: cookingTimeErrorMsg
     , blurInputHandler: cookingTimeBlurInputHandler
     , valueChangeHandler: cookingTimeChangeHandler
-    , resetInput: cookingTimeReset
   } = useFormInput(validateNumber);
 
   const {
@@ -151,7 +159,6 @@ const RecipeForm = (props) => {
     , errMsg: cookingTimeTypeErrorMsg
     , blurInputHandler: cookingTimeTypeBlurInputHandler
     , valueChangeHandler: cookingTimeTypeChangeHandler
-    , resetInput: cookingTimeTypeReset
   } = useFormInput(validateTimeType, 'minutes');
 
   const {
@@ -162,7 +169,6 @@ const RecipeForm = (props) => {
     , errMsg: recipePrivacyStatusErrorMsg
     , blurInputHandler: recipePrivacyStatusBlurInputHandler
     , valueChangeHandler: recipePrivacyStatusChangeHandler
-    , resetInput: recipePrivacyStatusReset
   } = useFormInput(validatePrivacyStatus, 'public');
 
   // Grouped multipe inputs
@@ -383,51 +389,21 @@ const RecipeForm = (props) => {
           headers: { "Content-Type": "multipart/form-data" },
         });
 
-        console.log("Create response back: ", response);
-
         if (response?.status === 200) {
           navigate(`/recipe/${response.data.recipeId}`);
         }
-
-        // Clear form inputs (necessary?)
-        recipeNameReset();
-        recipeDescriptionReset();
-        servingSizeReset();
-        prepTimeReset();
-        prepTimeTypeReset();
-        cookingTimeReset();
-        cookingTimeTypeReset();
-        recipePrivacyStatusReset();
-
       }
     } catch (err) {
       // Error handling
-      console.log("Create server side err", err);
       const { response } = err;
+      const errMsgs = await recipeServerSideError(response?.status,  response?.data);
+      console.log('errMsgs', errMsgs);
 
-      if (response?.status === 422) {
-        // console.log("create error: ", response);
-        setHasFormError(true);
-
-        const { errors } = response?.data;
-        console.log("errors", errors);
-        console.log(errors[0]['recipeName']);
-
-        const errMsgs = {};
-        for(let error of errors) {
-          console.log(error);
-          Object.entries(error).forEach(el => {
-            if (el[0] in errMsgs) {
-              errMsgs[el[0]].append(el[1]);
-            } else {
-              errMsgs[el[0]] = [el[1]];
-            }
-          })
-        }
-
-        setErrorFromAPI('recipeName', errMsgs['recipeName']);
-
-      }
+      Object.entries(errMsgs).forEach(err => {
+        // setErrorFromAPI('recipeName', errMsgs['recipeName']);
+        console.log("hello err", err);
+        setErrorFromAPI(err[0], err[1]);
+      });
     }
   };
 
@@ -454,7 +430,6 @@ const RecipeForm = (props) => {
   return (
     <FormCard>
       <SectionTitle>{isEditForm ? 'Edit Recipe' : 'Add a Recipe'}</SectionTitle>
-      { hasFormError ? <div>There was a problem with the the form submission. Please check the inputs again </div> : '' }
       <form className={classes.form} onSubmit={submitHandler} method="post" encType="multipart/form-data">
         <RecipeInfoFormSection
           // Recipe Name
@@ -471,6 +446,8 @@ const RecipeForm = (props) => {
           recipeDescription={recipeDescription}
           hasRecipeDescriptionInputError={hasRecipeDescriptionInputError}
           recipeDescriptionErrorMsg={recipeDescriptionErrorMsg}
+          recipeDescriptionServerSideError={recipeDescriptionServerSideError}
+          recipeDescriptionServerSideErrorMsgs={recipeDescriptionServerSideErrorMsgs}
           recipeDescriptionBlurInputHandler={recipeDescriptionBlurInputHandler}
           recipeDescriptionChangeHandler={recipeDescriptionChangeHandler}
 
@@ -478,6 +455,8 @@ const RecipeForm = (props) => {
           servingSize={servingSize}
           hasServingSizeInputError={hasServingSizeInputError}
           servingSizeErrorMsg={servingSizeErrorMsg}
+          servingSizeServerSideError={servingSizeServerSideError}
+          servingSizeServerSideErrorMsgs={servingSizeServerSideErrorMsgs}
           servingSizeBlurInputHandler={servingSizeBlurInputHandler}
           servingSizeChangeHandler={servingSizeChangeHandler}
 
