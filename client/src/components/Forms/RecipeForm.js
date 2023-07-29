@@ -71,6 +71,18 @@ const RecipeForm = (props) => {
     } else if (inputName === 'recipeDescription') {
       recipeDescriptionServerSideErrorHandler(true);
       recipeDescriptionSetServerSideErrorMsgs(errMsgs);
+    } else if (inputName === 'prepTime') {
+      prepTimeServerSideErrorHandler(true);
+      prepTimeSetServerSideErrorMsgs(errMsgs);
+    } else if (inputName === 'prepTimeQty') {
+      prepTimeTypeServerSideErrorHandler(true);
+      prepTimeTypeSetServerSideErrorMsgs(errMsgs);
+    } else if (inputName === 'cookingTime') {
+      cookingTimeServerSideErrorHandler(true);
+      cookingTimeSetServerSideErrorMsgs(errMsgs);
+    } else if (inputName === 'cookingTimeQty') {
+      cookingTimeTypeServerSideErrorHandler(true);
+      cookingTimeTypeSetServerSideErrorMsgs(errMsgs);
     }
   }
 
@@ -129,6 +141,10 @@ const RecipeForm = (props) => {
     , errMsg: prepTimeErrorMsg
     , blurInputHandler: prepTimeBlurInputHandler
     , valueChangeHandler: prepTimeChangeHandler
+    , serverSideError: prepTimeServerSideError
+    , serverSideErrorHandler: prepTimeServerSideErrorHandler
+    , serverSideErrorMsgs: prepTimeServerSideErrorMsgs
+    , setServerSideErrorMsgs: prepTimeSetServerSideErrorMsgs
   } = useFormInput(validateNumber);
 
   const {
@@ -139,6 +155,10 @@ const RecipeForm = (props) => {
     , errMsg: prepTimeTypeErrorMsg
     , blurInputHandler: prepTimeTypeBlurInputHandler
     , valueChangeHandler: prepTimeTypeChangeHandler
+    , serverSideError: prepTimeTypeServerSideError
+    , serverSideErrorHandler: prepTimeTypeServerSideErrorHandler
+    , serverSideErrorMsgs: prepTimeTypeServerSideErrorMsgs
+    , setServerSideErrorMsgs: prepTimeTypeSetServerSideErrorMsgs
   } = useFormInput(validateTimeType, 'minutes');
 
   const {
@@ -149,6 +169,10 @@ const RecipeForm = (props) => {
     , errMsg: cookingTimeErrorMsg
     , blurInputHandler: cookingTimeBlurInputHandler
     , valueChangeHandler: cookingTimeChangeHandler
+    , serverSideError: cookingTimeServerSideError
+    , serverSideErrorHandler: cookingTimeServerSideErrorHandler
+    , serverSideErrorMsgs: cookingTimeServerSideErrorMsgs
+    , setServerSideErrorMsgs: cookingTimeSetServerSideErrorMsgs
   } = useFormInput(validateNumber);
 
   const {
@@ -159,6 +183,10 @@ const RecipeForm = (props) => {
     , errMsg: cookingTimeTypeErrorMsg
     , blurInputHandler: cookingTimeTypeBlurInputHandler
     , valueChangeHandler: cookingTimeTypeChangeHandler
+    , serverSideError: cookingTimeTypeServerSideError
+    , serverSideErrorHandler: cookingTimeTypeServerSideErrorHandler
+    , serverSideErrorMsgs: cookingTimeTypeServerSideErrorMsgs
+    , setServerSideErrorMsgs: cookingTimeTypeSetServerSideErrorMsgs
   } = useFormInput(validateTimeType, 'minutes');
 
   const {
@@ -497,6 +525,8 @@ const RecipeForm = (props) => {
           prepTimeErrorMsg={prepTimeErrorMsg}
           prepTimeBlurInputHandler={prepTimeBlurInputHandler}
           prepTimeChangeHandler={prepTimeChangeHandler}
+          prepTimeServerSideError={prepTimeServerSideError}
+          prepTimeServerSideErrorMsgs={prepTimeServerSideErrorMsgs}
 
           // Prep Time Type
           prepTimeType={prepTimeType}
@@ -504,6 +534,8 @@ const RecipeForm = (props) => {
           prepTimeTypeErrorMsg={prepTimeTypeErrorMsg}
           prepTimeTypeBlurInputHandler={prepTimeTypeBlurInputHandler}
           prepTimeTypeChangeHandler={prepTimeTypeChangeHandler}
+          prepTimeTypeServerSideError={prepTimeTypeServerSideError}
+          prepTimeTypeServerSideErrorMsgs={prepTimeTypeServerSideErrorMsgs}
 
           // Cooking Time
           cookingTime={cookingTime}
@@ -511,6 +543,8 @@ const RecipeForm = (props) => {
           cookingTimeErrorMsg={cookingTimeErrorMsg}
           cookingTimeBlurInputHandler={cookingTimeBlurInputHandler}
           cookingTimeChangeHandler={cookingTimeChangeHandler}
+          cookingTimeServerSideError={cookingTimeServerSideError}
+          cookingTimeServerSideErrorMsgs={cookingTimeServerSideErrorMsgs}
 
           // Cooking Time Type
           cookingTimeType={cookingTimeType}
@@ -518,6 +552,8 @@ const RecipeForm = (props) => {
           cookingTimeTypeErrorMsg={cookingTimeTypeErrorMsg}
           cookingTimeTypeChangeHandler={cookingTimeTypeChangeHandler}
           cookingTimeTypeBlurInputHandler={cookingTimeTypeBlurInputHandler}
+          cookingTimeTypeServerSideError={cookingTimeTypeServerSideError}
+          cookingTimeTypeServerSideErrorMsgs={cookingTimeTypeServerSideErrorMsgs}
         />
         <Divider />
         <RecipeNotesFormSection

@@ -81,7 +81,7 @@ export const validateEmail = (email) => {
 };
 
 export const validateTimeType = (timeType) => {
-  if (['minutes', 'hours', 'days'].includes(timeType)) {
+  if (['minutes', 'hours', 'days', 'blah'].includes(timeType)) {
     return {
       isValid: true,
       errorMsg: null
