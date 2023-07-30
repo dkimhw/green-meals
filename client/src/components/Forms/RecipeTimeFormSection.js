@@ -36,7 +36,6 @@ const RecipeTimeFormSection = (props) => {
             <MenuItem value={'minutes'}>minutes</MenuItem>
             <MenuItem value={'hours'}>hours</MenuItem>
             <MenuItem value={'days'}>days</MenuItem>
-            <MenuItem value={'blah'}>blah</MenuItem>
           </Select>
           {props.hasPrepTimeTypeInputError ? <FormHelperText>{props.prepTimeTypeErrorMsg}</FormHelperText> : '' || props.prepTimeTypeServerSideError ? <FormHelperText>{props.prepTimeTypeServerSideErrorMsgs[0]}</FormHelperText> : ''}
         </FormControl>
@@ -54,7 +53,7 @@ const RecipeTimeFormSection = (props) => {
           onChange={props.cookingTimeChangeHandler}
           onBlur={props.cookingTimeBlurInputHandler}
         />
-        <FormControl fullWidth error={props.hasCookingTimeTypeInputError}>
+        <FormControl fullWidth error={props.hasCookingTimeTypeInputError || props.cookingTimeTypeServerSideError }>
           <InputLabel id="cooking-time-type">Cooking Time Qty</InputLabel>
           <Select
             labelId="cooking-time-type-label"
@@ -68,9 +67,12 @@ const RecipeTimeFormSection = (props) => {
             <MenuItem value={'minutes'}>minutes</MenuItem>
             <MenuItem value={'hours'}>hours</MenuItem>
             <MenuItem value={'days'}>days</MenuItem>
-            <MenuItem value={'blah'}>blah</MenuItem>
           </Select>
-          {props.hasCookingTimeTypeInputError ? <FormHelperText>{props.cookingTimeTypeErrorMsg}</FormHelperText> : ''}
+          {
+            props.hasCookingTimeTypeInputError ? <FormHelperText>{props.cookingTimeTypeErrorMsg}</FormHelperText> : ''
+            ||
+            props.cookingTimeTypeServerSideError ? <FormHelperText>{props.cookingTimeTypeServerSideErrorMsgs[0]}</FormHelperText> : ''
+          }
         </FormControl>
       </div>
     </React.Fragment>

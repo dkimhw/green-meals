@@ -2,7 +2,7 @@ import express from 'express';
 import recipesController from '../controllers/recipes.js';
 import multer from 'multer';
 import { recipeFormValidationRules, validate } from '../utils/validator.js';
-import { body, validationResult } from 'express-validator';
+import { parseJSONString } from '../middleware/parseJSONString.js';
 
 const router = express.Router();
 
@@ -37,6 +37,7 @@ router.route('/images').get(recipesController.getRecipeImages);
 router.post(
   '/create',
   upload.array("images"),
+  parseJSONString,
   recipeFormValidationRules(),
   validate,
   recipesController.createRecipe

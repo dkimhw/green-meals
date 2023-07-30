@@ -20,8 +20,6 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(cors()); // Allow cross-origin requests
 
-
-
 // Routes
 app.get('/', (req, res) => {
   res.send('Hello World!');

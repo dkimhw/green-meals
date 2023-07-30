@@ -46,11 +46,11 @@ export const recipeFormValidationRules = () => {
 
     // recipe ingredients
     body('recipeIngredients')
-      .isArray(),
+      .isArray().withMessage('Ingredient value must be an array'),
 
     body('recipeIngredients.*')
       .isString().withMessage('Ingredient value must be a string.')
-      .isLength({ min: 0 }).withMessage('Ingredient values cannot be empty.'),
+      .isLength({ min: 1 }).withMessage('Ingredient value is not long enough - must be at least two characters long.'),
 
   ];
 };

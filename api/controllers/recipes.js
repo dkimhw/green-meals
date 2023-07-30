@@ -209,6 +209,7 @@ export const createRecipe = async (req, res) => {
   } = req.body;
 
   // Parse directions, ingredients, and notes for bulk create
+  console.log(recipeIngredients);
   let ingredients = JSON.parse(recipeIngredients);
   ingredients = ingredients.map(ingredient => {
     return {
