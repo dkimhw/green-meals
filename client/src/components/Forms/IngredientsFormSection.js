@@ -7,6 +7,8 @@ import FormInputAlert from '../UI/FormInputAlert';
 
 
 const AddIngredientsFormSection = (props) => {
+
+
   return (
     <React.Fragment>
       {props.hasRecipeIngredientsError ? <Alert severity="error" sx={{'mb': '.75rem'}}>{props.recipeIngredientsErrorMsg}</Alert> : ''}
@@ -18,8 +20,12 @@ const AddIngredientsFormSection = (props) => {
                 id={`recipe-name-${input.id}`}
                 name='ingredient_name'
                 placeholder={input.placeholder}
-                error={input.hasError}
-                helperText={input.hasError ? input.errorMsg : '' }
+                error={input.hasError || input.serverSideError}
+                helperText={
+                  input.hasError ? input.errorMsg : ''
+                  ||
+                  input.serverSideError ? input.serverSideMsgs[0] : ''
+                }
                 onChange={props.handleIngredientNameChange}
                 onBlur={props.handleIngredientBlur}
                 variant="outlined"

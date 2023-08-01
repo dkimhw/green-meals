@@ -17,7 +17,7 @@ import SectionTitle from '../UI/SectionTitle';
 import { useState, useEffect } from 'react';
 import { isValidImagesUploaded, validateTextInput, validateNumber, validateTimeType, validatePrivacyStatus, validateGroupInputs } from '../../utils/validateInputs';
 import { DeleteButton } from '../UI/DeleteButton';
-import { recipeServerSideError } from "../../utils/recipeFormErrorHelpers";
+import { cleanRecipeServerSideErrors } from "../../utils/recipeFormErrorHelpers";
 
 const ingredientsInputs = [
   { id: 0, ingredient_name: '', placeholder: 'e.g. Flour', hasError: false, errorMsg: '', touched: false },
@@ -83,6 +83,8 @@ const RecipeForm = (props) => {
     } else if (inputName === 'cookingTimeQty') {
       cookingTimeTypeServerSideErrorHandler(true);
       cookingTimeTypeSetServerSideErrorMsgs(errMsgs);
+    } else if (inputName.includes('recipeIngredients')) {
+      recipeIngredientHandleServerErrors(inputName, errMsgs);
     }
   }
 
@@ -91,7 +93,7 @@ const RecipeForm = (props) => {
   }, [props.id]);
 
   // Input custom hooks
-  let {
+  const {
     value: recipeName
     , setEnteredValue: setRecipeName
     , isValid: isRecipenameInputValid
@@ -210,6 +212,7 @@ const RecipeForm = (props) => {
     , onSubmitValidate: recipeIngredientsOnSubmit
     , groupInputsErrorMsg: recipeIngredientsErrorMsg
     , hasGroupInputsError: hasRecipeIngredientsError
+    , handleServerErrors: recipeIngredientHandleServerErrors
   } = useMultipleInputs(
     ingredientsInputs,
     { id: 0, ingredient_name: '', placeholder: 'Add a new ingredient', hasError: false, error: '' },
@@ -424,12 +427,8 @@ const RecipeForm = (props) => {
     } catch (err) {
       // Error handling
       const { response } = err;
-      const errMsgs = await recipeServerSideError(response?.status,  response?.data);
-      console.log('errMsgs', errMsgs);
-
+      const errMsgs = await cleanRecipeServerSideErrors(response?.status,  response?.data);
       Object.entries(errMsgs).forEach(err => {
-        // setErrorFromAPI('recipeName', errMsgs['recipeName']);
-        console.log("hello err", err);
         setErrorFromAPI(err[0], err[1]);
       });
     }
