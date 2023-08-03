@@ -7,9 +7,10 @@ import { TextField, IconButton } from '@mui/material';
 
 export const TextInputWithCloseIcon = (props) => {
   const theme = useTheme();
-
   // Custom styling for action bar
+  console.log("hello")
   const ButtonGroupBox = styled(Box) ({
+    position: 'relative'
   });
 
   const TextFieldInput = styled(TextField) ({
@@ -24,9 +25,11 @@ export const TextInputWithCloseIcon = (props) => {
   const CloseIconButton = styled(IconButton) ({
     position: 'absolute !important',
     right: '-17.5%',
-    top: '10%',
+    top: '12.5%',
+    width: '3rem',
+    color: theme.palette.primary.main,
     '@media (max-width: 780px)': {
-      fontSize: '1rem'
+      right: '-20%'
     }
   });
 
@@ -40,6 +43,7 @@ export const TextInputWithCloseIcon = (props) => {
       }}
     >
       <TextFieldInput
+        key={props.index}
         id={props.textFieldIdName}
         name={props.name}
         placeholder={props.placeholder}
@@ -52,18 +56,27 @@ export const TextInputWithCloseIcon = (props) => {
         onChange={props.onChange}
         onBlur={props.onBlur}
         variant="outlined"
-        value={props.ingredient_name || ''}
+        value={props.value || ''}
         label={props.label}
       />
       <CloseIconButton
         id={props.iconButtonIdName}
-        color = { theme.palette.primary.main }
         onClick={() => props.iconOnClick(props.id)}
         aria-label={props.iconButtonAriaLabel}
         component={props.iconButtonComponent}
       >
         <CloseIcon sx={{fontSize: '1.75rem'}}/>
       </CloseIconButton>
+      {/* <IconButton
+        id={props.iconButtonIdName}
+        // =color = { theme.palette.primary.main }
+        onClick={() => props.iconOnClick(props.id)}
+        aria-label={props.iconButtonAriaLabel}
+        component={props.iconButtonComponent}
+      >
+        Hello
+        <CloseIcon sx={{fontSize: '1.75rem'}}/>
+      </IconButton> */}
     </ButtonGroupBox>
   )
 }

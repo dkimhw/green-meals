@@ -50,7 +50,7 @@ export const recipeFormValidationRules = () => {
 
     body('recipeIngredients.*.ingredient_name')
       .isString().withMessage('Ingredient value must be a string.')
-      .isLength({ min: 2 }).withMessage('Must be at least two characters long.'),
+      .isLength({ min: 2 }).withMessage('Ingredient value is not long enough. Must be at least two characters long.'),
 
   ];
 };

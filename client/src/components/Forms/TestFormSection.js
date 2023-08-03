@@ -3,17 +3,18 @@ import React from 'react';
 import { Button, Alert } from '@mui/material';
 import classes from './IngredientsFormSection.module.css';
 import FormInputAlert from '../UI/FormInputAlert';
-import { TextInputWithCloseIcon } from '../UI/textInputWithCloseIcon';
+import { TextInputWithCloseIcon } from '../UI/TextInputWithCloseIcon';
 
 export const TestIngredientsSection = (props) => {
   return (
     <React.Fragment>
       {props.hasRecipeIngredientsError ? <Alert severity="error" sx={{'mb': '.75rem'}}>{props.recipeIngredientsErrorMsg}</Alert> : ''}
-      {props.ingredients ? props.ingredients.map((input) => {
+      {props.ingredients ? props.ingredients.map((input, index) => {
         return (
-          <React.Fragment key={input.id}>
             <TextInputWithCloseIcon
               /* Text Field props */
+              key={index}
+              index={index}
               textFieldIdName={`recipe-name-${input.id}`}
               name='ingredient_name'
               id={input.id}
@@ -33,12 +34,10 @@ export const TestIngredientsSection = (props) => {
               iconButtonAriaLabel="remove ingredient"
               iconButtonComponent="label"
             />
-            {input.hasError ? <FormInputAlert msg={input.error} css={classes['ingredients-form-group-error']}/> : '' }
-          </React.Fragment>
         )
       }) : ''}
 
-      <Button variant="contained" color="primary" sx={{mb: '1rem', display: 'flex', justifyContent: 'center'}} onClick={props.addIngredient}>Add Ingredient</Button>
+      <Button variant="contained" color="primary" sx={{mb: '1rem', mt: '1rem', display: 'flex', justifyContent: 'center'}} onClick={props.addIngredient}>Add Ingredient</Button>
     </React.Fragment>
   )
 }
