@@ -18,7 +18,7 @@ import { useState, useEffect } from 'react';
 import { isValidImagesUploaded, validateTextInput, validateNumber, validateTimeType, validatePrivacyStatus, validateGroupInputs } from '../../utils/validateInputs';
 import { DeleteButton } from '../UI/DeleteButton';
 import { cleanRecipeServerSideErrors } from "../../utils/recipeFormErrorHelpers";
-import { TestIngredientsSection } from "./TestFormSection";
+
 
 const ingredientsInputs = [
   { id: 0, ingredient_name: '', placeholder: 'e.g. Flour', hasError: false, errorMsg: '', touched: false },
@@ -494,19 +494,8 @@ const RecipeForm = (props) => {
           filesData={filesData}
           fileErrors={fileErrors}
         />
-        <Divider />
-        <Typography variant="h5" sx={{mb: '1rem'}}>Ingredients Test</Typography>
-        <TestIngredientsSection
-          ingredients={recipeIngredients}
-          addIngredient={addIngredient}
-          removeIngredient={removeIngredient}
-          handleIngredientNameChange={handleIngredientNameChange}
-          handleIngredientBlur={handleIngredientBlur}
-          recipeIngredientsErrorMsg={recipeIngredientsErrorMsg}
-          hasRecipeIngredientsError={hasRecipeIngredientsError}
-        />
 
-        {/* <Divider />
+        <Divider />
         <Typography variant="h5" sx={{mb: '1rem'}}>Ingredients</Typography>
         <IngredientsFormSection
           ingredients={recipeIngredients}
@@ -516,7 +505,7 @@ const RecipeForm = (props) => {
           handleIngredientBlur={handleIngredientBlur}
           recipeIngredientsErrorMsg={recipeIngredientsErrorMsg}
           hasRecipeIngredientsError={hasRecipeIngredientsError}
-        /> */}
+        />
         <Divider />
         <Typography variant="h5" sx={{mb: '1rem'}}>Directions</Typography>
         <RecipeInstructionsFormSection

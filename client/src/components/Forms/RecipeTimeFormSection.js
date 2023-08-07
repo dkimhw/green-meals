@@ -79,4 +79,4 @@ const RecipeTimeFormSection = (props) => {
   );
 }
 
-export default RecipeTimeFormSection
+export default RecipeTimeFormSection;

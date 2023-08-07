@@ -5,10 +5,9 @@ import CloseIcon from '@mui/icons-material/Close';
 import { TextField, IconButton } from '@mui/material';
 
 
-export const TextInputWithCloseIcon = (props) => {
+const TextInputWithCloseIcon = (props) => {
   const theme = useTheme();
   // Custom styling for action bar
-  console.log("hello")
   const ButtonGroupBox = styled(Box) ({
     position: 'relative'
   });
@@ -36,6 +35,7 @@ export const TextInputWithCloseIcon = (props) => {
 
   return (
     <ButtonGroupBox
+      key={props.textFieldIdName}
       sx={{
         display: 'flex',
         justifyContent: 'flex-start',
@@ -43,7 +43,6 @@ export const TextInputWithCloseIcon = (props) => {
       }}
     >
       <TextFieldInput
-        key={props.index}
         id={props.textFieldIdName}
         name={props.name}
         placeholder={props.placeholder}
@@ -80,3 +79,5 @@ export const TextInputWithCloseIcon = (props) => {
     </ButtonGroupBox>
   )
 }
+
+export default TextInputWithCloseIcon;
