@@ -86,6 +86,12 @@ const RecipeForm = (props) => {
       cookingTimeTypeSetServerSideErrorMsgs(errMsgs);
     } else if (inputName.includes('recipeIngredients')) {
       recipeIngredientHandleServerErrors(inputName, errMsgs);
+    } else if (inputName.includes('recipeInstructions')) {
+      recipeInstructionsHandleServerErrors(inputName, errMsgs);
+    } else if (inputName.includes('recipeNoteTitles')) {
+      recipeNoteTitlesHandleServerErrors(inputName, errMsgs);
+    } else if (inputName.includes('recipeNoteMessages')) {
+      recipeNoteMessagesHandleServerErrors(inputName, errMsgs);
     }
   }
 
@@ -232,6 +238,7 @@ const RecipeForm = (props) => {
     , onSubmitValidate: recipeInstructionsOnSubmit
     , groupInputsErrorMsg: recipeInstructionsErrorMsg
     , hasGroupInputsError: hasRecipeInstructionsError
+    , handleServerErrors: recipeInstructionsHandleServerErrors
   } = useMultipleInputs(
     recipeInstructionsIntitalValue,
     { id: 0, instruction_text: '', placeholder: 'Add another instruction' },
@@ -248,6 +255,7 @@ const RecipeForm = (props) => {
     , handleChange: handleRecipeNoteTitlesChange
     , onBlur: handleRecipeNoteTitlesBlur
     , onSubmitValidate: recipeNoteTitlesOnSubmit
+    , handleServerErrors: recipeNoteTitlesHandleServerErrors
   } = useMultipleInputs(
     recipeNoteTitlesInitialValue,
     { id: 0, title: ''},
@@ -262,6 +270,7 @@ const RecipeForm = (props) => {
     , handleChange: handleRecipeNoteMessagesChange
     , onBlur: handleRecipeNoteMessagesBlur
     , onSubmitValidate: recipeNoteMessagesOnSubmit
+    , handleServerErrors: recipeNoteMessagesHandleServerErrors
   } = useMultipleInputs(
     recipeNoteMessagesInitialValue,
     { id: 0, note: '' },
@@ -507,7 +516,7 @@ const RecipeForm = (props) => {
           hasRecipeIngredientsError={hasRecipeIngredientsError}
         />
         <Divider />
-        <Typography variant="h5" sx={{mb: '1rem'}}>Directions</Typography>
+        <Typography variant="h5" sx={{mb: '1rem'}}>Instructions</Typography>
         <RecipeInstructionsFormSection
           instructions={recipeInstructions}
           addRecipeInstruction={addRecipeInstruction}

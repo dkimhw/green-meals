@@ -27,7 +27,6 @@ const useMultipleInputs = (intialValues, defaultValue, validate, groupValidate=n
     values[idx]['serverSideError'] = !values[idx]['serverError'];
     values[idx]['serverSideMsgs'] = serverError;
 
-    console.log("info values", values);
     setInputArray(values);
   }
 

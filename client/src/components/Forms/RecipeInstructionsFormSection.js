@@ -16,8 +16,8 @@ const TextFieldInput = styled(TextField) ({
 
 const CloseIconButton = styled(IconButton) ({
   position: 'absolute !important',
-  right: '-17.5%',
-  top: '12.5%',
+  right: '-3rem',
+  top: '.75rem',
   width: '3rem',
   '@media (max-width: 780px)': {
     right: '-17.5%'
@@ -37,8 +37,12 @@ const RecipeInstructionsFormSection = (props) => {
               name='instruction_text'
               placeholder={input.placeholder}
               label={`Step ${idx + 1}`}
-              error={input.hasError}
-              helperText={input.hasError ? input.errorMsg : '' }
+              error={input.hasError || input.serverSideError}
+              helperText={
+                input.hasError ? input.errorMsg : ''
+                ||
+                input.serverSideError ? input.serverSideMsgs[0] : ''
+              }
               multiline
               maxRows={4}
               value={input.instruction_text || ''}

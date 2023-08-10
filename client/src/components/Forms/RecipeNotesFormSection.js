@@ -1,8 +1,29 @@
 
 import React from 'react';
+import { styled } from '@mui/system';
 import { TextField, InputLabel, IconButton, Button, Alert } from '@mui/material'
 import classes from './RecipeNotesFormSection.module.css'
 import CloseIcon from '@mui/icons-material/Close';
+
+const TextFieldInput = styled(TextField) ({
+  marginTop: '1rem',
+  marginBottom: '1rem',
+  width: '375px',
+  '@media (max-width: 780px)': {
+    width: '100%'
+  },
+});
+
+const CloseIconButton = styled(IconButton) ({
+  position: 'absolute !important',
+  right: '-12.5%',
+  top: '3rem',
+  width: '3rem',
+  '@media (max-width: 780px)': {
+    right: '-17.5%'
+  },
+});
+
 
 // Add functionality to add additional notes
 const RecipeNotesFormSection = (props) => {
@@ -12,32 +33,31 @@ const RecipeNotesFormSection = (props) => {
     recipeNotes.push([props.recipeNoteTitles[idx], props.recipeNoteMessages[idx]])
   };
 
-  // const removeRecipeNote = (id) => {
-  //   props.removeRecipeNoteMessages(id);
-  //   props.handleRecipeNoteTitlesChange(id);
-  // }
-
   return (
     <div className={classes['notes-form-section']}>
       {props.hasRecipeNoteTitlesError ? <Alert severity="error" sx={{'mb': '.75rem'}}>{props.hasRecipeNoteTitlesError}</Alert> : ''}
       {recipeNotes ? recipeNotes.map((note) => {
+       let titleServerSideError = note[0]?.serverSideError;
+       console.log("titleServerSideError", titleServerSideError);
        return(
         <div key={note[0].id}>
           <div className={classes['note-input-group']}>
-            <InputLabel id={`note-title-${note[0].id}`} className={classes['note-label']}>Title</InputLabel>
-            <TextField
+            <InputLabel id={`note-title-${note[0].id}`}>Title</InputLabel>
+            <TextFieldInput
               id={`note-title-${note[0].id}`}
               name='title'
               placeholder="e.g. Cook's Tips"
-              variant="outlined"
-              className={`${classes['form-notes-input']} ${classes['note-input']}`}
+              error={note[0].hasError || titleServerSideError}
+              helperText={
+                note[0].hasError ? note[0].errorMsg : ''
+                ||
+                note[0].serverSideError ? note[0].serverSideMsgs[0] : ''
+              }
               value={note[0].title || ""}
-              error={note[0].hasError}
-              helperText={note[0].hasError ? note[0].errorMsg : '' }
               onChange={props.handleRecipeNoteTitlesChange}
               onBlur={props.handleRecipeNoteTitlesBlur}
             />
-            <IconButton
+            <CloseIconButton
               id={`remove-note-${note[0].id}`}
               color="primary"
               onClick={() => {
@@ -49,21 +69,25 @@ const RecipeNotesFormSection = (props) => {
               className={classes['note-remove-btn']}
             >
               <CloseIcon sx={{fontSize: '1.25rem'}}/>
-            </IconButton>
+            </CloseIconButton>
           </div>
           <div className={classes['note-input-group']}>
-            <InputLabel id={`note-${note[1].id}`} className={classes['note-label']}>Note</InputLabel>
+            <InputLabel id={`note-${note[1].id}`}>Note</InputLabel>
             <TextField
               id={`note-${note[1].id}`}
               name='note'
               multiline
               variant="outlined"
               rows={4}
-              className={`${classes['form-notes-input']} ${classes['note-input']}`}
+              className={`${classes['form-notes-input']}`}
               placeholder="Write your recipe notes here..."
               InputLabelProps={{ shrink: true, sx: {'fontSize': '1.25rem'} }}
-              error={note[1].hasError}
-              helperText={note[1].hasError ? note[1].errorMsg : '' }
+              error={note[1].hasError || note[1].serverSideError}
+              helperText={
+                note[1].hasError ? note[1].errorMsg : ''
+                ||
+                note[1].serverSideError ? note[1].serverSideMsgs[0] : ''
+              }
               value={note[1].note || ''}
               onChange={props.handleRecipeNoteMessagesChange}
               onBlur={props.handleRecipeNoteMessagesBlur}
@@ -75,7 +99,7 @@ const RecipeNotesFormSection = (props) => {
       <Button
         variant="contained"
         color="primary"
-        sx={{mb: '1rem'}}
+        sx={{mt: '.25rem', mb: '1rem', width: '7.5rem', alignSelf: 'center'}}
         onClick={() => {
           props.addRecipeNoteTitles();
           props.addRecipeNoteMessages();

@@ -46,12 +46,31 @@ export const recipeFormValidationRules = () => {
 
     // recipe ingredients
     body('recipeIngredients')
-      .isArray().withMessage('Ingredient value must be an array'),
-
+      .isArray().withMessage('Ingredient must be an array'),
     body('recipeIngredients.*.ingredient_name')
       .isString().withMessage('Ingredient value must be a string.')
       .isLength({ min: 2 }).withMessage('Ingredient value is not long enough. Must be at least two characters long.'),
 
+    // recipe instructions
+    body('recipeInstructions')
+      .isArray().withMessage('Instruction must be an array'),
+    body('recipeInstructions.*.instruction_text')
+      .isString().withMessage('Instruction value must be a string')
+      .isLength({ min: 2 }).withMessage('Instruction value is not long enough. Must be at least two characters long.'),
+
+    // recipe titles
+    body('recipeNoteTitles')
+      .isArray().withMessage('Note titles must be an array'),
+    body('recipeNoteTitles.*.title')
+      .isString().withMessage('Note title value must be a string')
+      .isLength({ min: 2 }).withMessage('Note title value is not long enough. Must be at least two characters long.'),
+
+    // recipe messages
+    body('recipeNoteMessages')
+      .isArray().withMessage('Note messages must be an array'),
+    body('recipeNoteMessages.*.note')
+      .isString().withMessage('Note message value must be a string')
+      .isLength({ min: 2 }).withMessage('Note message value is not long enough. Must be at least two characters long.')
   ];
 };
 

@@ -18,7 +18,7 @@ const TextFieldInput = styled(TextField) ({
 const CloseIconButton = styled(IconButton) ({
   position: 'absolute !important',
   right: '-17.5%',
-  top: '12.5%',
+  top: '.75rem',
   width: '3rem',
   '@media (max-width: 780px)': {
     right: '-20.5%'
@@ -26,8 +26,6 @@ const CloseIconButton = styled(IconButton) ({
 });
 
 const AddIngredientsFormSection = (props) => {
-  console.log("ingredients form re-rendered", props);
-
   return (
     <React.Fragment>
       {props.hasRecipeIngredientsError ? <Alert severity="error" sx={{'mb': '.75rem'}}>{props.recipeIngredientsErrorMsg}</Alert> : ''}

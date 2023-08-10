@@ -4,20 +4,17 @@
   position: relative;
   row-gap: 0;
   grid-template-rows: 1.25rem 1fr;
-  /* grid-template-columns: minmax(300px, 1fr);
-  grid-template-rows: auto 1fr; */
   margin-bottom: 1rem;
-}
-
-.note-remove-btn {
-  position: absolute !important;
-  font-size: 1rem;
-  top: 40%;
-  right: -12.5%;
 }
 
 .form-notes-input {
   margin-top: 1.25rem !important;
   margin-bottom: 1.25rem !important;
   width: 375px;
+}
+
+.notes-form-section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
