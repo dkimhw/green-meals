@@ -46,60 +46,16 @@ const recipeNoteMessagesInitialValue = [
 // Multiple Files: https://www.techgeeknext.com/react/multiple-files-upload-example
 // https://www.positronx.io/react-multiple-files-upload-with-node-express-tutorial/
 const RecipeForm = (props) => {
+  /*
+    States
+  */
   const navigate = useNavigate();
   const [recipeData, setRecipeData] = useState();
   const isEditForm = props.id ? true : false;
 
-  const fetchAllRecipeData = async (recipeID) => {
-    axios({
-      method: "get",
-      url: `http://localhost:5051/api/recipes/get/${recipeID}`,
-    })
-      .then((response) => {
-        const data = response.data;
-        setRecipeData(data[0]);
-      })
-      .catch(error => console.error(`Error: ${error}`));
-  }
-
-  const setErrorFromAPI = async (inputName, errMsgs) => {
-    if (inputName === 'recipeName') {
-      recipeNameServerSideErrorHandler(true);
-      recipeNameSetServerSideErrorMsgs(errMsgs);
-    } else if (inputName === 'servingSize') {
-      servingSizeServerSideErrorHandler(true);
-      servingSizeSetServerSideErrorMsgs(errMsgs);
-    } else if (inputName === 'recipeDescription') {
-      recipeDescriptionServerSideErrorHandler(true);
-      recipeDescriptionSetServerSideErrorMsgs(errMsgs);
-    } else if (inputName === 'prepTime') {
-      prepTimeServerSideErrorHandler(true);
-      prepTimeSetServerSideErrorMsgs(errMsgs);
-    } else if (inputName === 'prepTimeQty') {
-      prepTimeTypeServerSideErrorHandler(true);
-      prepTimeTypeSetServerSideErrorMsgs(errMsgs);
-    } else if (inputName === 'cookingTime') {
-      cookingTimeServerSideErrorHandler(true);
-      cookingTimeSetServerSideErrorMsgs(errMsgs);
-    } else if (inputName === 'cookingTimeQty') {
-      cookingTimeTypeServerSideErrorHandler(true);
-      cookingTimeTypeSetServerSideErrorMsgs(errMsgs);
-    } else if (inputName.includes('recipeIngredients')) {
-      recipeIngredientHandleServerErrors(inputName, errMsgs);
-    } else if (inputName.includes('recipeInstructions')) {
-      recipeInstructionsHandleServerErrors(inputName, errMsgs);
-    } else if (inputName.includes('recipeNoteTitles')) {
-      recipeNoteTitlesHandleServerErrors(inputName, errMsgs);
-    } else if (inputName.includes('recipeNoteMessages')) {
-      recipeNoteMessagesHandleServerErrors(inputName, errMsgs);
-    }
-  }
-
-  useEffect(() => {
-    if (props.id) fetchAllRecipeData(props.id);
-  }, [props.id]);
-
-  // Input custom hooks
+  /*
+    Custom Hooks
+  */
   const {
     value: recipeName
     , setEnteredValue: setRecipeName
@@ -285,6 +241,66 @@ const RecipeForm = (props) => {
     fileErrors
   } = useFormImagesUpload(isValidImagesUploaded);
 
+
+  /* Event Handlers & Use Effect callbacks */
+  const setErrorFromAPI = async (inputName, errMsgs) => {
+    if (inputName === 'recipeName') {
+      recipeNameServerSideErrorHandler(true);
+      recipeNameSetServerSideErrorMsgs(errMsgs);
+    } else if (inputName === 'servingSize') {
+      servingSizeServerSideErrorHandler(true);
+      servingSizeSetServerSideErrorMsgs(errMsgs);
+    } else if (inputName === 'recipeDescription') {
+      recipeDescriptionServerSideErrorHandler(true);
+      recipeDescriptionSetServerSideErrorMsgs(errMsgs);
+    } else if (inputName === 'prepTime') {
+      prepTimeServerSideErrorHandler(true);
+      prepTimeSetServerSideErrorMsgs(errMsgs);
+    } else if (inputName === 'prepTimeQty') {
+      prepTimeTypeServerSideErrorHandler(true);
+      prepTimeTypeSetServerSideErrorMsgs(errMsgs);
+    } else if (inputName === 'cookingTime') {
+      cookingTimeServerSideErrorHandler(true);
+      cookingTimeSetServerSideErrorMsgs(errMsgs);
+    } else if (inputName === 'cookingTimeQty') {
+      cookingTimeTypeServerSideErrorHandler(true);
+      cookingTimeTypeSetServerSideErrorMsgs(errMsgs);
+    } else if (inputName.includes('recipeIngredients')) {
+      recipeIngredientHandleServerErrors(inputName, errMsgs);
+    } else if (inputName.includes('recipeInstructions')) {
+      recipeInstructionsHandleServerErrors(inputName, errMsgs);
+    } else if (inputName.includes('recipeNoteTitles')) {
+      recipeNoteTitlesHandleServerErrors(inputName, errMsgs);
+    } else if (inputName.includes('recipeNoteMessages')) {
+      recipeNoteMessagesHandleServerErrors(inputName, errMsgs);
+    }
+  }
+
+  const handleServerSideError = async (err) => {
+    const { response } = err;
+    const errMsgs = await cleanRecipeServerSideErrors(response?.status,  response?.data);
+    // Object.entries(errMsgs).forEach(err => {
+    //   setErrorFromAPI(err[0], err[1]);
+    // });
+  }
+
+  const fetchAllRecipeData = async (recipeID) => {
+    axios({
+      method: "get",
+      url: `http://localhost:5051/api/recipes/get/${recipeID}`,
+    })
+      .then((response) => {
+        const data = response.data;
+        setRecipeData(data[0]);
+      })
+      .catch(error => console.error(`Error: ${error}`));
+  }
+
+  // If there is a props id fetch the recipe data
+  useEffect(() => {
+    if (props.id) fetchAllRecipeData(props.id);
+  }, [props.id]);
+
   // If there is a reciped id and subsequent data fill out form
   useEffect(() => {
     if (recipeData) {
@@ -317,15 +333,44 @@ const RecipeForm = (props) => {
     , setPrepTime, setPrepTimeType, setCookingTime, setCookingTimeType
     , setRecipePrivacyStatus]);
 
-  // Submit Recipe Info //
+  // Helper function to create recipe form data to send to server //
+  const createFormData = async () => {
+    const recipeFormInfo = new FormData();
+    recipeFormInfo.append('recipeName', recipeName);
+    recipeFormInfo.append('recipeDescription', recipeDescription);
+    recipeFormInfo.append('cookingTime', cookingTime);
+    recipeFormInfo.append('cookingTimeQty', cookingTimeType);
+    recipeFormInfo.append('prepTime', prepTime);
+    recipeFormInfo.append('prepTimeQty', prepTimeType);
+    recipeFormInfo.append('servingSize', servingSize);
+    recipeFormInfo.append('recipePrivacyStatus', recipePrivacyStatus);
+    recipeFormInfo.append('recipeIngredients', JSON.stringify(recipeIngredients));
+    recipeFormInfo.append('recipeInstructions',  JSON.stringify(recipeInstructions));
+    recipeFormInfo.append('recipeNoteMessages',  JSON.stringify(recipeNoteMessages));
+    recipeFormInfo.append('recipeNoteTitles',  JSON.stringify(recipeNoteTitles));
+
+    uploadedFiles.forEach(image => {
+      recipeFormInfo.append('images', image);
+    });
+
+    // let formEntries = recipeFormInfo.entries();
+    // let formKeys    = recipeFormInfo.keys();
+    // do {
+    //   console.log(formEntries.next().value);
+    // } while (!formKeys.next().done)
+
+    return recipeFormInfo
+  }
+
+  // Submit recipe information //
   const submitHandler = (event) => {
     return !isEditForm ? createHandler(event) : editHandler(event);
   };
 
+  // Edit handler for put requests //
   const editHandler = async (event) => {
     try {
       event.preventDefault();
-      console.log('updated');
       let recipeID = props.id ? props.id : null;
       if (!recipeID) return;
 
@@ -348,31 +393,13 @@ const RecipeForm = (props) => {
         && isPrepTimeValid && isCookingTimeValid && isPrepTimeTypeValid
         && isCookingTimeTypeValid && isRecipePrivacyStatusValid
       ) {
-        const recipeFormInfo = new FormData();
-        recipeFormInfo.append('recipeName', recipeName);
-        recipeFormInfo.append('recipeDescription', recipeDescription);
-        recipeFormInfo.append('cookingTime', cookingTime);
-        recipeFormInfo.append('cookingTimeQty', cookingTimeType);
-        recipeFormInfo.append('prepTime', prepTime);
-        recipeFormInfo.append('prepTimeQty', prepTimeType);
-        recipeFormInfo.append('servingSize', servingSize);
-        recipeFormInfo.append('recipePrivacyStatus', recipePrivacyStatus);
-        recipeFormInfo.append('recipeIngredients', JSON.stringify(recipeIngredients));
-        recipeFormInfo.append('recipeInstructions',  JSON.stringify(recipeInstructions));
-        recipeFormInfo.append('recipeNoteMessages',  JSON.stringify(recipeNoteMessages));
-        recipeFormInfo.append('recipeNoteTitles',  JSON.stringify(recipeNoteTitles));
-
-        uploadedFiles.forEach(image => {
-          recipeFormInfo.append('images', image);
-        });
-
+        const recipeFormInfo = createFormData();
         const response = await axios({
           method: "put",
           url: `http://localhost:5051/api/recipes/edit/${recipeID}`,
           data: recipeFormInfo,
           headers: { "Content-Type": "multipart/form-data" },
         });
-        console.log(response);
 
         if (response?.status === 200) {
           navigate(`/recipe/${response.data.recipeId}`);
@@ -380,10 +407,11 @@ const RecipeForm = (props) => {
 
       }
     } catch (err) {
-      throw err
+      handleServerSideError(err);
     }
   };
 
+  // Create new recipe handler //
   const createHandler = async (event) => {
     event.preventDefault();
 
@@ -404,25 +432,9 @@ const RecipeForm = (props) => {
 
       if (isRecipeDescriptionValid && isRecipenameInputValid && isServingSizeValid
           && isPrepTimeValid && isCookingTimeValid && isPrepTimeTypeValid
-          && isCookingTimeTypeValid && isRecipePrivacyStatusValid) {
-        const recipeFormInfo = new FormData();
-        recipeFormInfo.append('recipeName', recipeName);
-        recipeFormInfo.append('recipeDescription', recipeDescription);
-        recipeFormInfo.append('cookingTime', cookingTime);
-        recipeFormInfo.append('cookingTimeQty', cookingTimeType);
-        recipeFormInfo.append('prepTime', prepTime);
-        recipeFormInfo.append('prepTimeQty', prepTimeType);
-        recipeFormInfo.append('servingSize', servingSize);
-        recipeFormInfo.append('recipePrivacyStatus', recipePrivacyStatus);
-        recipeFormInfo.append('recipeIngredients', JSON.stringify(recipeIngredients));
-        recipeFormInfo.append('recipeInstructions',  JSON.stringify(recipeInstructions));
-        recipeFormInfo.append('recipeNoteMessages',  JSON.stringify(recipeNoteMessages));
-        recipeFormInfo.append('recipeNoteTitles',  JSON.stringify(recipeNoteTitles));
-
-        uploadedFiles.forEach(image => {
-          recipeFormInfo.append('images', image);
-        });
-
+          && isCookingTimeTypeValid && isRecipePrivacyStatusValid
+      ) {
+        const recipeFormInfo = createFormData();
         const response = await axios({
           method: "post",
           url: "http://localhost:5051/api/recipes/create",
@@ -435,12 +447,7 @@ const RecipeForm = (props) => {
         }
       }
     } catch (err) {
-      // Error handling
-      const { response } = err;
-      const errMsgs = await cleanRecipeServerSideErrors(response?.status,  response?.data);
-      Object.entries(errMsgs).forEach(err => {
-        setErrorFromAPI(err[0], err[1]);
-      });
+      handleServerSideError(err);
     }
   };
 

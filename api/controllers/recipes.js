@@ -137,13 +137,13 @@ export const updateRecipe = async (req, res) => {
   });
 
   // Update ingredients
-  const ingredients = await cleanIngredientsData(recipeIngredients, recipeID);
+  const ingredients = cleanIngredientsData(recipeIngredients, recipeID);
   const currIngredients = await getAllItems(models.Ingredient, recipeID);
   await removeDeletedItems(ingredients, currIngredients, models.Ingredient);
   await updateItems(models.Ingredient, ingredients, ["ingredient_name", "recipeId"]);
 
   // Update instructions
-  const instructions = await cleanInstructionsData(recipeInstructions, recipeID);
+  const instructions = cleanInstructionsData(recipeInstructions, recipeID);
   const currInstructions = await getAllItems(models.Instruction, recipeID);
   await removeDeletedItems(instructions, currInstructions, models.Instruction);
   await updateItems(models.Instruction, instructions, ['instruction_order_number', 'instruction_text', 'recipeId']);
@@ -175,20 +175,6 @@ export const updateRecipe = async (req, res) => {
     "recipeId": recipeID
   });
 };
-
-export const createRecipeTest = async (req, res) => {
-  // Parse request body
-  let {
-    recipeName
-    , recipeDescription
-  } = req.body;
-
-  console.log(recipeName);
-  console.log(recipeDescription);
-  res.send({
-    "success": "success"
-  });
-}
 
 // This needs to be improved - should be able to use just one create method to insert everything
 export const createRecipe = async (req, res) => {
@@ -303,6 +289,5 @@ export default {
   getRecipeImages,
   updateRecipe,
   getRecipe,
-  createRecipeTest,
   deleteRecipe,
 }

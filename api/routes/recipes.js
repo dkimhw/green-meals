@@ -28,8 +28,12 @@ const upload = multer({ storage: storage, fileFilter: imageFilter });
 
 router.route('/get').get(recipesController.getRecipes);
 router.route('/get/:recipeID').get(recipesController.getRecipe);
-router.route('/edit/:recipeID').put(
+router.put(
+  '/edit/:recipeID',
   upload.array("images"),
+  parseJSONString,
+  recipeFormValidationRules(),
+  validate,
   recipesController.updateRecipe
 );
 router.route('/delete/:recipeId').delete(recipesController.deleteRecipe)
@@ -42,11 +46,6 @@ router.post(
   validate,
   recipesController.createRecipe
 );
-router.post(
-  '/create-test',
-  recipeFormValidationRules(),
-  validate,
-  recipesController.createRecipeTest
-);
+
 
 export default router;

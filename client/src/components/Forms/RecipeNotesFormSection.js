@@ -38,7 +38,6 @@ const RecipeNotesFormSection = (props) => {
       {props.hasRecipeNoteTitlesError ? <Alert severity="error" sx={{'mb': '.75rem'}}>{props.hasRecipeNoteTitlesError}</Alert> : ''}
       {recipeNotes ? recipeNotes.map((note) => {
        let titleServerSideError = note[0]?.serverSideError;
-       console.log("titleServerSideError", titleServerSideError);
        return(
         <div key={note[0].id}>
           <div className={classes['note-input-group']}>
