@@ -25,7 +25,13 @@ export const getRecipes = async (req, res, next) => {
   let limit = req.query.limit ? req.query.limit : 15;
   let offset = req.query.offset ? req.query.offset : 0;
 
-  const allRecipes = await recipesModel.findAndCountAll({page: page, offset: offset, limit: limit});
+  const allRecipes = await recipesModel.findAndCountAll({
+    page: page,
+    offset: offset,
+    limit: limit,
+    order: [
+      ['id', 'ASC']
+    ]});
   res.send(allRecipes)
 };
 
@@ -195,32 +201,24 @@ export const createRecipe = async (req, res) => {
   } = req.body;
 
   // Parse directions, ingredients, and notes for bulk create
-  console.log(recipeIngredients);
-  let ingredients = JSON.parse(recipeIngredients);
-  ingredients = ingredients.map(ingredient => {
+  let ingredients = recipeIngredients.map(ingredient => {
     return {
       ingredient_name: ingredient.ingredient_name,
     }
   });
 
-  let instructions = JSON.parse(recipeInstructions);
-  instructions = instructions.map((instruction, idx) => {
+  let instructions = recipeInstructions.map((instruction, idx) => {
     return {
       instruction_order_number: idx + 1,
       instruction_text: instruction.instruction_text
     }
   });
-  console.log("Create: ", instructions);
-
-
-  let noteTitles = JSON.parse(recipeNoteTitles);
-  let noteMessages = JSON.parse(recipeNoteMessages);
 
   let notes = [];
-  for (let idx = 0; idx < noteTitles.length; idx += 1) {
+  for (let idx = 0; idx < recipeNoteTitles.length; idx += 1) {
     notes.push({
-      title: noteTitles[idx]['title'],
-      text: noteMessages[idx]['note']
+      title: recipeNoteTitles[idx]['title'],
+      text: recipeNoteMessages[idx]['note']
     })
   };
 
@@ -274,7 +272,6 @@ export const createRecipe = async (req, res) => {
       }
     })
   );
-
 
   res.send({
     "recipeId": newRecipe.dataValues.id

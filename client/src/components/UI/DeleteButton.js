@@ -1,21 +1,24 @@
-import { Fragment } from "react";
 import { Button } from "@mui/material";
 
-export const DeleteButton = () => {
+export const DeleteButton = (props) => {
   return (
-    <Fragment>
-      <Button
-        variant="outlined"
-        type="submit"
-        sx={{
-          mt: '.5rem',
-          color: '#FF2171',
-          borderColor: "#FF2171",
-          width: '5.5rem',
-        }}
-      >
-        Delete
-      </Button>
-    </Fragment>
+    <Button
+      variant="outlined"
+      type="submit"
+      sx={{
+        mt: '.5rem',
+        color: '#FF2171',
+        borderColor: "#FF2171",
+        width: '5.5rem',
+        transition: '.5s all',
+        "&:hover": {
+          border: "1px solid #FF2171",
+          transform: 'scale(1.05)'
+        },
+      }}
+      onClick={props.onClick}
+    >
+      Delete
+    </Button>
   )
 };

@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { Button, Typography, Box } from '@mui/material';
 import FormCard from '../UI/FormCard';
 import classes from './AddRecipeForm.module.css';
+import AlertBox from '../UI/AlertBox'
 import IngredientsFormSection from './IngredientsFormSection';
 import RecipeInstructionsFormSection from './RecipeInstructionsFormSection';
 import RecipeInfoFormSection from './RecipeInfoFormSection';
@@ -279,9 +280,9 @@ const RecipeForm = (props) => {
   const handleServerSideError = async (err) => {
     const { response } = err;
     const errMsgs = await cleanRecipeServerSideErrors(response?.status,  response?.data);
-    // Object.entries(errMsgs).forEach(err => {
-    //   setErrorFromAPI(err[0], err[1]);
-    // });
+    Object.entries(errMsgs).forEach(err => {
+      setErrorFromAPI(err[0], err[1]);
+    });
   }
 
   const fetchAllRecipeData = async (recipeID) => {
@@ -333,35 +334,6 @@ const RecipeForm = (props) => {
     , setPrepTime, setPrepTimeType, setCookingTime, setCookingTimeType
     , setRecipePrivacyStatus]);
 
-  // Helper function to create recipe form data to send to server //
-  const createFormData = async () => {
-    const recipeFormInfo = new FormData();
-    recipeFormInfo.append('recipeName', recipeName);
-    recipeFormInfo.append('recipeDescription', recipeDescription);
-    recipeFormInfo.append('cookingTime', cookingTime);
-    recipeFormInfo.append('cookingTimeQty', cookingTimeType);
-    recipeFormInfo.append('prepTime', prepTime);
-    recipeFormInfo.append('prepTimeQty', prepTimeType);
-    recipeFormInfo.append('servingSize', servingSize);
-    recipeFormInfo.append('recipePrivacyStatus', recipePrivacyStatus);
-    recipeFormInfo.append('recipeIngredients', JSON.stringify(recipeIngredients));
-    recipeFormInfo.append('recipeInstructions',  JSON.stringify(recipeInstructions));
-    recipeFormInfo.append('recipeNoteMessages',  JSON.stringify(recipeNoteMessages));
-    recipeFormInfo.append('recipeNoteTitles',  JSON.stringify(recipeNoteTitles));
-
-    uploadedFiles.forEach(image => {
-      recipeFormInfo.append('images', image);
-    });
-
-    // let formEntries = recipeFormInfo.entries();
-    // let formKeys    = recipeFormInfo.keys();
-    // do {
-    //   console.log(formEntries.next().value);
-    // } while (!formKeys.next().done)
-
-    return recipeFormInfo
-  }
-
   // Submit recipe information //
   const submitHandler = (event) => {
     return !isEditForm ? createHandler(event) : editHandler(event);
@@ -393,7 +365,23 @@ const RecipeForm = (props) => {
         && isPrepTimeValid && isCookingTimeValid && isPrepTimeTypeValid
         && isCookingTimeTypeValid && isRecipePrivacyStatusValid
       ) {
-        const recipeFormInfo = createFormData();
+        const recipeFormInfo = new FormData();
+        recipeFormInfo.append('recipeName', recipeName);
+        recipeFormInfo.append('recipeDescription', recipeDescription);
+        recipeFormInfo.append('cookingTime', cookingTime);
+        recipeFormInfo.append('cookingTimeQty', cookingTimeType);
+        recipeFormInfo.append('prepTime', prepTime);
+        recipeFormInfo.append('prepTimeQty', prepTimeType);
+        recipeFormInfo.append('servingSize', servingSize);
+        recipeFormInfo.append('recipePrivacyStatus', recipePrivacyStatus);
+        recipeFormInfo.append('recipeIngredients', JSON.stringify(recipeIngredients));
+        recipeFormInfo.append('recipeInstructions',  JSON.stringify(recipeInstructions));
+        recipeFormInfo.append('recipeNoteMessages',  JSON.stringify(recipeNoteMessages));
+        recipeFormInfo.append('recipeNoteTitles',  JSON.stringify(recipeNoteTitles));
+
+        uploadedFiles.forEach(image => {
+          recipeFormInfo.append('images', image);
+        });
         const response = await axios({
           method: "put",
           url: `http://localhost:5051/api/recipes/edit/${recipeID}`,
@@ -434,7 +422,23 @@ const RecipeForm = (props) => {
           && isPrepTimeValid && isCookingTimeValid && isPrepTimeTypeValid
           && isCookingTimeTypeValid && isRecipePrivacyStatusValid
       ) {
-        const recipeFormInfo = createFormData();
+        const recipeFormInfo = new FormData();
+        recipeFormInfo.append('recipeName', recipeName);
+        recipeFormInfo.append('recipeDescription', recipeDescription);
+        recipeFormInfo.append('cookingTime', cookingTime);
+        recipeFormInfo.append('cookingTimeQty', cookingTimeType);
+        recipeFormInfo.append('prepTime', prepTime);
+        recipeFormInfo.append('prepTimeQty', prepTimeType);
+        recipeFormInfo.append('servingSize', servingSize);
+        recipeFormInfo.append('recipePrivacyStatus', recipePrivacyStatus);
+        recipeFormInfo.append('recipeIngredients', JSON.stringify(recipeIngredients));
+        recipeFormInfo.append('recipeInstructions',  JSON.stringify(recipeInstructions));
+        recipeFormInfo.append('recipeNoteMessages',  JSON.stringify(recipeNoteMessages));
+        recipeFormInfo.append('recipeNoteTitles',  JSON.stringify(recipeNoteTitles));
+
+        uploadedFiles.forEach(image => {
+          recipeFormInfo.append('images', image);
+        });
         const response = await axios({
           method: "post",
           url: "http://localhost:5051/api/recipes/create",
@@ -453,6 +457,9 @@ const RecipeForm = (props) => {
 
   const deleteHandler = async (event) =>{
     event.preventDefault();
+
+
+
     let recipeId = props.id ? props.id : null;
     if (!recipeId) return;
 
@@ -599,7 +606,19 @@ const RecipeForm = (props) => {
         <Button variant="outlined" type="submit" sx={{mt: '1.5rem', width: '5.5rem'}}>Submit</Button>
 
       </form>
-      { isEditForm ? <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center'}}><form onSubmit={deleteHandler} method="post"><DeleteButton/></form></Box> : ''}
+      {/* { isEditForm ?
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+          <form onSubmit={deleteHandler} method="post"><DeleteButton/>
+          </form>
+        </Box> : ''} */}
+
+        { isEditForm ?
+          <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+            <AlertBox
+              handleAccept={deleteHandler}
+            />
+          </Box>
+        : ''}
     </FormCard>
   )
 
