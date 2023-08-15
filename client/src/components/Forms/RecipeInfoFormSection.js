@@ -3,6 +3,7 @@ import { TextField, IconButton } from '@mui/material'
 import classes from './RecipeInfoFormSection.module.css'
 import CloseIcon from '@mui/icons-material/Close';
 import FormInputAlert from '../UI/FormInputAlert';
+import { blockInvalidNumberInput } from '../../utils/blockInvalidInputs'
 
 // Image preview: https://stackoverflow.com/questions/69035352/how-to-show-image-upload-previews-with-react
 const RecipeInfoFormSection = (props) => {
@@ -49,6 +50,7 @@ const RecipeInfoFormSection = (props) => {
         value={props.servingSize || ''}
         onChange={props.servingSizeChangeHandler}
         onBlur={props.servingSizeBlurInputHandler}
+        onKeyDown={blockInvalidNumberInput}
       />
       Upload an Image
       <input

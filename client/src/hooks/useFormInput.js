@@ -24,7 +24,9 @@ const useFormInput = (validateInputValue, initialValues = '') => {
 
   // Handler for input value change
   const valueChangeHandler = (event) => {
+    console.log('valuechangehandler', event.target.value)
     setEnteredValue(event.target.value);
+
     setServerSideError(false)
   };
 

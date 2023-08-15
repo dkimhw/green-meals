@@ -2,9 +2,10 @@
 import React from 'react';
 import { TextField, FormControl, MenuItem, Select, InputLabel, FormHelperText } from '@mui/material';
 import classes from './RecipeTimeFormSection.module.css';
+import { blockInvalidNumberInput } from '../../utils/blockInvalidInputs'
+
 
 const RecipeTimeFormSection = (props) => {
-
   return (
     <React.Fragment>
       <div className={classes['form-group']}>
@@ -19,6 +20,7 @@ const RecipeTimeFormSection = (props) => {
           helperText={props.hasPrepTimeInputError ? props.prepTimeErrorMsg : '' || props.prepTimeServerSideError ? props.prepTimeServerSideErrorMsgs[0] : ''}
           onChange={props.prepTimeChangeHandler}
           onBlur={props.prepTimeBlurInputHandler}
+          onKeyDown={blockInvalidNumberInput}
         />
         <FormControl fullWidth error={props.hasPrepTimeTypeInputError || props.prepTimeTypeServerSideError}>
           <InputLabel id="prep-time-type">Prep Time Qty</InputLabel>
@@ -52,6 +54,7 @@ const RecipeTimeFormSection = (props) => {
           helperText={props.hasCookingTimeInputError ? props.cookingTimeErrorMsg : '' || props.cookingTimeServerSideError ? props.cookingTimeServerSideErrorMsgs[0] : ''}
           onChange={props.cookingTimeChangeHandler}
           onBlur={props.cookingTimeBlurInputHandler}
+          onKeyDown={blockInvalidNumberInput}
         />
         <FormControl fullWidth error={props.hasCookingTimeTypeInputError || props.cookingTimeTypeServerSideError }>
           <InputLabel id="cooking-time-type">Cooking Time Qty</InputLabel>

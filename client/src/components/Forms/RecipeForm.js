@@ -16,10 +16,8 @@ import useMultipleInputs from '../../hooks/useMultipleInputs';
 import useFormInput from '../../hooks/useFormInput';
 import SectionTitle from '../UI/SectionTitle';
 import { useState, useEffect } from 'react';
-import { isValidImagesUploaded, validateTextInput, validateNumber, validateTimeType, validatePrivacyStatus, validateGroupInputs } from '../../utils/validateInputs';
-import { DeleteButton } from '../UI/DeleteButton';
+import { isValidImagesUploaded, validateTextInput, validatePositiveNumber, validateTimeType, validatePrivacyStatus, validateGroupInputs } from '../../utils/validateInputs';
 import { cleanRecipeServerSideErrors } from "../../utils/recipeFormErrorHelpers";
-
 
 const ingredientsInputs = [
   { id: 0, ingredient_name: '', placeholder: 'e.g. Flour', hasError: false, errorMsg: '', touched: false },
@@ -97,7 +95,7 @@ const RecipeForm = (props) => {
     , serverSideErrorHandler: servingSizeServerSideErrorHandler
     , serverSideErrorMsgs: servingSizeServerSideErrorMsgs
     , setServerSideErrorMsgs: servingSizeSetServerSideErrorMsgs
-  } = useFormInput(validateNumber);
+  } = useFormInput(validatePositiveNumber);
 
   const {
     value: prepTime
@@ -111,7 +109,7 @@ const RecipeForm = (props) => {
     , serverSideErrorHandler: prepTimeServerSideErrorHandler
     , serverSideErrorMsgs: prepTimeServerSideErrorMsgs
     , setServerSideErrorMsgs: prepTimeSetServerSideErrorMsgs
-  } = useFormInput(validateNumber);
+  } = useFormInput(validatePositiveNumber);
 
   const {
     value: prepTimeType
@@ -139,7 +137,7 @@ const RecipeForm = (props) => {
     , serverSideErrorHandler: cookingTimeServerSideErrorHandler
     , serverSideErrorMsgs: cookingTimeServerSideErrorMsgs
     , setServerSideErrorMsgs: cookingTimeSetServerSideErrorMsgs
-  } = useFormInput(validateNumber);
+  } = useFormInput(validatePositiveNumber);
 
   const {
     value: cookingTimeType
@@ -606,19 +604,13 @@ const RecipeForm = (props) => {
         <Button variant="outlined" type="submit" sx={{mt: '1.5rem', width: '5.5rem'}}>Submit</Button>
 
       </form>
-      {/* { isEditForm ?
+      { isEditForm ?
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-          <form onSubmit={deleteHandler} method="post"><DeleteButton/>
-          </form>
-        </Box> : ''} */}
-
-        { isEditForm ?
-          <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-            <AlertBox
-              handleAccept={deleteHandler}
-            />
-          </Box>
-        : ''}
+          <AlertBox
+            handleAccept={deleteHandler}
+          />
+        </Box>
+      : ''}
     </FormCard>
   )
 
