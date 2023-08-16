@@ -1,14 +1,12 @@
 
 
-export const cleanRecipeNotesData = async(recipeNoteMessages, recipeNoteTitles, recipeID) => {
-  let noteTitles = await JSON.parse(recipeNoteTitles);
-  let noteMessages = await JSON.parse(recipeNoteMessages);
+export const cleanRecipeNotesData = (recipeNoteMessages, recipeNoteTitles, recipeID) => {
   let notes = [];
 
-  for (let idx = 0; idx < noteTitles.length; idx += 1) {
+  for (let idx = 0; idx < recipeNoteTitles.length; idx += 1) {
     notes.push({
-      title: noteTitles[idx]['title'],
-      text: noteMessages[idx]['note']
+      title: recipeNoteTitles[idx]['title'],
+      text: recipeNoteMessages[idx]['note']
     })
   };
 
@@ -21,8 +19,8 @@ export const cleanRecipeNotesData = async(recipeNoteMessages, recipeNoteTitles, 
   })
 }
 
-export const cleanInstructionsData = async (instructions, recipeID) => {
-  return await JSON.parse(instructions).map((instruction, idx) => {
+export const cleanInstructionsData = (instructions, recipeID) => {
+  return instructions.map((instruction, idx) => {
     return {
       id: instruction.id,
       instruction_order_number: idx + 1,
@@ -32,8 +30,8 @@ export const cleanInstructionsData = async (instructions, recipeID) => {
   });
 };
 
-export const cleanIngredientsData = async (ingredients, recipeID) => {
-  return await JSON.parse(ingredients).map(ingredient => {
+export const cleanIngredientsData = (ingredients, recipeID) => {
+  return ingredients.map(ingredient => {
     return {
       id: ingredient.id,
       ingredient_name: ingredient.ingredient_name,

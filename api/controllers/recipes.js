@@ -25,7 +25,13 @@ export const getRecipes = async (req, res, next) => {
   let limit = req.query.limit ? req.query.limit : 15;
   let offset = req.query.offset ? req.query.offset : 0;
 
-  const allRecipes = await recipesModel.findAndCountAll({page: page, offset: offset, limit: limit});
+  const allRecipes = await recipesModel.findAndCountAll({
+    page: page,
+    offset: offset,
+    limit: limit,
+    order: [
+      ['id', 'ASC']
+    ]});
   res.send(allRecipes)
 };
 
@@ -88,7 +94,9 @@ export const deleteRecipe = async (req, res) => {
         deleteImages(images);
       }
 
-      res.send(recipe);
+      res.send({
+        "recipeId": recipeId
+      });
     }
   } catch (err) {
     throw new Error(err);
@@ -135,13 +143,13 @@ export const updateRecipe = async (req, res) => {
   });
 
   // Update ingredients
-  const ingredients = await cleanIngredientsData(recipeIngredients, recipeID);
+  const ingredients = cleanIngredientsData(recipeIngredients, recipeID);
   const currIngredients = await getAllItems(models.Ingredient, recipeID);
   await removeDeletedItems(ingredients, currIngredients, models.Ingredient);
   await updateItems(models.Ingredient, ingredients, ["ingredient_name", "recipeId"]);
 
   // Update instructions
-  const instructions = await cleanInstructionsData(recipeInstructions, recipeID);
+  const instructions = cleanInstructionsData(recipeInstructions, recipeID);
   const currInstructions = await getAllItems(models.Instruction, recipeID);
   await removeDeletedItems(instructions, currInstructions, models.Instruction);
   await updateItems(models.Instruction, instructions, ['instruction_order_number', 'instruction_text', 'recipeId']);
@@ -169,8 +177,10 @@ export const updateRecipe = async (req, res) => {
   await recipe.save();
 
   // Take recipe id
-  res.json({ data: recipe });
-}
+  res.send({
+    "recipeId": recipeID
+  });
+};
 
 // This needs to be improved - should be able to use just one create method to insert everything
 export const createRecipe = async (req, res) => {
@@ -191,33 +201,24 @@ export const createRecipe = async (req, res) => {
   } = req.body;
 
   // Parse directions, ingredients, and notes for bulk create
-  let ingredients = JSON.parse(recipeIngredients);
-  ingredients = ingredients.map(ingredient => {
+  let ingredients = recipeIngredients.map(ingredient => {
     return {
       ingredient_name: ingredient.ingredient_name,
     }
   });
 
-  let instructions = JSON.parse(recipeInstructions);
-  instructions = instructions.map((instruction, idx) => {
+  let instructions = recipeInstructions.map((instruction, idx) => {
     return {
       instruction_order_number: idx + 1,
       instruction_text: instruction.instruction_text
     }
   });
-  console.log("Create: ", instructions);
-
-
-  let noteTitles = JSON.parse(recipeNoteTitles);
-  let noteMessages = JSON.parse(recipeNoteMessages);
 
   let notes = [];
-  for (let idx = 0; idx < noteTitles.length; idx += 1) {
-    console.log(noteTitles[idx]);
-    console.log("Check: ", noteMessages[idx]);
+  for (let idx = 0; idx < recipeNoteTitles.length; idx += 1) {
     notes.push({
-      title: noteTitles[idx]['title'],
-      text: noteMessages[idx]['note']
+      title: recipeNoteTitles[idx]['title'],
+      text: recipeNoteMessages[idx]['note']
     })
   };
 
@@ -272,8 +273,9 @@ export const createRecipe = async (req, res) => {
     })
   );
 
-
-  res.json({ message: "Recipe saved!" });
+  res.send({
+    "recipeId": newRecipe.dataValues.id
+  });
 }
 
 

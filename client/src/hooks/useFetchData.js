@@ -13,8 +13,6 @@ export const useFetchData = (url) => {
       setIsPending(true);
       try {
         const response = await axios.get(url);
-        console.log("response.data: ", response);
-
         // if (!response.ok) throw new Error(response.statusText);
 
         // const json = await response.json();

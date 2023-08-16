@@ -19,6 +19,16 @@ const useMultipleInputs = (intialValues, defaultValue, validate, groupValidate=n
     hasGroupInputsError = !valueIsValid && groupInputsTouched;
   }
 
+  const handleServerErrors = (inputName, serverError) => {
+    const values = [...inputArray];
+    const serverErrorLoc = inputName.split(/[[\]]/);
+    const idx = Number(serverErrorLoc[1]);
+
+    values[idx]['serverSideError'] = !values[idx]['serverError'];
+    values[idx]['serverSideMsgs'] = serverError;
+
+    setInputArray(values);
+  }
 
   const validateInput = (val, isTouched, validateFunc) => {
     // Validate
@@ -50,9 +60,14 @@ const useMultipleInputs = (intialValues, defaultValue, validate, groupValidate=n
     const values = [...inputArray];
     values[findIdx][event.target.name] = event.target.value;
 
+    // validate
     let validated = validateInput(event.target.value, true, validate);
     values[findIdx]['hasError'] = validated['hasError'];
     values[findIdx]['errorMsg'] = validated['errorMsg'];
+
+    // set server side error if exists to default
+    values[findIdx]['serverSideError'] = false;
+    values[findIdx]['serverSideMsgs'] = [];
 
     setInputArray(values);
     setGroupInputsTouched(true);
@@ -96,6 +111,7 @@ const useMultipleInputs = (intialValues, defaultValue, validate, groupValidate=n
     , onSubmitValidate
     , groupInputsErrorMsg
     , hasGroupInputsError
+    , handleServerErrors
   }
 }
 

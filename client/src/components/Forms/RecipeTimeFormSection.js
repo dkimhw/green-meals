@@ -2,9 +2,10 @@
 import React from 'react';
 import { TextField, FormControl, MenuItem, Select, InputLabel, FormHelperText } from '@mui/material';
 import classes from './RecipeTimeFormSection.module.css';
+import { blockInvalidNumberInput } from '../../utils/blockInvalidInputs'
+
 
 const RecipeTimeFormSection = (props) => {
-
   return (
     <React.Fragment>
       <div className={classes['form-group']}>
@@ -15,28 +16,30 @@ const RecipeTimeFormSection = (props) => {
           label="Prep Time"
           type="number"
           value={props.prepTime || ''}
-          error={props.hasPrepTimeInputError}
-          helperText={props.hasPrepTimeInputError ? props.prepTimeErrorMsg : ''}
+          error={props.hasPrepTimeInputError || props.prepTimeServerSideError}
+          helperText={props.hasPrepTimeInputError ? props.prepTimeErrorMsg : '' || props.prepTimeServerSideError ? props.prepTimeServerSideErrorMsgs[0] : ''}
           onChange={props.prepTimeChangeHandler}
           onBlur={props.prepTimeBlurInputHandler}
+          onKeyDown={blockInvalidNumberInput}
         />
-        <FormControl fullWidth error={props.hasPrepTimeTypeInputError}>
+        <FormControl fullWidth error={props.hasPrepTimeTypeInputError || props.prepTimeTypeServerSideError}>
           <InputLabel id="prep-time-type">Prep Time Qty</InputLabel>
           <Select
             labelId="prep-time-type-label"
             id="prep-time-type"
             label="prepTimeType"
             name="prepTimeType"
-            // helperText={props.hasPrepTimeTypeInputError ? props.prepTimeTypeErrorMsg : ''}
+            // error={props.prepTimeTypeServerSideError}
+            // helperText={props.prepTimeTypeServerSideError ? props.prepTimeTypeServerSideErrorMsgs[0] : ''}
             value={props.prepTimeType}
             onChange={props.prepTimeTypeChangeHandler}
             onBlur={props.prepTimeTypeBlurInputHandler}
-            >
+          >
             <MenuItem value={'minutes'}>minutes</MenuItem>
             <MenuItem value={'hours'}>hours</MenuItem>
             <MenuItem value={'days'}>days</MenuItem>
           </Select>
-          {props.hasPrepTimeTypeInputError ? <FormHelperText>{props.prepTimeTypeErrorMsg}</FormHelperText> : ''}
+          {props.hasPrepTimeTypeInputError ? <FormHelperText>{props.prepTimeTypeErrorMsg}</FormHelperText> : '' || props.prepTimeTypeServerSideError ? <FormHelperText>{props.prepTimeTypeServerSideErrorMsgs[0]}</FormHelperText> : ''}
         </FormControl>
       </div>
       <div className={classes['form-group']}>
@@ -47,12 +50,13 @@ const RecipeTimeFormSection = (props) => {
           label="Cooking Time"
           type="number"
           value={props.cookingTime || ''}
-          error={props.hasCookingTimeInputError}
-          helperText={props.hasCookingTimeInputError ? props.cookingTimeErrorMsg : ''}
+          error={props.hasCookingTimeInputError || props.cookingTimeServerSideError}
+          helperText={props.hasCookingTimeInputError ? props.cookingTimeErrorMsg : '' || props.cookingTimeServerSideError ? props.cookingTimeServerSideErrorMsgs[0] : ''}
           onChange={props.cookingTimeChangeHandler}
           onBlur={props.cookingTimeBlurInputHandler}
+          onKeyDown={blockInvalidNumberInput}
         />
-        <FormControl fullWidth error={props.hasCookingTimeTypeInputError}>
+        <FormControl fullWidth error={props.hasCookingTimeTypeInputError || props.cookingTimeTypeServerSideError }>
           <InputLabel id="cooking-time-type">Cooking Time Qty</InputLabel>
           <Select
             labelId="cooking-time-type-label"
@@ -67,11 +71,15 @@ const RecipeTimeFormSection = (props) => {
             <MenuItem value={'hours'}>hours</MenuItem>
             <MenuItem value={'days'}>days</MenuItem>
           </Select>
-          {props.hasCookingTimeTypeInputError ? <FormHelperText>{props.cookingTimeTypeErrorMsg}</FormHelperText> : ''}
+          {
+            props.hasCookingTimeTypeInputError ? <FormHelperText>{props.cookingTimeTypeErrorMsg}</FormHelperText> : ''
+            ||
+            props.cookingTimeTypeServerSideError ? <FormHelperText>{props.cookingTimeTypeServerSideErrorMsgs[0]}</FormHelperText> : ''
+          }
         </FormControl>
       </div>
     </React.Fragment>
   );
 }
 
-export default RecipeTimeFormSection
+export default RecipeTimeFormSection;

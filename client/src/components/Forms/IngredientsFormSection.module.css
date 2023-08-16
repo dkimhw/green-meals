@@ -8,7 +8,7 @@
 
 .ingredients-form-group {
   display: grid;
-  grid-template-columns: minmax(300px, 1fr);
+  grid-template-columns: 100%;
   position: relative;
   margin-bottom: 1rem;
 }

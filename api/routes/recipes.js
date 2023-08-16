@@ -1,7 +1,8 @@
 import express from 'express';
 import recipesController from '../controllers/recipes.js';
 import multer from 'multer';
-
+import { recipeFormValidationRules, validate } from '../utils/validator.js';
+import { parseJSONString } from '../middleware/parseJSONString.js';
 
 const router = express.Router();
 
@@ -27,15 +28,24 @@ const upload = multer({ storage: storage, fileFilter: imageFilter });
 
 router.route('/get').get(recipesController.getRecipes);
 router.route('/get/:recipeID').get(recipesController.getRecipe);
-router.route('/edit/:recipeID').put(
+router.put(
+  '/edit/:recipeID',
   upload.array("images"),
+  parseJSONString,
+  recipeFormValidationRules(),
+  validate,
   recipesController.updateRecipe
 );
 router.route('/delete/:recipeId').delete(recipesController.deleteRecipe)
 router.route('/images').get(recipesController.getRecipeImages);
-router.route('/create').post(
+router.post(
+  '/create',
   upload.array("images"),
+  parseJSONString,
+  recipeFormValidationRules(),
+  validate,
   recipesController.createRecipe
 );
+
 
 export default router;

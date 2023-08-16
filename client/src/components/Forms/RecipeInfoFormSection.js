@@ -3,6 +3,7 @@ import { TextField, IconButton } from '@mui/material'
 import classes from './RecipeInfoFormSection.module.css'
 import CloseIcon from '@mui/icons-material/Close';
 import FormInputAlert from '../UI/FormInputAlert';
+import { blockInvalidNumberInput } from '../../utils/blockInvalidInputs'
 
 // Image preview: https://stackoverflow.com/questions/69035352/how-to-show-image-upload-previews-with-react
 const RecipeInfoFormSection = (props) => {
@@ -14,8 +15,8 @@ const RecipeInfoFormSection = (props) => {
         placeholder="Write your recipe name here..."
         variant="outlined"
         label="Recipe Name"
-        error={props.hasRecipeNameInputError}
-        helperText={props.hasRecipeNameInputError ? props.recipeNameErrorMsg : ''}
+        error={props.hasRecipeNameInputError || props.recipeNameServerSideError}
+        helperText={ props.hasRecipeNameInputError ? props.recipeNameErrorMsg : '' || props.recipeNameServerSideError ? props.recipeNameServerSideErrorMsgs[0] : '' }
         className={`${classes['form-input']}`}
         value={props.recipeName || ''}
         onChange={props.recipeNameChangeHandler}
@@ -29,8 +30,8 @@ const RecipeInfoFormSection = (props) => {
         variant="outlined"
         rows={4}
         placeholder="Write your recipe description here..."
-        error={props.hasRecipeDescriptionInputError}
-        helperText={props.hasRecipeDescriptionInputError ? props.recipeDescriptionErrorMsg : ''}
+        error={props.hasRecipeDescriptionInputError || props.recipeDescriptionServerSideError }
+        helperText={props.hasRecipeDescriptionInputError ? props.recipeDescriptionErrorMsg : '' || props.recipeDescriptionServerSideError ? props.recipeDescriptionServerSideErrorMsgs[0] : ''}
         className={classes['form-input']}
         value={props.recipeDescription || ''}
         onChange={props.recipeDescriptionChangeHandler}
@@ -42,12 +43,13 @@ const RecipeInfoFormSection = (props) => {
         variant="outlined"
         label="Servings"
         type="number"
-        error={props.hasServingSizeInputError}
-        helperText={props.hasServingSizeInputError ? props.servingSizeErrorMsg : ''}
+        error={props.hasServingSizeInputError || props.servingSizeServerSideError}
+        helperText={props.hasServingSizeInputError ? props.servingSizeErrorMsg : '' || props.servingSizeServerSideError ? props.servingSizeServerSideErrorMsgs[0] : ''}
         className={classes['form-input']}
         value={props.servingSize || ''}
         onChange={props.servingSizeChangeHandler}
         onBlur={props.servingSizeBlurInputHandler}
+        onKeyDown={blockInvalidNumberInput}
       />
       Upload an Image
       <input

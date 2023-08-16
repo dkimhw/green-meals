@@ -54,12 +54,7 @@ export const validateTextInput = (str) => {
 };
 
 export const validateNumber = (num) => {
-  if (String(num).trim() === '') {
-    return {
-      isValid: false,
-      errorMsg: 'Please fill out this field.'
-    };
-  } else if (typeof num !== "number" && !/[0-9]+/g.test(num)) {
+  if (typeof num !== "number" && !/[0-9]+/g.test(num)) {
     return {
       isValid: false,
       errorMsg: 'Please enter a valid number.'
@@ -71,6 +66,28 @@ export const validateNumber = (num) => {
     errorMsg: null
   };
 };
+
+export const validatePositiveNumber = (num) => {
+  let validNum = validateNumber(num)
+  let isNum = validateNumber(num)?.isValid;
+
+  if (!isNum) {
+    return {
+      isValid: false,
+      errorMsg: validNum['errorMsg']
+    }
+  } else if (isNum && num <= 0) {
+    return {
+      isValid: false,
+      errorMsg: 'Please enter a positive number.'
+    }
+  }
+
+  return {
+    isValid: true,
+    errorMsg: null
+  }
+}
 
 export const validateEmail = (email) => {
   return String(email)
