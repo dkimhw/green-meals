@@ -7,7 +7,6 @@ import { blockInvalidNumberInput } from '../../utils/blockInvalidInputs'
 
 // Image preview: https://stackoverflow.com/questions/69035352/how-to-show-image-upload-previews-with-react
 const RecipeInfoFormSection = (props) => {
-  // console.log("recipe error server side: ", props.recipeNameServerSideError, props.recipeNameServerSideErrorMsgs );
   return (
     <React.Fragment>
       <TextField
