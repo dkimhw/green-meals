@@ -59,6 +59,7 @@ const getRecipeModel = (sequelize, { DataTypes }) => {
     Recipe.hasMany(models.Instruction, { onDelete: 'CASCADE' });
     Recipe.hasMany(models.RecipeNote, { onDelete: 'CASCADE' });
     Recipe.hasMany(models.RecipeImage, { onDelete: 'CASCADE' });
+    Recipe.hasMany(models.Review, { onDelete: 'CASCADE' });
   };
   return Recipe;
 };

@@ -4,6 +4,7 @@ import getIngredientModel from "./ingredient.js";
 import getInstructionModel from "./instruction.js";
 import getRecipeNoteModel from "./note.js";
 import getRecipeImageModel from "./image.js"
+import getReviewModel from "./review.js";
 import dotenv from 'dotenv'
 
 
@@ -30,7 +31,8 @@ const models = {
   Ingredient: getIngredientModel(sequelize, Sequelize),
   Instruction: getInstructionModel(sequelize, Sequelize),
   RecipeNote: getRecipeNoteModel(sequelize, Sequelize),
-  RecipeImage: getRecipeImageModel(sequelize, Sequelize)
+  RecipeImage: getRecipeImageModel(sequelize, Sequelize),
+  Review: getReviewModel(sequelize, Sequelize),
 }
 
 Object.keys(models).forEach((key) => {

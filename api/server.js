@@ -3,6 +3,7 @@ import express from 'express';
 import dotenv from 'dotenv'
 import models, { sequelize } from './models/index.js';
 import recipesRoutes from './routes/recipes.js';
+import reviewsRoutes from './routes/reviews.js'
 import bodyParser from 'body-parser';
 import cors from 'cors';
 
@@ -25,8 +26,9 @@ app.get('/', (req, res) => {
   res.send('Hello World!');
 });
 
-// Recipes Routes
+// Routes
 app.use('/api/recipes', recipesRoutes);
+app.use('/api/reviews', reviewsRoutes);
 
 // Sync DB
 // sequelize.sync()
