@@ -155,7 +155,7 @@ export const updateRecipe = async (req, res) => {
   await updateItems(models.Instruction, instructions, ['instruction_order_number', 'instruction_text', 'recipeId']);
 
   // Update notes
-  const notes = await cleanRecipeNotesData(recipeNoteMessages, recipeNoteTitles, recipeID);
+  const notes = cleanRecipeNotesData(recipeNoteMessages, recipeNoteTitles, recipeID);
   const currNotes = await getAllItems(models.RecipeNote, recipeID);
   await removeDeletedItems(notes, currNotes, models.RecipeNote);
   await updateItems(models.RecipeNote, notes, ['title', 'text', 'recipeId']);

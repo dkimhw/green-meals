@@ -1,7 +1,7 @@
 
 const getReviewModel = (sequelize, { DataTypes }) => {
-  const Review = sequelize.define('ingredient', {
-    title: {
+  const Review = sequelize.define('review', {
+    review_title: {
       type: DataTypes.STRING(1000),
       allowNull: false,
       validate: {
@@ -15,6 +15,14 @@ const getReviewModel = (sequelize, { DataTypes }) => {
         notEmpty: true,
       },
     },
+    review_rating: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+        min: 1,
+        max: 5
+      }
+    }
   }, {
     updatedAt: 'updated_at',
     createdAt: 'created_at',
