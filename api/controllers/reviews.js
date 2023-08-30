@@ -1,4 +1,5 @@
 import models from '../models/index.js';
+import { CustomAPIError, createError } from '../errors/custom-api-error.js';
 
 export const getAllReviews = (req, res) => {
   console.log("getAllReviews route");
@@ -22,7 +23,7 @@ const getReview = async (req, res) => {
   }
 };
 
-const createReview = async (req, res) => {
+const createReview = async (req, res, next) => {
   try {
     const { recipeId: recipeID } = req.params;
     const { reviewTitle, reviewText, reviewRating } = req.body;
@@ -32,7 +33,7 @@ const createReview = async (req, res) => {
       }
     });
 
-    if (!recipe) return res.status(404).json({ 'msg': `No such recipe found` });
+    if (!recipe) return next(createError(`No such recipe found`, 404));
 
     const newReview = await models.Review.create(
       {
@@ -49,9 +50,44 @@ const createReview = async (req, res) => {
   }
 };
 
-const updateReview = (req, res) => {
-  console.log("updateReview route");
-  res.send('updateReview route');
+const updateReview = async (req, res) => {
+  try {
+    const { recipeId: recipeID, reviewId: reviewID  } = req.params;
+    const { reviewTitle, reviewText, reviewRating } = req.body;
+
+    const recipe = await models.Recipe.findOne({
+      where: {
+        id: recipeID
+      }
+    });
+    if (!recipe) throw new CustomAPIError(`No such recipe found`, 404);
+
+    const review = await models.Review.findOne({
+      where: {
+        id: reviewID
+      }
+    });
+    if (!review) throw new CustomAPIError(`No such review found`, 404);
+
+    const data = {};
+    if (reviewTitle) data['review_title'] = reviewTitle;
+    if (reviewText) data['review_text'] = reviewText;
+    if (reviewRating) data['review_rating'] = reviewRating;
+
+    // Update recipe
+    review.set(data);
+    await review.save();
+
+    res.status(200).json({ review });
+  } catch (err) {
+    res.status(500).json({'msg': err});
+  }
+
+
+
+
+
+
 };
 
 const deleteReview = (req, res) => {

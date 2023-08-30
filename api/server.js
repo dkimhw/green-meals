@@ -1,7 +1,9 @@
 
 import express from 'express';
-import dotenv from 'dotenv'
+import dotenv from 'dotenv';
+import 'express-async-errors';
 import models, { sequelize } from './models/index.js';
+import errorHandler from './middleware/error-handler.js';
 import recipesRoutes from './routes/recipes.js';
 import reviewsRoutes from './routes/reviews.js'
 import bodyParser from 'body-parser';
@@ -40,11 +42,7 @@ app.use('/api/reviews', reviewsRoutes);
 //   });
 
 // Error handling
-app.use((error, req, res, next) => {
-  const message = `This is the rejected field -> ${error.field}`;
-  console.log(message);
-  return res.status(500).send(message)
-});
+app.use(errorHandler);
 
 // sequelize.sync({ force: true }).
 const PORT = process.env.PORT;
