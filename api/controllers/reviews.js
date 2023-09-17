@@ -1,9 +1,32 @@
 import models from '../models/index.js';
 import { CustomAPIError, createError } from '../errors/custom-api-error.js';
 
-export const getAllReviews = (req, res) => {
-  console.log("getAllReviews route");
-  res.send('getAllReviews route');
+export const getAllReviews = async (req, res) => {
+  try {
+    const reviewsModel = models.Review;
+    const { recipeId: recipeID } = req.params;
+
+    let page = req.query.page ? req.query.page : 1;
+    let limit = req.query.limit ? req.query.limit : 15;
+    let offset = req.query.offset ? req.query.offset : 0;
+
+    const allReviews = await reviewsModel.findAndCountAll({
+      page: page,
+      offset: offset,
+      limit: limit,
+      where: {
+        recipeId: recipeID
+      },
+      order: [
+        ['id', 'ASC']
+      ]});
+    if (!allReviews) throw new CustomAPIError(`No recipes found`, 404);
+
+    res.status(200).json({ allReviews });
+
+  } catch (err) {
+    res.status(500).json({ 'msg': err });
+  }
 };
 
 const getReview = async (req, res) => {
@@ -82,17 +105,23 @@ const updateReview = async (req, res) => {
   } catch (err) {
     res.status(500).json({'msg': err});
   }
-
-
-
-
-
-
 };
 
-const deleteReview = (req, res) => {
-  console.log("deleteReview route");
-  res.send('deleteReview route');
+const deleteReview = async (req, res) => {
+  try {
+    const { reviewId: reviewID } = req.params;
+    const review = await models.Review.findOne({
+      where: {
+        id: reviewID
+      }
+    });
+    if (!review) throw new CustomAPIError(`No such review found`, 404);
+    const response = await review.destroy();
+
+    res.status(200).json({ response });
+  } catch (err) {
+    res.status(500).json({'msg': err});
+  }
 };
 
 export default {
