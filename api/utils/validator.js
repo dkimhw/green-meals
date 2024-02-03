@@ -75,14 +75,11 @@ export const recipeFormValidationRules = () => {
 };
 
 export const validate = (req, res, next) => {
-  console.log("validate here");
-  console.log(req.body['recipeIngredients']);
   const errors = validationResult(req)
   if (errors.isEmpty()) {
     return next()
   }
 
-  console.log(errors);
   const extractedErrors = []
   errors.array().map(err => extractedErrors.push({ [err.path]: err.msg }))
 

@@ -21,7 +21,6 @@ export default function AlertDialogSlide(props) {
   const handleClose = () => {
     setOpen(false);
   };
-  console.log(open)
   return (
     <div>
       <DeleteButton onClick={handleClickOpen} />

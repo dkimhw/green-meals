@@ -17,6 +17,12 @@ const sequelize = new Sequelize(process.env.DB, process.env.USERNAME, process.en
   dialect: 'postgres',
   database: process.env.DB,
   schema: process.env.SCHEMA,
+  port: process.env.PORT,
+  dialectOptions: {
+    ssl: {
+        rejectUnauthorized: false
+    }
+  },
 
   pool: {
     max: 5,

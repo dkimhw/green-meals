@@ -40,12 +40,6 @@ export const validateTextInput = (str) => {
       errorMsg: 'Please fill out this field.'
     };
   }
-  // } else if (typeof str !== "string" || /[0-9]+/g.test(str)) {
-  //   return {
-  //     isValid: false,
-  //     errorMsg: 'Please enter a valid string.'
-  //   };
-  // }
 
   return {
     isValid: true,
@@ -58,6 +52,20 @@ export const validateNumber = (num) => {
     return {
       isValid: false,
       errorMsg: 'Please enter a valid number.'
+    };
+  }
+
+  return {
+    isValid: true,
+    errorMsg: null
+  };
+};
+
+export const validateReviewRatings = (num) => {
+  if (typeof num !== "number" && !/[1-5]+/g.test(num)) {
+    return {
+      isValid: false,
+      errorMsg: 'Please select a valid review rating.'
     };
   }
 

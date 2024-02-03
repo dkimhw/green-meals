@@ -2,6 +2,7 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import 'express-async-errors';
+import morgan from 'morgan';
 import models, { sequelize } from './models/index.js';
 import errorHandler from './middleware/error-handler.js';
 import recipesRoutes from './routes/recipes.js';
@@ -16,19 +17,14 @@ dotenv.config({path: '.env'});
 const app = express();
 
 // Middlewares
-// app.use(express.urlencoded({ extended: true })); // Tells Express to parse the post request body data
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({
-  extended: true
-}));
+app.use(morgan('tiny'));
+app.use(express.json());
 app.use(cors()); // Allow cross-origin requests
 
 // Routes
 app.get('/', (req, res) => {
   res.send('Hello World!');
 });
-
-// Routes
 app.use('/api/recipes', recipesRoutes);
 app.use('/api/reviews', reviewsRoutes);
 
@@ -45,7 +41,7 @@ app.use('/api/reviews', reviewsRoutes);
 app.use(errorHandler);
 
 // sequelize.sync({ force: true }).
-const PORT = process.env.PORT;
+const PORT = 5051;
 sequelize.sync().then(() => {
   app.listen(5051, () => {
     console.log(`Listening on port ${PORT}!`);

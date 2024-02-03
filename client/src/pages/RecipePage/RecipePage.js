@@ -9,18 +9,23 @@ import InfoBox from '../../components/UI/InfoBox';
 import { IngredientsList } from '../../components/UI/IngredientsList';
 import DirectionList from '../../components/UI/DirectionList';
 import { RecipeCarousel } from '../../components/RecipeCarousel/RecipeCarousel';
+import RecipeReviewForm from "../../components/RecipeReviewForm/RecipeReviewForm";
+import Divider from '../../components/UI/Divider';
+import ReviewList from '../../components/ReviewList/ReviewList';
+
+// Check reviews
+// If exists add divider, reviews list
 
 const RecipePage = (props) => {
   const params= useParams();
   const [recipeData, setRecipeData] = useState();
 
-  const fetchAllRecipeData = async (recipeID) => {
+  const fetchRecipeData = async (recipeID) => {
     try {
       const response = await axios({
         method: "get",
         url: `http://localhost:5051/api/recipes/get/${recipeID}`,
       });
-      console.log(response.data);
       setRecipeData(response.data[0]);
     } catch (err) {
       console.error(`Error: ${err}`);
@@ -30,7 +35,7 @@ const RecipePage = (props) => {
 
   useEffect(() => {
     if(params.id) {
-      fetchAllRecipeData(params.id);
+      fetchRecipeData(params.id);
     }
   }, [params.id]);
 
@@ -53,12 +58,17 @@ const RecipePage = (props) => {
         cookTimeQty={recipeData? recipeData['cooking_time_qty'] : ''}
         servings={recipeData? recipeData['servings'] : ''}
       />
+      <Divider borderCSS={{border: '#adadad 1px solid'}}/>
       <IngredientsList
         ingredients={recipeData? recipeData['ingredients'] : ''}
       />
       <DirectionList
         directions={recipeData? recipeData['instructions'] : '' }
       />
+      <Divider borderCSS={{border: '#adadad 1px solid'}}/>
+      <RecipeReviewForm />
+      <Divider borderCSS={{border: '#adadad 1px solid'}}/>
+      <ReviewList />
     </Container>
   );
 }

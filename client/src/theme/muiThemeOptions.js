@@ -32,5 +32,8 @@ export const appTheme = createTheme({
     secondary: {
       main: '#f50057',
     },
+    error: {
+      main: '#d32f2f',
+    }
   },
 });

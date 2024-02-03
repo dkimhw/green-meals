@@ -1,2 +1,0 @@
-
-// For adhoc pg queries
